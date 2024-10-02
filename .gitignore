@@ -1,0 +1,4 @@
+node_modules
+exported_data
+output
+!output/.gitkeep

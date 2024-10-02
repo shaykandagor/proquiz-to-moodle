@@ -1,0 +1,17 @@
+{
+  "name": "proquiz-to-moodle",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build-quiz-xml": "node src/xml-quiz-builder.js",
+    "build-quiz-gift": "node src/gift-quiz-builder.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "php-serialize": "^5.0.1",
+    "xmlbuilder": "^15.1.1"
+  }
+}
