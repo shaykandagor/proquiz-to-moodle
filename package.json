@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build-quiz-xml": "node src/xml-quiz-builder.js",
-    "build-quiz-gift": "node src/gift-quiz-builder.js"
+    "build-quiz-xml": "nodemon src/xml-quiz-builder.js",
+    "build-quiz-gift": "nodemon src/gift-quiz-builder.js",
+    "build-lessons-xml": "nodemon src/xml-lessons-builder.js",
+    "build-lessons-html": "nodemon src/html-lessons-builder.js",
+    "build-topics-html": "nodemon src/html-topics-builder.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "lodash": "^4.17.21",
+    "nodemon": "^3.1.7",
     "php-serialize": "^5.0.1",
     "xmlbuilder": "^15.1.1"
   }
