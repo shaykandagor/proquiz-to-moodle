@@ -1,20 +1,22 @@
 const fs = require("fs");
 const xmlbuilder = require("xmlbuilder");
 const { writeFileCallback } = require("./utils/utils");
+const { generateHtml } = require("./utils/html");
 
-const createContent = (data) => {
-  const json = JSON.parse(data);
-
-  const content = json.wp_data.map(({ wp_post_content, wp_post_title }) => ({
+const createContent = (data) =>
+  JSON.parse(data).wp_data.map(({ wp_post_content, wp_post_title }) => ({
     title: wp_post_title,
     content: wp_post_content,
   }));
 
+const generateXml = (lessons, path) => {
   const xml = xmlbuilder.create("lessons");
 
-  content.forEach(({ title, content }) => {
-    const lesson = xml.ele("lesson", { title });
-    lesson.ele("content", content);
+  lessons.forEach((lesson) => {
+    const xmlLesson = xml.ele("lesson", { title: lesson.title });
+    const html = generateHtml(lesson, path, "lessons");
+
+    xmlLesson.ele("content", html);
   });
 
   const xmlString = xml.end({ pretty: true });
@@ -25,17 +27,20 @@ const createContent = (data) => {
 const writeFile = (filename, content) =>
   fs.writeFile(filename, content, writeFileCallback);
 
-const readFileCallback = (outputPath) => (err, data) => {
+const readFileCallback = (path, outputPath) => (err, data) => {
   if (err) {
     console.error("Error reading file:", err);
     return;
   }
 
-  writeFile(outputPath, createContent(data));
+  const content = createContent(data);
+  const xml = generateXml(content, path);
+
+  writeFile(outputPath, xml);
 };
 
 const main = (path, outputPath) =>
-  fs.readFile(path, "utf8", readFileCallback(outputPath));
+  fs.readFile(path, "utf8", readFileCallback(path, outputPath));
 
 const inputPath = process.argv[2];
 const outputPath = "output/lessons.xml";
