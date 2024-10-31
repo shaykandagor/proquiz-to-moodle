@@ -10,27 +10,22 @@ npm install
 
 ## Usage
 
-### Quizzes
+Create `config.json` file in the root (same level as `package.json`) of the project with the following content:
 
-Moodle GIFT format generation.
-
-```bash
-npm run build-quiz-gift <path-to-exported-json>
+```json
+{
+  "basePath": "<path-to-exported-json-folder>",
+  "quizPath": "<path-to-exported-quiz-json-file>",
+  "topicsPath": "<path-to-exported-topics-json-file>",
+  "lessonsPath": "<path-to-exported-lessons-json-file>"
+}
 ```
 
-Moodle XML format generation.
-
 ```bash
-npm run build-quiz-xml <path-to-exported-json>
+npm run build-all
 ```
 
 ### Lessons
-
-#### Lessons XML
-
-```bash
-npm run build-lessons-xml <path-to-exported-json>
-```
 
 #### Lessons HTML
 
@@ -40,18 +35,11 @@ npm run build-lessons-html <path-to-exported-json>
 
 ### Topics
 
-#### Topics XML
-
-```bash
-npm run build-topics-xml <path-to-exported-json>
-```
-
 #### Topics HTML
 
 ```bash
 npm run build-topics-html <path-to-exported-json>
 ```
-
 
 ### Generate Moodle archive (MBZ)
 

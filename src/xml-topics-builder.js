@@ -17,7 +17,7 @@ const generateXml = (topics, path) => {
 
   topics.forEach((topic) => {
     const lesson = xml.ele("topic", { title: topic.title });
-    const html = generateHtml(topic, path, "topics")
+    const html = generateHtml(topic, path, "topics");
 
     lesson.ele("content", html);
   });
@@ -31,6 +31,7 @@ const writeFile = (filename, content) =>
   fs.writeFile(filename, content, writeFileCallback);
 
 const readFileCallback = (path, outputPath) => (err, data) => {
+  console.log("path", path);
   if (err) {
     console.error("Error reading file:", err);
     return;
@@ -38,32 +39,34 @@ const readFileCallback = (path, outputPath) => (err, data) => {
 
   console.log("outputPath", outputPath);
 
-  const content = createContent(data)
+  const content = createContent(data);
 
   const xml = generateXml(content, path);
 
   writeFile(outputPath, xml);
 
-  console.log("xml", xml);
+  // console.log("xml", xml);
 
-//   .forEach((content) => {
-//     writeFile(
-//       outputPath,
-//       //   `output/html/topics/${content.name}.html`,
-//       // NOTE: generateHtml function will also copy files to the output folder
-//       // this does not yet work with XML
-//       // we will need to find a way to store the file paths and copy them after the XML is generated
-//       // NOTE: some MBZ exports seem to store the images as Base64 encoded strings in the content
-//       // NOTE: course material also contains MP3 files
-//       generateXml(generateHtml(content, path, "topics"))
-//     );
-//   });
+  //   .forEach((content) => {
+  //     writeFile(
+  //       outputPath,
+  //       //   `output/html/topics/${content.name}.html`,
+  //       // NOTE: generateHtml function will also copy files to the output folder
+  //       // this does not yet work with XML
+  //       // we will need to find a way to store the file paths and copy them after the XML is generated
+  //       // NOTE: some MBZ exports seem to store the images as Base64 encoded strings in the content
+  //       // NOTE: course material also contains MP3 files
+  //       generateXml(generateHtml(content, path, "topics"))
+  //     );
+  //   });
 };
 
-const main = (path, outputPath) =>
+const buildTopicsXml = (path, outputPath) =>
   fs.readFile(path, "utf8", readFileCallback(path, outputPath));
 
-const inputPath = process.argv[2];
-const outputPath = "output/topics.xml";
+// const inputPath = process.argv[2];
+// const outputPath = "output/topics.xml";
 
-main(inputPath, outputPath);
+// main(inputPath, outputPath);
+
+module.exports = buildTopicsXml;

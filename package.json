@@ -3,13 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build-quiz-xml": "nodemon src/xml-quiz-builder.js",
-    "build-quiz2-xml": "nodemon src/xml-quiz2-builder.js",
-    "build-quiz3-xml": "nodemon src/xml-quiz3-builder.js",
-    "build-quiz-gift": "nodemon src/gift-quiz-builder.js",
-    "build-lessons-xml": "nodemon src/xml-lessons-builder.js",
+    "build-all": "nodemon src/build-all.js",
     "build-lessons-html": "nodemon src/html-lessons-builder.js",
-    "build-topics-xml": "nodemon src/xml-topics-builder.js",
     "build-topics-html": "nodemon src/html-topics-builder.js"
   },
   "author": "",

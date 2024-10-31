@@ -34,10 +34,7 @@ const readFileCallback = (outputPath) => (err, data) => {
   writeTheGIFT(outputPath, createQuestions(parse(data)));
 };
 
-const main = (path, outputPath) =>
+const buildQuizGift = (path, outputPath) =>
   fs.readFile(path, "utf8", readFileCallback(outputPath));
 
-const inputPath = process.argv[2];
-const outputPath = "output/quiz.gift";
-
-main(inputPath, outputPath);
+module.exports = buildQuizGift;

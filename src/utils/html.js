@@ -44,8 +44,7 @@ const saveMatch = (originFilePath, theme) => (match) => {
 
 const copyFiles = (content, path, theme) => {
   const regex = /{site_url}\/wp-content\/uploads\/[^"]+/g;
-  console.log("content", content);
-  console.log("hmm")
+  // console.log("content", content);
   const matches = content.match(regex);
 
   if (!matches) {
@@ -82,7 +81,9 @@ const generateHtml = ({ title, content }, path, theme) => {
   const contentWithFiles = copyFiles(content, path, theme);
   const contentWithIframe = convertEmbedToIframe(contentWithFiles);
   const contentWithoutWordpress = removeWordPress(contentWithIframe);
-  const contentWithoutMultipleNewlines = removeMultipleNewLines(contentWithoutWordpress);
+  const contentWithoutMultipleNewlines = removeMultipleNewLines(
+    contentWithoutWordpress
+  );
   const formattedContent = contentWithoutMultipleNewlines;
 
   return `

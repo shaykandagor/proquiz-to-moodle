@@ -61,10 +61,7 @@ const readFileCallback = (outputPath) => (err, data) => {
   writeFile(outputPath, createQuestions(parse(data)));
 };
 
-const main = (path, outputPath) =>
+const buildQuizTrueFalseXml = (path, outputPath) =>
   fs.readFile(path, "utf8", readFileCallback(outputPath));
 
-const inputPath = process.argv[2];
-const outputPath = "output/xml/quiz3.xml";
-
-main(inputPath, outputPath);
+module.exports = buildQuizTrueFalseXml;

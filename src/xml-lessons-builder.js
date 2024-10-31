@@ -39,10 +39,12 @@ const readFileCallback = (path, outputPath) => (err, data) => {
   writeFile(outputPath, xml);
 };
 
-const main = (path, outputPath) =>
+const buildLessonsXml = (path, outputPath) =>
   fs.readFile(path, "utf8", readFileCallback(path, outputPath));
 
-const inputPath = process.argv[2];
-const outputPath = "output/lessons.xml";
+// const inputPath = process.argv[2];
+// const outputPath = "output/lessons.xml";
 
-main(inputPath, outputPath);
+// main(inputPath, outputPath);
+
+module.exports = buildLessonsXml;
