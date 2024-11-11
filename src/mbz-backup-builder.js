@@ -31,11 +31,10 @@ function createMoodleBackup(outputDir) {
     const completionProgressDir = path.join(blocksDir, 'completion_progress');
     const htmlDir = path.join(blocksDir, 'html');
     const analyticsGraphsDir = path.join(blocksDir, 'analytics_graphs');
+    const sectionsDir = path.join(outputDir, 'sections');
+    const sectionDir = path.join(sectionsDir, 'section');
 
-    // Ensure the directories exist
-    if (!fs.existsSync(completionProgressDir)) {
-        fs.mkdirSync(completionProgressDir, { recursive: true });
-    }
+
 
     const backupXml = xmlbuilder.create('moodle_backup', { encoding: 'UTF-8' })
         .ele('information')
@@ -504,6 +503,35 @@ function createMoodleBackup(outputDir) {
         .ele('role_assignments', '').up()
     .end({ pretty: true });
     fs.writeFileSync(path.join(analyticsGraphsDir, 'roles.xml'), agRoleXml);
+
+    // Create inforef.xml inside 'sections' directory inside 'section'
+     const sectionsInforefXml = xmlbuilder.create('inforef', { encoding: 'UTF-8' })
+     .ele('fileref')
+         .ele('file',)
+             .ele('id', '').up()
+         .up()
+     .up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(sectionDir, 'inforef.xml'), sectionsInforefXml);
+
+
+    // Create section.xml inside 'sections' directory inside 'section'
+    const sectionsXml = xmlbuilder.create('section', { encoding: 'UTF-8' })
+        .att('id', '')
+        .ele('number', '').up()
+        .ele('name', '').up()
+        .ele('summary', '').up()
+        .ele('summaryformat', '').up()
+        .ele('sequence', '').up()
+        .ele('visible', '').up()
+        .ele('availabilityjson', '').up()
+        .ele('timemodified', '').up()
+        .ele('plugin_format_grid_section')
+            .ele('image', '').up()
+            .ele('alttext', '').up()
+        .up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(sectionDir, 'section.xml'), sectionsXml);
 }
 
 // Example usage:
