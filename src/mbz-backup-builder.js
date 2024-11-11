@@ -25,32 +25,18 @@ function createMoodleBackup(outputDir) {
         }
     });
 
-    // Create directories and files inside the 'course' directory
+    // Create directories
     const courseDir = path.join(outputDir, 'course');
-    const courseSubDirs = ['blocks'];
-    const courseFiles = ['course.xml', 'calendar.xml', 'competencies.xml', 'completiondefaults.xml', 'contentbank.xml', 'enrolments.xml', 'filters.xml', 'inforef.xml', 'roles.xml'];
+    const blocksDir = path.join(courseDir, 'blocks');
+    const completionProgressDir = path.join(blocksDir, 'completion_progress');
+    const htmlDir = path.join(blocksDir, 'html');
+    const analyticsGraphsDir = path.join(blocksDir, 'analytics_graphs');
 
-    // Create subdirectories inside 'course'
-    courseSubDirs.forEach(subDir => {
-        const subDirPath = path.join(courseDir, subDir);
-        if (!fs.existsSync(subDirPath)) {
-            fs.mkdirSync(subDirPath, { recursive: true });
-        }
-    });
+    // Ensure the directories exist
+    if (!fs.existsSync(completionProgressDir)) {
+        fs.mkdirSync(completionProgressDir, { recursive: true });
+    }
 
-    // Create directories and files inside the 'blocks' directory within 'course'
-    const courseBlockDir = path.join(courseDir, 'blocks');
-    const blockSubDirs = ['analytics_graphs', 'html', 'completion_progress'];
-
-    // Create subdirectories inside 'blocks'
-    blockSubDirs.forEach(subDir => {
-        const subDirPath = path.join(courseBlockDir, subDir);
-        if (!fs.existsSync(subDirPath)) {
-            fs.mkdirSync(subDirPath, { recursive: true });
-        }
-    });
-
-    
     const backupXml = xmlbuilder.create('moodle_backup', { encoding: 'UTF-8' })
         .ele('information')
             .ele('name', 'backup-moodle2-course-5014-insmat_s24-20241030-0912-nu.mbz').up()
@@ -246,14 +232,6 @@ function createMoodleBackup(outputDir) {
     fs.writeFileSync(path.join(outputDir, 'completion.xml'), completionXml);
 
 
-   // Create files inside 'course'
-   courseFiles.forEach(file => {
-    const filePath = path.join(courseDir, file);
-    if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, 'This is a sample file content.');
-    }
-    });
-
     // Create calendar.xml inside 'course'
     const calendarXml = xmlbuilder.create('events', { encoding: 'UTF-8' })
         .end({ pretty: true });
@@ -431,6 +409,101 @@ function createMoodleBackup(outputDir) {
     .end({ pretty: true });
     fs.writeFileSync(path.join(courseDir, 'roles.xml'), roleXml);
 
+    // Create block.xml inside 'blocks' directory inside 'completion_progress'
+    const blockXml = xmlbuilder.create('block', { encoding: 'UTF-8' })
+        .att( 'id', '' ).att('contextid', '').att('version', '')
+            .ele('blockname', '').up()
+            .ele('parentcontextid', '').up()
+            .ele('showinsubcontexts', '').up()
+            .ele('pagetypepattern', '').up()
+            .ele('subpagepattern', '').up()
+            .ele('defaultregion', '').up()
+            .ele('defaultweight', '').up()
+            .ele('configdata', '').up()
+            .ele('timecreated', '').up()
+            .ele('timemodified', '').up()
+            .ele('block_positions', '').up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(completionProgressDir, 'block.xml'), blockXml);
+
+     // Create inforef.xml inside 'blocks' directory inside 'completion_progress'
+    const cpInforefXml = xmlbuilder.create('inforef', { encoding: 'UTF-8' })
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(completionProgressDir, 'inforef.xml'), cpInforefXml);
+
+     // Create roles.xml inside 'blocks' directory inside 'completion_progress'
+    const cpRoleXml = xmlbuilder.create('roles', { encoding: 'UTF-8' })
+        .ele('role_overrides', '').up()
+        .ele('role_assignments', '').up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(completionProgressDir, 'roles.xml'), cpRoleXml);
+
+    // Create block.xml inside 'blocks' directory inside 'html'
+    const htmlBlockXml = xmlbuilder.create('block', { encoding: 'UTF-8' })
+        .att( 'id', '' ).att('contextid', '').att('version', '')
+            .ele('blockname', '').up()
+            .ele('parentcontextid', '').up()
+            .ele('showinsubcontexts', '').up()
+            .ele('pagetypepattern', '').up()
+            .ele('subpagepattern', '').up()
+            .ele('defaultregion', '').up()
+            .ele('defaultweight', '').up()
+            .ele('configdata', '').up()
+            .ele('timecreated', '').up()
+            .ele('timemodified', '').up()
+            .ele('block_positions', '').up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(htmlDir, 'block.xml'), htmlBlockXml);
+
+     // Create inforef.xml inside 'blocks' directory inside 'html'
+    const htmlInforefXml = xmlbuilder.create('inforef', { encoding: 'UTF-8' })
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(htmlDir, 'inforef.xml'), htmlInforefXml);
+
+     // Create roles.xml inside 'blocks' directory inside 'html'
+    const htmlRoleXml = xmlbuilder.create('roles', { encoding: 'UTF-8' })
+        .ele('role_overrides', '').up()
+        .ele('role_assignments', '').up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(htmlDir, 'roles.xml'), htmlRoleXml);
+
+    // Create block.xml inside 'blocks' directory inside 'analytics_graphs'
+    const agBlockXml = xmlbuilder.create('block', { encoding: 'UTF-8' })
+        .att( 'id', '' ).att('contextid', '').att('version', '')
+            .ele('blockname', '').up()
+            .ele('parentcontextid', '').up()
+            .ele('showinsubcontexts', '').up()
+            .ele('pagetypepattern', '').up()
+            .ele('subpagepattern', '').up()
+            .ele('defaultregion', '').up()
+            .ele('defaultweight', '').up()
+            .ele('configdata', '').up()
+            .ele('timecreated', '').up()
+            .ele('timemodified', '').up()
+            .ele('block_positions')
+                .ele('block_position', { id: '' })
+                    .ele('contextid', '').up()
+                    .ele('pagetype', '').up()
+                    .ele('subpage', '').up()
+                    .ele('visible', '').up()
+                    .ele('region', '').up()
+                    .ele('weight', '').up()
+                .up()
+            .up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(analyticsGraphsDir, 'block.xml'), agBlockXml);
+
+     // Create inforef.xml inside 'blocks' directory inside 'analytics_graphs'
+    const agInforefXml = xmlbuilder.create('inforef', { encoding: 'UTF-8' })
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(analyticsGraphsDir, 'inforef.xml'), agInforefXml);
+
+     // Create roles.xml inside 'blocks' directory inside 'analytics_graphs'
+    const agRoleXml = xmlbuilder.create('roles', { encoding: 'UTF-8' })
+        .ele('role_overrides', '').up()
+        .ele('role_assignments', '').up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(analyticsGraphsDir, 'roles.xml'), agRoleXml);
 }
 
 // Example usage:
