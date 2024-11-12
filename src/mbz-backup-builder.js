@@ -1,35 +1,36 @@
-const fs = require('fs');
-const path = require('path');
-const { title } = require('process');
-const xmlbuilder = require('xmlbuilder');
+const fs = require("fs");
+const path = require("path");
+const { title } = require("process");
+const xmlbuilder = require("xmlbuilder");
 
 const generateQuestionsXml = require('./components/generateQuestionsXml');
 const generateMoodleBackup = require('./components/generateMoodleBackup');
 const generateOutcomesXml = require('./components/generateOutcomes');
 const generateRolesXml = require('./components/generateRoles');
 const generateScalesXml = require('./components/generateScales');
+const { generateCompletionXml } = require("./components/generateCompletionXml");
+const { generateFilesXml } = require("./components/generateFilesXml");
+const { generateGradehistoryXml } = require("./components/generateGradehistoryXml");
+const { generateGradebookXml } = require("./components/generateGradebookXml");
+const { generateGroupsXml } = require("./components/generateGroupsXml");
+
 
 function createMoodleBackup(outputDir) {
-    // Create subdirectories
-    const backupDirs = [
-        'activities',
-        'course',
-        'files',
-        'sections'
-    ];
+  // Create subdirectories
+  const backupDirs = ["activities", "course", "files", "sections"];
 
-    // Ensure the output directory exists
-    if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
+  // Ensure the output directory exists
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
+  // Create subdirectories
+  backupDirs.forEach((dir) => {
+    const dirPath = path.join(outputDir, dir);
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
     }
-
-    // Create subdirectories
-    backupDirs.forEach(dir => {
-        const dirPath = path.join(outputDir, dir);
-        if (!fs.existsSync(dirPath)) {
-            fs.mkdirSync(dirPath, { recursive: true });
-        }
-    });
+  });
 
     // Create directories
     const courseDir = path.join(outputDir, 'course');
@@ -63,7 +64,7 @@ function createMoodleBackup(outputDir) {
             .ele('repositoryid', '').up()
             .ele('reference', '').up()
         .end({ pretty: true });
-    fs.writeFileSync(path.join(outputDir, 'files.xml'), fileXml);
+    fs.writeFileSync(path.join(outputDir, 'files.xml'), fileXml); 
 
     const gradebookXml = xmlbuilder.create('gradebook', { encoding: 'UTF-8' })
         .ele('attributes').up()
@@ -130,7 +131,8 @@ function createMoodleBackup(outputDir) {
             .up()
         .up()
         .end({ pretty: true });
-    fs.writeFileSync(path.join(outputDir, 'gradebook.xml'), gradebookXml);
+
+    fs.writeFileSync(path.join(outputDir, 'gradebook.xml'), gradebookXml); 
 
     const gradehistoryXml = xmlbuilder.create('grade_history', { encoding: 'UTF-8' })
         .ele('grade_grades', '').up()
@@ -165,10 +167,10 @@ function createMoodleBackup(outputDir) {
 
     const completionXml = xmlbuilder.create('course_completion', { encoding: 'UTF-8' })
         .end({ pretty: true });
-    fs.writeFileSync(path.join(outputDir, 'completion.xml'), completionXml);
+    //fs.writeFileSync(path.join(outputDir, 'completion.xml'), completionXml); 
 
 
-    /* // Create calendar.xml inside 'course'
+    // Create calendar.xml inside 'course'
     const calendarXml = xmlbuilder.create('events', { encoding: 'UTF-8' })
         .end({ pretty: true });
     fs.writeFileSync(path.join(courseDir, 'calendar.xml'), calendarXml);
@@ -178,15 +180,15 @@ function createMoodleBackup(outputDir) {
         .ele('competencies', '').up()
         .ele('user_competencies', '').up()
     .end({ pretty: true });
-    fs.writeFileSync(path.join(courseDir, 'competencies.xml'), competenciesXml);
+    fs.writeFileSync(path.join(courseDir, 'competencies.xml'), competenciesXml); 
 
     // Create completiondefaults.xml inside 'course'
     const completiondefaultsXml = xmlbuilder.create('course_completion_defaults', { encoding: 'UTF-8' })
         .end({ pretty: true });
-    fs.writeFileSync(path.join(courseDir, 'completiondefaults.xml'), completiondefaultsXml);
+    fs.writeFileSync(path.join(courseDir, 'coxpletiondefaults.xml'), completiondefaultsXml);
 
     // Create contentbank.xml inside 'course'
-    const contentbankXml = xmlbuilder.create('contents', { encoding: 'UTF-8' })
+    const contentbankXml = xmlbuilder.create('contents', { encoding: 'UTF-8' })  
         .end({ pretty: true });
     fs.writeFileSync(path.join(courseDir, 'contentbank.xml'), contentbankXml);
 
@@ -269,7 +271,7 @@ function createMoodleBackup(outputDir) {
               .ele('name', '').up()
               .ele('value', '').up()
     .end({ pretty: true });
-    fs.writeFileSync(path.join(courseDir, 'course.xml'), courseXml);
+    fs.writeFileSync(path.join(courseDir, 'course.xml'), courseXml); 
 
     // Create enrolments.xml inside 'course'
     const enrolmentsXml = xmlbuilder.create('enrolments', { encoding: 'UTF-8' })
@@ -343,7 +345,7 @@ function createMoodleBackup(outputDir) {
         .ele('role_overrides', '').up()
         .ele('role_assignments', '').up()
     .end({ pretty: true });
-    fs.writeFileSync(path.join(courseDir, 'roles.xml'), roleXml);
+    fs.writeFileSync(path.join(courseDir, 'roles.xml'), roleXml); 
 
     // Create block.xml inside 'blocks' directory inside 'completion_progress'
     const blockXml = xmlbuilder.create('block', { encoding: 'UTF-8' })
@@ -449,7 +451,7 @@ function createMoodleBackup(outputDir) {
          .up()
      .up()
     .end({ pretty: true });
-    fs.writeFileSync(path.join(sectionDir, 'inforef.xml'), sectionsInforefXml);
+    fs.writeFileSync(path.join(sectionDir, 'inforef.xml'), sectionsInforefXml); 
 
 
     // Create section.xml inside 'sections' directory inside 'section'
@@ -479,5 +481,7 @@ function createMoodleBackup(outputDir) {
 
 }
 
-// Example usage:
-createMoodleBackup('output/mbz');
+
+
+
+createMoodleBackup("output/mbz");
