@@ -41,7 +41,19 @@ function createMoodleBackup(outputDir) {
     const sectionsDir = path.join(outputDir, 'sections');
     const sectionDir = path.join(sectionsDir, 'section');
 
-    const fileXml = xmlbuilder.create('files', { encoding: 'UTF-8' })
+    generateCompletionXml(outputDir);
+    generateFilesXml(outputDir);
+    generateGradebookXml(outputDir);
+    generateGradehistoryXml(outputDir);
+    generateGroupsXml(outputDir);
+    generateMoodleBackup(outputDir);
+    generateMoodleBackup(outputDir);
+    generateOutcomesXml(outputDir);
+    generateQuestionsXml(outputDir);
+    generateRolesXml(outputDir);
+    generateScalesXml(outputDir);
+
+    /* const fileXml = xmlbuilder.create('files', { encoding: 'UTF-8' })
          .ele('file',  { id: '' })
             .ele('contenthash', '').up()
             .ele('contextid', '').up()
@@ -472,12 +484,7 @@ function createMoodleBackup(outputDir) {
     .end({ pretty: true });
     fs.writeFileSync(path.join(sectionDir, 'section.xml'), sectionsXml); */
 
-    generateMoodleBackup(outputDir);
-    generateMoodleBackup(outputDir);
-    generateOutcomesXml(outputDir);
-    generateQuestionsXml(outputDir);
-    generateRolesXml(outputDir);
-    generateScalesXml(outputDir);
+    
 
 }
 
