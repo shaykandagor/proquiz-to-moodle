@@ -90,6 +90,42 @@ function createMoodleBackup(outputDir) {
         .end({ pretty: true });
 
     fs.writeFileSync(path.join(outputDir, 'moodle_backup.xml'), backupXml);
+
+    const outcomesXml = xmlbuilder.create('outcomes_definition', { encoding: 'UTF-8' })
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(outputDir, 'outcomes.xml'), outcomesXml);
+
+    const scalesXml = xmlbuilder.create('scales_definition', { encoding: 'UTF-8' })
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(outputDir, 'scales.xml'), scalesXml);
+
+    const rolesXml = xmlbuilder.create('roles_definition', { encoding: 'UTF-8' })
+    .ele('role', { id: '' })
+        .ele('name', '').up()
+        .ele('shortname', '').up()
+        .ele('nameincourse', '').up()
+        .ele('description', '').up()
+        .ele('sortorder', '').up()
+        .ele('archetype', '').up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(outputDir, 'roles.xml'), rolesXml);
+
+    const questionsXml = xmlbuilder.create('question_categories', { encoding: 'UTF-8' })
+    .ele('question_category', { id: '' })
+        .ele('name', '').up()
+        .ele('contextid', '').up()
+        .ele('contextlevel', '').up()
+        .ele('contextinstanceid', '').up()
+        .ele('info', '').up()
+        .ele('infoformat', '').up()
+        .ele('stamp', '').up()
+        .ele('parent', '').up()
+        .ele('sortorder', '').up()
+        .ele('idnumber', '').up()
+        .ele('question_bank_entries', '').up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(outputDir, 'questions.xml'), questionsXml);
+
 }
 
 // Example usage:
