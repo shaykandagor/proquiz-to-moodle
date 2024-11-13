@@ -44,6 +44,13 @@ const generateQuizInforefXml = require("./components/activities/quiz-xml-files/g
 const generateResourceXml = require("./components/activities/resource-xml-files/generateResourceXml");
 const generateUrlXml = require("./components/activities/url-xml-files/generateUrlXml");
 
+// Imports for Courses directory
+const { generateCourseFiles } = require("./components/course/generateCourseFiles");
+const { generateBlockFiles } = require("./components/course/blocks/generateBlocksFiles");
+
+// Imports for Section directory
+const { generateSectionFiles } = require("./components/section/generateSectionFiles");
+
 function createMoodleBackup(outputDir) {
   // Create subdirectories
   const backupDirs = ["activities", "course", "files", "sections"];
@@ -72,6 +79,29 @@ function createMoodleBackup(outputDir) {
     generateQuestionsXml(outputDir);
     generateRolesXml(outputDir);
     generateScalesXml(outputDir);
+
+    /* // Creates xml files inside 'course' directory
+    const courseDir = path.join(outputDir, 'course');
+    generateCourseFiles(courseDir);
+    
+    // Creates subdirectory inside 'course'
+    // course/blocks
+    const blocksDir = path.join(courseDir, 'blocks');
+    
+    // Creates subdirectory inside 'blocks' directory 'completion_progress'
+    // courses/blocks/completion_progress
+    const completionProgressDir = path.join(blocksDir, 'completion_progress');
+    
+    // Generate xml files in courses/blocks/completion_progress
+    generateBlockFiles(completionProgressDir)
+    
+    // Creates subdirectries inside 'sections'
+    const sectionsDir = path.join(outputDir, 'sections');
+
+    // Creates subdirectories inside 'sections'
+    // sections/section
+    const sectionDir = path.join(sectionsDir, 'sections/section');
+    generateSectionFiles(sectionDir) */
 
     // Create subdirectories inside 'activities'
     const activitiesDir = path.join(outputDir, 'activities');
@@ -210,6 +240,7 @@ function createMoodleBackup(outputDir) {
     generateModuleXml(activitiesUrlDir);
     generateAssignRolesXml(activitiesUrlDir);
     generateUrlXml(activitiesUrlDir);
+
 }
 
 createMoodleBackup("output/mbz");
