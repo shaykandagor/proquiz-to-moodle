@@ -11,8 +11,19 @@ const { generateFilesXml } = require("./components/generateFilesXml");
 const { generateGradehistoryXml } = require("./components/generateGradehistoryXml");
 const { generateGradebookXml } = require("./components/generateGradebookXml");
 const { generateGroupsXml } = require("./components/generateGroupsXml");
-const generateActivitiesFolders = require("./components/activities/generateActivitiesFolders");
 
+// Activities directory
+const generateActivitiesFolders = require("./components/activities/generateActivitiesFolders");
+const generateActivityGradehistoryXml = require("./components/activities/xml-files/generateGradeHistoryXml");
+const generateAssignXml = require("./components/activities/xml-files/generateAssignXml");
+const generateCalendarXml = require("./components/activities/xml-files/generateCalendarXml");
+const generateCompetenciesXml = require("./components/activities/xml-files/generateCompetenciesXml");
+const generateFiltersXml = require("./components/activities/xml-files/generateFiltersXml");
+const generateGradesXml = require("./components/activities/xml-files/generateGradesXml");
+const generateGradingXml = require("./components/activities/xml-files/generateGradingXml");
+const generateInforefXml = require("./components/activities/xml-files/generateInforefXml");
+const generateModuleXml = require("./components/activities/xml-files/generateModuleXml");
+const generateActivitiesRolesXml = require("./components/activities/xml-files/generateRolesXml");
 
 function createMoodleBackup(outputDir) {
   // Create subdirectories
@@ -31,18 +42,8 @@ function createMoodleBackup(outputDir) {
     }
   });
 
-    // Create directories
-    const courseDir = path.join(outputDir, 'course');
-    const blocksDir = path.join(courseDir, 'blocks');
-    const completionProgressDir = path.join(blocksDir, 'completion_progress');
-    const htmlDir = path.join(blocksDir, 'html');
-    const analyticsGraphsDir = path.join(blocksDir, 'analytics_graphs');
-    const sectionsDir = path.join(outputDir, 'sections');
-    const sectionDir = path.join(sectionsDir, 'section');
-
-    const activitiesDir = path.join(outputDir, 'activities');
-
     // Create subdirectories inside 'activities'
+    const activitiesDir = path.join(outputDir, 'activities'); 
     generateActivitiesFolders(activitiesDir);
 
     // Create xml files
@@ -58,84 +59,20 @@ function createMoodleBackup(outputDir) {
     generateRolesXml(outputDir);
     generateScalesXml(outputDir);
 
-    /* 
-    const gradehistoryXml = xmlbuilder.create('grade_history', { encoding: 'UTF-8' })
-        .ele('grade_grades', '').up()
-    .end({ pretty: true });
-    fs.writeFileSync(path.join(outputDir, 'grade_history.xml'), gradehistoryXml);
+    // Generate xml files inside "activities" directories
+    // activities/assign
+    const activitiesAssignDir = path.join(outputDir, 'activities/assign');
+    generateAssignXml(activitiesAssignDir);
+    generateActivityGradehistoryXml(activitiesAssignDir);
+    generateCalendarXml(activitiesAssignDir);
+    generateCompetenciesXml(activitiesAssignDir);
+    generateFiltersXml(activitiesAssignDir);
+    generateGradesXml(activitiesAssignDir);
+    generateGradingXml(activitiesAssignDir);
+    generateInforefXml(activitiesAssignDir);
+    generateModuleXml(activitiesAssignDir);
+    generateActivitiesRolesXml(activitiesAssignDir);
 
-    
-
-    // Create calendar.xml inside 'course'
-    const calendarXml = xmlbuilder.create('events', { encoding: 'UTF-8' })
-        .end({ pretty: true });
-    fs.writeFileSync(path.join(courseDir, 'calendar.xml'), calendarXml);
-
-    // Create competencies.xml inside 'course'
-    const competenciesXml = xmlbuilder.create('course_competencies', { encoding: 'UTF-8' })
-        .ele('competencies', '').up()
-        .ele('user_competencies', '').up()
-    .end({ pretty: true });
-    fs.writeFileSync(path.join(courseDir, 'competencies.xml'), competenciesXml); 
-
-
-    // Create filters.xml inside 'course'
-    const filtersXml = xmlbuilder.create('filters', { encoding: 'UTF-8' })
-        .ele('filter_actives', '').up()
-        .ele('filters_config', '').up()
-    .end({ pretty: true });
-    fs.writeFileSync(path.join(courseDir, 'filters.xml'), filtersXml);
-
-    // Create inforef.xml inside 'course'
-    const inforefXml = xmlbuilder.create('inforef', { encoding: 'UTF-8' })
-        .ele('groupref')
-            .ele('group',)
-                .ele('id', '').up()
-            .up()
-        .up()
-        .ele('roleref')
-            .ele('role')
-                .ele('id', '').up()
-            .up()
-        .up()
-        .ele('question_categoryref')
-            .ele('question_category')
-                .ele('id', '').up()
-            .up()
-        .up()
-    .end({ pretty: true });
-    fs.writeFileSync(path.join(courseDir, 'inforef.xml'), inforefXml);
-
-    // Create roles.xml inside 'course'
-    const roleXml = xmlbuilder.create('roles', { encoding: 'UTF-8' })
-        .ele('role_overrides', '').up()
-        .ele('role_assignments', '').up()
-    .end({ pretty: true });
-    fs.writeFileSync(path.join(courseDir, 'roles.xml'), roleXml); 
-
-
-     // Create inforef.xml inside 'blocks' directory inside 'completion_progress'
-    const cpInforefXml = xmlbuilder.create('inforef', { encoding: 'UTF-8' })
-    .end({ pretty: true });
-    fs.writeFileSync(path.join(completionProgressDir, 'inforef.xml'), cpInforefXml);
-
-     // Create roles.xml inside 'blocks' directory inside 'completion_progress'
-    const cpRoleXml = xmlbuilder.create('roles', { encoding: 'UTF-8' })
-        .ele('role_overrides', '').up()
-        .ele('role_assignments', '').up()
-    .end({ pretty: true });
-    fs.writeFileSync(path.join(completionProgressDir, 'roles.xml'), cpRoleXml);
-
-
-     // Create inforef.xml inside 'blocks' directory inside 'html'
-    const htmlInforefXml = xmlbuilder.create('inforef', { encoding: 'UTF-8' })
-    .end({ pretty: true });
-    fs.writeFileSync(path.join(htmlDir, 'inforef.xml'), htmlInforefXml);
-
-     */
 }
-
-
-
 
 createMoodleBackup("output/mbz");
