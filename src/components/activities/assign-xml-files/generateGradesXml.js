@@ -13,6 +13,8 @@ function generateGradesXml(outputDir) {
                 .ele('itemmodule', '').up()
                 .ele('iteminstance', '').up()
                 .ele('itemnumber', '').up()
+                .ele('iteminfo', '').up()
+                .ele('idnumber', '').up()
                 .ele('calculation', '').up()
                 .ele('gradetype', '').up()
                 .ele('grademax', '').up()
