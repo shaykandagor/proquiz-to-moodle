@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const xmlbuilder = require('xmlbuilder');
 
+// Generates moodle_backup.xml file inside 'output' directory
+// output\moodle_backup.xml
 function generateMoodleBackup(outputDir) {
     const backupXml = xmlbuilder.create('moodle_backup', { encoding: 'UTF-8' })
         .ele('information')
