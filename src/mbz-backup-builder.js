@@ -12,6 +12,18 @@ const { generateGradehistoryXml } = require("./components/generateGradehistoryXm
 const { generateGradebookXml } = require("./components/generateGradebookXml");
 const { generateGroupsXml } = require("./components/generateGroupsXml");
 
+// Activities directory
+const generateActivitiesFolders = require("./components/activities/generateActivitiesFolders");
+const generateActivityGradehistoryXml = require("./components/activities/xml-files/generateGradeHistoryXml");
+const generateAssignXml = require("./components/activities/xml-files/generateAssignXml");
+const generateCalendarXml = require("./components/activities/xml-files/generateCalendarXml");
+const generateCompetenciesXml = require("./components/activities/xml-files/generateCompetenciesXml");
+const generateFiltersXml = require("./components/activities/xml-files/generateFiltersXml");
+const generateGradesXml = require("./components/activities/xml-files/generateGradesXml");
+const generateGradingXml = require("./components/activities/xml-files/generateGradingXml");
+const generateInforefXml = require("./components/activities/xml-files/generateInforefXml");
+const generateModuleXml = require("./components/activities/xml-files/generateModuleXml");
+const generateActivitiesRolesXml = require("./components/activities/xml-files/generateRolesXml");
 
 function createMoodleBackup(outputDir) {
   // Create subdirectories
@@ -30,6 +42,11 @@ function createMoodleBackup(outputDir) {
     }
   });
 
+    // Create subdirectories inside 'activities'
+    const activitiesDir = path.join(outputDir, 'activities'); 
+    generateActivitiesFolders(activitiesDir);
+
+    // Create xml files
     generateCompletionXml(outputDir);
     generateFilesXml(outputDir);
     generateGradebookXml(outputDir);
@@ -42,9 +59,20 @@ function createMoodleBackup(outputDir) {
     generateRolesXml(outputDir);
     generateScalesXml(outputDir);
 
+    // Generate xml files inside "activities" directories
+    // activities/assign
+    const activitiesAssignDir = path.join(outputDir, 'activities/assign');
+    generateAssignXml(activitiesAssignDir);
+    generateActivityGradehistoryXml(activitiesAssignDir);
+    generateCalendarXml(activitiesAssignDir);
+    generateCompetenciesXml(activitiesAssignDir);
+    generateFiltersXml(activitiesAssignDir);
+    generateGradesXml(activitiesAssignDir);
+    generateGradingXml(activitiesAssignDir);
+    generateInforefXml(activitiesAssignDir);
+    generateModuleXml(activitiesAssignDir);
+    generateActivitiesRolesXml(activitiesAssignDir);
+
 }
-
-
-
 
 createMoodleBackup("output/mbz");
