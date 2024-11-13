@@ -15,8 +15,6 @@ const { generateGroupsXml } = require("./components/generateGroupsXml");
 
 
 // Imports for Activities directory
-// Activities directory
-// activities/assign
 const generateActivitiesFolders = require("./components/activities/generateActivitiesFolders");
 const generateAssignXml = require("./components/activities/assign-xml-files/generateAssignXml");
 const generateCalendarXml = require("./components/activities/assign-xml-files/generateCalendarXml");
@@ -26,14 +24,10 @@ const generateGradesXml = require("./components/activities/assign-xml-files/gene
 const generateGradingXml = require("./components/activities/assign-xml-files/generateGradingXml");
 const generateInforefXml = require("./components/activities/assign-xml-files/generateInforefXml");
 const generateModuleXml = require("./components/activities/assign-xml-files/generateModuleXml");
-
-//activities/attendance
 const generateAttendanceXml = require("./components/activities/attendance-xml-files/generateAttendanceXml");
 const generateAttCalendarXml = require("./components/activities/attendance-xml-files/generateAttCalendarXml");
 const generateGradeHistoryXml = require("./components/activities/assign-xml-files/generateAssignGradeHistoryXml");
 const generateAttInforefXml = require("./components/activities/attendance-xml-files/generateAttInfoXml");
-
-//activities/board
 const generateBoardXml = require("./components/activities/board-xml-files/generateBoardXml");
 const generateBoaGradesXml = require("./components/activities/board-xml-files/generateBoaGradesXml");
 const generateBoaInforefXml = require("./components/activities/board-xml-files/generateBoaInforefXml");
