@@ -1,7 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-const { title } = require("process");
-const xmlbuilder = require("xmlbuilder");
 const { generateBlockXml } = require("./xmlFiles/generateBlockXml");
 const { generateInforefXml } = require("./xmlFiles/generateInforefXml");
 const { generateRolesXml } = require("./xmlFiles/generateRolesXml");

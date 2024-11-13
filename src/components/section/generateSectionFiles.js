@@ -1,7 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-const { title } = require("process");
-const xmlbuilder = require("xmlbuilder");
 const { generateSectionXml } = require("./xmlFiles/generateSectionXml");
 const { generateInforefXml } = require("./xmlFiles/generateInforefXml");
 

@@ -1,8 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-const { title } = require("process");
-const xmlbuilder = require("xmlbuilder");
-
 const { generateCalendarXml } = require("./xmlFiles/generateCalendarXml");
 const { generateCompetenciesXml } = require("./xmlFiles/generateCompetenciesXml");
 const { generateCompletiondefaultsXml } = require("./xmlFiles/generateCompletiondefaultsXml");
@@ -21,8 +16,8 @@ function generateCourseFiles (courseDir) {
     generateContentbankXml(courseDir);
     generateCourseXml(courseDir);
     generateEnrolmentXml(courseDir);
-    generateInforefXml(courseDir);
     generateFiltersXml(courseDir);
+    generateInforefXml(courseDir);
     generateRolesXml(courseDir);
 
 }
