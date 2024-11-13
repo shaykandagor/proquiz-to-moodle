@@ -1,17 +1,20 @@
 const fs = require("fs");
 const path = require("path");
 
+// Imports for Main xml files
 const generateQuestionsXml = require('./components/generateQuestionsXml');
 const generateMoodleBackup = require('./components/generateMoodleBackup');
-const generateOutcomesXml = require('./components/generateOutcomes');
-const generateRolesXml = require('./components/generateRoles');
-const generateScalesXml = require('./components/generateScales');
+const generateOutcomesXml = require('./components/generateOutcomesXml');
+const generateRolesXml = require('./components/generateRolesXml');
+const generateScalesXml = require('./components/generateScalesXml');
 const { generateCompletionXml } = require("./components/generateCompletionXml");
 const { generateFilesXml } = require("./components/generateFilesXml");
 const { generateGradehistoryXml } = require("./components/generateGradehistoryXml");
 const { generateGradebookXml } = require("./components/generateGradebookXml");
 const { generateGroupsXml } = require("./components/generateGroupsXml");
 
+
+// Imports for Activities directory
 // Activities directory
 // activities/assign
 const generateActivitiesFolders = require("./components/activities/generateActivitiesFolders");
@@ -64,22 +67,21 @@ function createMoodleBackup(outputDir) {
     }
   });
 
-    // Create subdirectories inside 'activities'
-    const activitiesDir = path.join(outputDir, 'activities'); 
-    generateActivitiesFolders(activitiesDir);
-
-    // Create xml files
+    // Generate xml files inside "main" directory
     generateCompletionXml(outputDir);
     generateFilesXml(outputDir);
     generateGradebookXml(outputDir);
     generateGradehistoryXml(outputDir);
     generateGroupsXml(outputDir);
     generateMoodleBackup(outputDir);
-    generateMoodleBackup(outputDir);
     generateOutcomesXml(outputDir);
     generateQuestionsXml(outputDir);
     generateRolesXml(outputDir);
     generateScalesXml(outputDir);
+
+    // Create subdirectories inside 'activities'
+    const activitiesDir = path.join(outputDir, 'activities');
+    generateActivitiesFolders(activitiesDir);
 
     // Generate xml files inside "activities" directories
     // activities/assign
