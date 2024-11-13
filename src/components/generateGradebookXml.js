@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const xmlbuilder = require('xmlbuilder');
 
+// Generates gradebook.xml file inside 'output' directory
+// output\gradebook.xml
 function generateGradebookXml(outputDir) {
     const gradebookXml = xmlbuilder.create('gradebook', { encoding: 'UTF-8' })
         .ele('attributes').up()

@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const xmlbuilder = require('xmlbuilder');
 
+// Generates roles.xml file inside 'output' directory
+// output\roles.xml
 function generateRolesXml(outputDir) {
     const rolesXml = xmlbuilder.create('roles_definition', { encoding: 'UTF-8' })
     .ele('role', { id: '' })
