@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const xmlbuilder = require('xmlbuilder');
 
-function generateActivitiesRolesXml(outputDir) {
+function generateAssignRolesXml(outputDir) {
     const roleXml = xmlbuilder.create('roles', { encoding: 'UTF-8' })
         .ele('role_overrides', '').up()
         .ele('role_assignments', '').up()
@@ -18,4 +18,4 @@ function generateActivitiesRolesXml(outputDir) {
     return roleXml;
 }
 
-module.exports = generateActivitiesRolesXml;
+module.exports = generateAssignRolesXml;
