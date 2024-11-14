@@ -2,11 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const xmlbuilder = require('xmlbuilder');
 
-// Generates block.xml inside 'blocks' directory inside 'completion_progress' folder
-// course\blocks\completion_progress\block.xml
-function generateBlockXml(completionProgressDir){
+function generateBlockXml(completionProgressDir) {
+    // Ensure the directory exists
+    if (!fs.existsSync(completionProgressDir)) {
+        fs.mkdirSync(completionProgressDir, { recursive: true });
+    }
+
     const blockXml = xmlbuilder.create('block', { encoding: 'UTF-8' })
-    .att( 'id', '' ).att('contextid', '').att('version', '')
         .ele('blockname', '').up()
         .ele('parentcontextid', '').up()
         .ele('showinsubcontexts', '').up()
@@ -18,10 +20,11 @@ function generateBlockXml(completionProgressDir){
         .ele('timecreated', '').up()
         .ele('timemodified', '').up()
         .ele('block_positions', '').up()
-    .end({ pretty: true });
+        .end({ pretty: true });
+
     fs.writeFileSync(path.join(completionProgressDir, 'block.xml'), blockXml);
 
     return blockXml;
 }
 
-module.exports = { generateBlockXml }
+module.exports = { generateBlockXml };

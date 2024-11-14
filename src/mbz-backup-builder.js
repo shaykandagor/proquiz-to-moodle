@@ -46,10 +46,10 @@ const generateUrlXml = require("./components/activities/url-xml-files/generateUr
 
 // Imports for Courses directory
 const { generateCourseFiles } = require("./components/course/generateCourseFiles");
-const { generateBlockFiles } = require("./components/course/blocks/generateBlocksFiles");
 
 // Imports for Section directory
 const { generateSectionFiles } = require("./components/section/generateSectionFiles");
+const { generateBlockFiles } = require("./components/course/blocks/generateBlocksFiles");
 
 function createMoodleBackup(outputDir) {
   // Create subdirectories
@@ -80,7 +80,7 @@ function createMoodleBackup(outputDir) {
     generateRolesXml(outputDir);
     generateScalesXml(outputDir);
 
-    /* // Creates xml files inside 'course' directory
+    // Creates xml files inside 'course' directory
     const courseDir = path.join(outputDir, 'course');
     generateCourseFiles(courseDir);
     
@@ -91,17 +91,17 @@ function createMoodleBackup(outputDir) {
     // Creates subdirectory inside 'blocks' directory 'completion_progress'
     // courses/blocks/completion_progress
     const completionProgressDir = path.join(blocksDir, 'completion_progress');
+    generateBlockFiles(completionProgressDir);
     
     // Generate xml files in courses/blocks/completion_progress
-    generateBlockFiles(completionProgressDir)
     
     // Creates subdirectries inside 'sections'
     const sectionsDir = path.join(outputDir, 'sections');
 
     // Creates subdirectories inside 'sections'
     // sections/section
-    const sectionDir = path.join(sectionsDir, 'sections/section');
-    generateSectionFiles(sectionDir) */
+    const sectionDir = path.join(sectionsDir, 'section');
+    generateSectionFiles(sectionDir);
 
     // Create subdirectories inside 'activities'
     const activitiesDir = path.join(outputDir, 'activities');
