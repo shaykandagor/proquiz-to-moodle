@@ -13,29 +13,19 @@ const { generateGradehistoryXml } = require("./components/generateGradehistoryXm
 const { generateGradebookXml } = require("./components/generateGradebookXml");
 const { generateGroupsXml } = require("./components/generateGroupsXml");
 
-
-// Imports for Activities directory
-const generateActivitiesFolders = require("./components/activities/generateActivitiesFolders");
-const generateActivityGradehistoryXml = require("./components/activities/xml-files/generateGradeHistoryXml");
-const generateAssignXml = require("./components/activities/xml-files/generateAssignXml");
-const generateCalendarXml = require("./components/activities/xml-files/generateCalendarXml");
-const generateCompetenciesXml = require("./components/activities/xml-files/generateCompetenciesXml");
-const generateFiltersXml = require("./components/activities/xml-files/generateFiltersXml");
-const generateGradesXml = require("./components/activities/xml-files/generateGradesXml");
-const generateGradingXml = require("./components/activities/xml-files/generateGradingXml");
-const generateInforefXml = require("./components/activities/xml-files/generateInforefXml");
-const generateModuleXml = require("./components/activities/xml-files/generateModuleXml");
-const generateActivitiesRolesXml = require("./components/activities/xml-files/generateRolesXml");
-
 // Imports for Courses directory
 const { generateCourseFiles } = require("./components/course/generateCourseFiles");
-const { generateBlockFiles } = require("./components/course/blocks/generateBlocksFiles");
 
 // Imports for Section directory
 const { generateSectionFiles } = require("./components/section/generateSectionFiles");
 
 // Imports for Files directory
 const { generateFiles } = require("./components/files/generateFiles");
+const { generateBlockFiles } = require("./components/course/blocks/generateBlocksFiles");
+
+// Imports for Activities directory
+const generateActivitiesFiles = require("./components/activities/generateActivitiesFiles");
+
 
 function createMoodleBackup(outputDir) {
   // Create subdirectories
@@ -66,55 +56,32 @@ function createMoodleBackup(outputDir) {
     generateRolesXml(outputDir);
     generateScalesXml(outputDir);
 
-    // Create subdirectories inside 'activities'
-    const activitiesDir = path.join(outputDir, 'activities');
-    generateActivitiesFolders(activitiesDir);
-
     // Generate xml files inside "activities" directories
-    // activities/assign
-    const activitiesAssignDir = path.join(outputDir, 'activities/assign');
-    generateAssignXml(activitiesAssignDir);
-    generateActivityGradehistoryXml(activitiesAssignDir);
-    generateCalendarXml(activitiesAssignDir);
-    generateCompetenciesXml(activitiesAssignDir);
-    generateFiltersXml(activitiesAssignDir);
-    generateGradesXml(activitiesAssignDir);
-    generateGradingXml(activitiesAssignDir);
-    generateInforefXml(activitiesAssignDir);
-    generateModuleXml(activitiesAssignDir);
-    generateActivitiesRolesXml(activitiesAssignDir);
-    
-    // Creates xml files inside 'course' directory
+    generateActivitiesFiles(outputDir);
+
+    // Creates xml files inside 'course' directory 
     const courseDir = path.join(outputDir, 'course');
     generateCourseFiles(courseDir);
-    
-    // Creates subdirectory inside 'course'
-    // course/blocks
+    // Creates subdirectory course/blocks
     const blocksDir = path.join(courseDir, 'blocks');
-    
-    // Creates subdirectory inside 'blocks' directory 'completion_progress'
-    // courses/blocks/completion_progress
+    // Creates subdirectory courses/blocks/completion_progress
     const completionProgressDir = path.join(blocksDir, 'completion_progress');
-    
     // Generate xml files in courses/blocks/completion_progress
-    generateBlockFiles(completionProgressDir)
+    generateBlockFiles(completionProgressDir);
     
-    // Creates subdirectries inside 'sections'
+    // Defines 'sections' path 
     const sectionsDir = path.join(outputDir, 'sections');
+    // Creates subdirectory sections/section
+    const sectionDir = path.join(sectionsDir, 'section');
+    generateSectionFiles(sectionDir);
 
     // Creates subdirectries inside 'files'
     const filesDir = path.join(outputDir, 'files');
 
-    // Creates subdirectories inside 'sections'
-    // sections/section
     const fileDir = path.join(filesDir, 'file');
     generateFiles(fileDir)
     
 
-    // Creates subdirectories inside 'sections'
-    // sections/section
-    const sectionDir = path.join(sectionsDir, 'section');
-    generateSectionFiles(sectionDir)
 }
 
 createMoodleBackup("output/mbz");

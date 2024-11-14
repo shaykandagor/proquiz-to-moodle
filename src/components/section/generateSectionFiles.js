@@ -1,10 +1,9 @@
-const { generateSectionXml } = require("./xmlFiles/generateSectionXml");
-const { generateInforefXml } = require("./xmlFiles/generateInforefXml");
+const { generateInforefXml } = require("./sectionXmlFiles/generateInforefXml");
+const { generateSectionXml } = require("./sectionXmlFiles/generateSectionXml");
 
- // Generates xml files inside 'sections' directory inside 'section' file
-function generateSectionFiles(sectionDir){
-    generateSectionXml(sectionDir)
-    generateInforefXml(sectionDir)
+function generateSectionFiles(sectionDir) {
+    generateInforefXml(sectionDir);
+    generateSectionXml(sectionDir);
 }
 
 module.exports = { generateSectionFiles }
