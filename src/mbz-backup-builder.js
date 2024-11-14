@@ -34,6 +34,9 @@ const { generateBlockFiles } = require("./components/course/blocks/generateBlock
 // Imports for Section directory
 const { generateSectionFiles } = require("./components/section/generateSectionFiles");
 
+// Imports for Files directory
+const { generateFiles } = require("./components/files/generateFiles");
+
 function createMoodleBackup(outputDir) {
   // Create subdirectories
   const backupDirs = ["activities", "course", "files", "sections"];
@@ -99,9 +102,18 @@ function createMoodleBackup(outputDir) {
     // Creates subdirectries inside 'sections'
     const sectionsDir = path.join(outputDir, 'sections');
 
+    // Creates subdirectries inside 'files'
+    const filesDir = path.join(outputDir, 'files');
+
     // Creates subdirectories inside 'sections'
     // sections/section
-    const sectionDir = path.join(sectionsDir, 'sections/section');
+    const fileDir = path.join(filesDir, 'file');
+    generateFiles(fileDir)
+    
+
+    // Creates subdirectories inside 'sections'
+    // sections/section
+    const sectionDir = path.join(sectionsDir, 'section');
     generateSectionFiles(sectionDir)
 }
 
