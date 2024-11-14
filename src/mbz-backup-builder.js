@@ -8,7 +8,6 @@ const generateOutcomesXml = require('./components/generateOutcomesXml');
 const generateRolesXml = require('./components/generateRolesXml');
 const generateScalesXml = require('./components/generateScalesXml');
 const { generateCompletionXml } = require("./components/generateCompletionXml");
-const { generateFilesXml } = require("./components/generateFilesXml");
 const { generateGradehistoryXml } = require("./components/generateGradehistoryXml");
 const { generateGradebookXml } = require("./components/generateGradebookXml");
 const { generateGroupsXml } = require("./components/generateGroupsXml");
@@ -20,11 +19,11 @@ const { generateCourseFiles } = require("./components/course/generateCourseFiles
 const { generateSectionFiles } = require("./components/section/generateSectionFiles");
 
 // Imports for Files directory
-const { generateFiles } = require("./components/files/generateFiles");
 const { generateBlockFiles } = require("./components/course/blocks/generateBlocksFiles");
 
 // Imports for Activities directory
 const generateActivitiesFiles = require("./components/activities/generateActivitiesFiles");
+const { generateFilesXml } = require("./components/generateFilesXml");
 
 
 function createMoodleBackup(outputDir) {
@@ -74,12 +73,6 @@ function createMoodleBackup(outputDir) {
     // Creates subdirectory sections/section
     const sectionDir = path.join(sectionsDir, 'section');
     generateSectionFiles(sectionDir);
-
-    // Creates subdirectries inside 'files'
-    const filesDir = path.join(outputDir, 'files');
-
-    const fileDir = path.join(filesDir, 'file');
-    generateFiles(fileDir)
     
 
 }
