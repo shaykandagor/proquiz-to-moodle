@@ -53,39 +53,23 @@ function createMoodleBackup(outputDir) {
     generateScalesXml(outputDir);
 
     // Generate xml files inside "activities" directories
-    // activities/assign
-    generateActivitiesFiles(outputDir);
-
-    // Generate xml files inside "activities" directories
-    // activities/assign
     generateActivitiesFiles(outputDir);
 
     // Creates xml files inside 'course' directory 
     const courseDir = path.join(outputDir, 'course');
     generateCourseFiles(courseDir);
-    
-    // Creates subdirectory inside 'course'
-    // course/blocks
+    // Creates subdirectory course/blocks
     const blocksDir = path.join(courseDir, 'blocks');
-    
-    // Creates subdirectory inside 'blocks' directory 'completion_progress'
-    // courses/blocks/completion_progress
+    // Creates subdirectory courses/blocks/completion_progress
     const completionProgressDir = path.join(blocksDir, 'completion_progress');
+    // Generate xml files in courses/blocks/completion_progress
     generateBlockFiles(completionProgressDir);
     
-    // Generate xml files in courses/blocks/completion_progress
-    
-    // Creates subdirectries inside 'sections'
+    // Defines 'sections' path 
     const sectionsDir = path.join(outputDir, 'sections');
-
-    // Creates subdirectories inside 'sections'
-    // sections/section
+    // Creates subdirectory sections/section
     const sectionDir = path.join(sectionsDir, 'section');
     generateSectionFiles(sectionDir);
-
-    // Create subdirectories inside 'activities'
-   /*  const activitiesDir = path.join(outputDir, 'activities');
-    generateActivitiesFolders(activitiesDir); */
 
 }
 
