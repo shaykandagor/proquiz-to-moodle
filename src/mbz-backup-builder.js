@@ -25,7 +25,7 @@ const { generateBlockFiles } = require("./components/course/blocks/generateBlock
 
 function createMoodleBackup(outputDir) {
   // Create subdirectories
-  const backupDirs = ["activities", "course", "files", "sections"];
+  const backupDirs = ["course"];
 
   // Ensure the output directory exists
   if (!fs.existsSync(outputDir)) {
@@ -53,23 +53,23 @@ function createMoodleBackup(outputDir) {
     generateScalesXml(outputDir);
 
     // Generate xml files inside "activities" directories
-    generateActivitiesFiles(outputDir);
+    // generateActivitiesFiles(outputDir);
 
     // Creates xml files inside 'course' directory 
     const courseDir = path.join(outputDir, 'course');
     generateCourseFiles(courseDir);
     // Creates subdirectory course/blocks
-    const blocksDir = path.join(courseDir, 'blocks');
+    // const blocksDir = path.join(courseDir, 'blocks');
     // Creates subdirectory courses/blocks/completion_progress
-    const completionProgressDir = path.join(blocksDir, 'completion_progress');
+    // const completionProgressDir = path.join(blocksDir, 'completion_progress');
     // Generate xml files in courses/blocks/completion_progress
-    generateBlockFiles(completionProgressDir);
+    // generateBlockFiles(completionProgressDir);
     
     // Defines 'sections' path 
-    const sectionsDir = path.join(outputDir, 'sections');
+    // const sectionsDir = path.join(outputDir, 'sections');
     // Creates subdirectory sections/section
-    const sectionDir = path.join(sectionsDir, 'section');
-    generateSectionFiles(sectionDir);
+    // const sectionDir = path.join(sectionsDir, 'section');
+    // generateSectionFiles(sectionDir);
 
 }
 
