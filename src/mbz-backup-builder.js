@@ -10,7 +10,7 @@ const generateScalesXml = require('./components/generateScalesXml');
 const { generateCompletionXml } = require("./components/generateCompletionXml");
 const { generateFilesXml } = require("./components/generateFilesXml");
 const { generateGradehistoryXml } = require("./components/generateGradehistoryXml");
-const { generateGradebookXml } = require("./components/generateGradebookXml");
+const generateGradebookXml = require("./components/generateGradebookXml");
 const { generateGroupsXml } = require("./components/generateGroupsXml");
 
 // Imports for Courses directory

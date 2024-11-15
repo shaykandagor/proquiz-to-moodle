@@ -6,18 +6,6 @@ const xmlbuilder = require('xmlbuilder');
 // output\questions.xml
 function generateQuestionsXml(outputDir) {
     const questionsXml = xmlbuilder.create('question_categories', { encoding: 'UTF-8' })
-        .ele('question_category', { id: '' })
-            .ele('name', '').up()
-            .ele('contextid', '').up()
-            .ele('contextlevel', '').up()
-            .ele('contextinstanceid', '').up()
-            .ele('info', '').up()
-            .ele('infoformat', '').up()
-            .ele('stamp', '').up()
-            .ele('parent', '').up()
-            .ele('sortorder', '').up()
-            .ele('idnumber', '').up()
-            .ele('question_bank_entries', '').up()
         .end({ pretty: true });
         fs.writeFileSync(path.join(outputDir, 'questions.xml'), questionsXml);
 
