@@ -1,0 +1,67 @@
+const fs = require("fs");
+const path = require("path");
+const xmlbuilder = require('xmlbuilder');
+
+function generateAttendanceXml(outputDir) {
+    const attendanceXml = xmlbuilder.create('activity', { encoding: 'UTF-8' })
+    .att({ id: '', moduleid: '', modulename: 'attendance', contextid: '' })
+        .ele('attendance', {id: ''})
+            .ele('name', '').up()
+            .ele('intro', '').up()
+            .ele('introformat', '').up()
+            .ele('grade', '').up()
+            .ele('showextrauserdetails', '').up()
+            .ele('showsessiondetails', '').up()
+            .ele('sessiondetailspos', '').up()
+            .ele('subnet', '').up()
+            .ele('statuses')
+                .ele('status', {id: ''})
+                    .ele('acronym', '').up()
+                    .ele('description', '').up()
+                    .ele('grade', '').up()
+                    .ele('studentavailability', '').up()
+                    .ele('availablebeforesession', '').up()
+                    .ele('setunmarked', '').up()
+                    .ele('visible', '').up()
+                    .ele('deleted', '').up()
+                    .ele('setnumber', '').up()
+                .up()
+            .ele('warnings', '').up()
+            .ele('sessions')
+                .ele('session', {id: ''})
+                    .ele('groupid', '').up()
+                    .ele('sessdate', '').up()
+                    .ele('duration', '').up()
+                    .ele('lasttaken', '').up()
+                    .ele('lasttakenby', '').up()
+                    .ele('timemodified', '').up()
+                    .ele('description', ' ').up()
+                    .ele('descriptionformat', '').up()
+                    .ele('studentscanmark', '').up()
+                    .ele('allowupdatestatus', '').up()
+                    .ele('studentpassword', '').up()
+                    .ele('autoassignstatus', '').up()
+                    .ele('subnet', '').up()
+                    .ele('automark', '').up()
+                    .ele('automarkcompleted', '').up()
+                    .ele('statusset', '').up()
+                    .ele('absenteereport', '').up()
+                    .ele('preventsharedip', '').up()
+                    .ele('preventsharediptime', '').up()
+                    .ele('caleventid', '').up()
+                    .ele('calendarevent', '').up()
+                    .ele('includeqrcode', '').up()
+                    .ele('automarkcmid', '').up()
+                    .ele('studentsearlyopentime', '').up()
+                    .ele('logs').up()
+                .up()
+            .up()
+            .ele('customfields', '').up()
+        .up()
+    .end({ pretty: true });
+    fs.writeFileSync(path.join(outputDir, 'attendance.xml'), attendanceXml);
+
+    return attendanceXml;
+}
+
+module.exports = generateAttendanceXml;
