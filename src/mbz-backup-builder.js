@@ -11,7 +11,7 @@ const { generateCompletionXml } = require("./components/generateCompletionXml");
 const { generateFilesXml } = require("./components/generateFilesXml");
 const { generateGradehistoryXml } = require("./components/generateGradehistoryXml");
 const { generateGradebookXml } = require("./components/generateGradebookXml");
-const { generateGroupsXml } = require("./components/generateGroupsXml");
+const { generateGroupsXml, buildGroupsXml } = require("./components/generateGroupsXml");
 
 // Imports for Courses directory
 const { generateCourseFiles } = require("./components/course/generateCourseFiles");
@@ -45,7 +45,7 @@ function createMoodleBackup(outputDir) {
     generateFilesXml(outputDir);
     generateGradebookXml(outputDir);
     generateGradehistoryXml(outputDir);
-    generateGroupsXml(outputDir);
+    //generateGroupsXml(outputDir);
     generateMoodleBackup(outputDir);
     generateOutcomesXml(outputDir);
     generateQuestionsXml(outputDir);
