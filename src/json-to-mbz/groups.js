@@ -2,15 +2,12 @@ const fs = require("fs");
 const path = require("path");
 const xmlbuilder = require("xmlbuilder");
 
-
 // Function to generate XML from groups data
 const generateGroupsXml = (groups) => {
     const xml = xmlbuilder.create("groups");
 
-
     groups.forEach((group) => {
-        const groupElement = xml.ele("group", { id: group.id });
-        groupElement.ele("name", group.name);
+        const groupElement = xml.ele("group", { name: group.name });
         groupElement.ele("idnumber", group.idnumber);
         groupElement.ele("description", group.description);
         groupElement.ele("descriptionformat", group.descriptionformat);
@@ -25,38 +22,34 @@ const generateGroupsXml = (groups) => {
         });
     });
 
-
     const xmlString = xml.end({ pretty: true });
-
 
     return xmlString;
 };
 
-
 // Function to create content from JSON data
 const createContent = (data) =>
     JSON.parse(data).wp_data.map(
-        ({ wp_post_id, wp_author_id, wp_post_title, wp_post_name, wp_post_content, wp_post_date, wp_post_modified }) => ({
+        ({ wp_post_id, wp_post_title, wp_post_name, wp_post_content }) => ({
             id: wp_post_id, // Group ID
-            idnumber: wp_author_id, // ID of the user who created the group
             title: wp_post_title, // Group title
             name: wp_post_name, // Group name
+            content: wp_post_content, // Group content
             description: wp_post_content, // Group description
             descriptionformat: 1, // Description format
+            idnumber: wp_post_id, // Group ID number
             enrolmentkey: "", // Enrolment key
             picture: "", // Picture
             hidepicture: 0, // Hide picture flag
-            timecreated: wp_post_date, // Time created
-            timemodified: wp_post_modified, // Time modified
+            timecreated: 0, // Time created
+            timemodified: 0, // Time modified
             group_members: [] // Group members (empty for now)
         })
     );
 
-
 // Function to write content to a file
 const writeFile = (filename, content, callback) =>
     fs.writeFile(filename, content, callback);
-
 
 // Callback function to read file and generate XML
 const readFileCallback = (outputPath) => (err, data) => {
@@ -65,12 +58,9 @@ const readFileCallback = (outputPath) => (err, data) => {
         return;
     }
 
-
     const content = createContent(data);
 
-
     const xml = generateGroupsXml(content);
-
 
     writeFile(outputPath, xml, (err) => {
         if (err) {
@@ -81,12 +71,10 @@ const readFileCallback = (outputPath) => (err, data) => {
     });
 };
 
-
 // Function to build XML from JSON file
-const buildGroupsXml = (jsonFilePath, outputDir) => {
-    const outputPath = path.join(outputDir, "groups.xml");
+const buildGroupsXml = (jsonFilePath, finalDir) => {
+    const outputPath = path.join(finalDir, "groups.xml");
     fs.readFile(jsonFilePath, "utf8", readFileCallback(outputPath));
 };
-
 
 module.exports = { buildGroupsXml };

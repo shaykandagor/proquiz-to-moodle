@@ -1,12 +1,13 @@
 {
   "name": "proquiz-to-moodle",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "build-all": "nodemon src/build-all.js",
     "build-lessons-html": "nodemon src/html-lessons-builder.js",
     "build-topics-html": "nodemon src/html-topics-builder.js",
-    "build-mbz-backup": "nodemon src/mbz-backup-builder.js"
+    "build-mbz-backup": "nodemon src/mbz-backup-builder.js",
+    "build-final-mbz-backup": "nodemon src/final-mbz-backup-builder.js"
   },
   "author": "",
   "license": "ISC",
