@@ -45,7 +45,7 @@ function createMoodleBackup(outputDir) {
     generateFilesXml(outputDir);
     generateGradebookXml(outputDir);
     generateGradehistoryXml(outputDir);
-    generateGroupsXml(outputDir);
+    //generateGroupsXml(outputDir);
     generateMoodleBackup(outputDir);
     generateOutcomesXml(outputDir);
     generateQuestionsXml(outputDir);
