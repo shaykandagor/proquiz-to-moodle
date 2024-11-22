@@ -84,7 +84,7 @@ const readFileCallback = (outputPath) => (err, data) => {
 
 // Function to build XML from JSON file
 const buildGroupsXml = (jsonFilePath, outputDir) => {
-    const outputPath = path.join(outputDir, "groups.xml");
+    const outputPath = path.join(outputDir, "final-mbz/groups.xml");
     fs.readFile(jsonFilePath, "utf8", readFileCallback(outputPath));
 };
 
