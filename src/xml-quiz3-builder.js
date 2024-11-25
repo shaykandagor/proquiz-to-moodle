@@ -8,7 +8,8 @@ const createQuestion = (root) => (question) => {
   questionEle.ele("name").ele("text", question.title);
   questionEle
     .ele("questiontext", { format: "html" })
-    .ele("text", `<![CDATA[${question.question}]]>`);
+    .ele("text")
+    .raw(`<![CDATA[${question.question}]]>`);
   questionEle
     .ele("generalfeedback")
     .ele("text", question.generalfeedback || "");

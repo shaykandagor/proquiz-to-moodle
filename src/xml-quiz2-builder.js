@@ -3,12 +3,18 @@ const xmlbuilder = require("xmlbuilder");
 const { parse } = require("./utils/quiz-parser");
 const { writeFileCallback } = require("./utils/utils");
 
+// TODO: this creates Moodle XML import format, does this work with MBZ?
+// Does the format differ in MBZ archive and Moodle XML import?
+
+// TODO: should this file be renamed and moved to the components directory?
+
 const createQuestion = (root) => (question) => {
   const questionEle = root.ele("question", { type: question.type });
   questionEle.ele("name").ele("text", question.title);
   questionEle
     .ele("questiontext", { format: "html" })
-    .ele("text", `<![CDATA[${question.question}]]>`);
+    .ele("text")
+    .raw(`<![CDATA[${question.question}]]>`);
   questionEle
     .ele("generalfeedback")
     .ele("text", question.generalfeedback || "");
@@ -20,7 +26,9 @@ const createQuestion = (root) => (question) => {
 
   question.answers.forEach((answer) => {
     const answerEle = answersEle.ele("answer", { fraction: answer.fraction });
-    answerEle.ele("text", `<![CDATA[${answer.answer}]]>`);
+    answerEle
+      .ele("text", { format: "html" })
+      .raw(`<![CDATA[${answer.answer}]]>`);
     answerEle.ele("feedback").ele("text", answer.feedback || "");
   });
 };
