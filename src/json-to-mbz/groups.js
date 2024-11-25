@@ -1,92 +1,77 @@
 const fs = require("fs");
 const path = require("path");
-const xmlbuilder = require("xmlbuilder");
+const xml2js = require("xml2js");
 
-
-// Function to generate XML from groups data
-const generateGroupsXml = (groups) => {
-    const xml = xmlbuilder.create("groups");
-
-
-    groups.forEach((group) => {
-        const groupElement = xml.ele("group", { id: group.id });
-        groupElement.ele("name", group.name);
-        groupElement.ele("idnumber", group.idnumber);
-        groupElement.ele("description", group.description);
-        groupElement.ele("descriptionformat", group.descriptionformat);
-        groupElement.ele("enrolmentkey", group.enrolmentkey);
-        groupElement.ele("picture", group.picture);
-        groupElement.ele("hidepicture", group.hidepicture);
-        groupElement.ele("timecreated", group.timecreated);
-        groupElement.ele("timemodified", group.timemodified);
-        const membersElement = groupElement.ele("group_members");
-        group.group_members.forEach((member) => {
-            membersElement.ele("member", member);
+// Function to read JSON content
+const readJsonFile = (jsonFilePath) => {
+    return new Promise((resolve, reject) => {
+        fs.readFile(jsonFilePath, "utf8", (err, data) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(JSON.parse(data));
+            }
         });
     });
-
-
-    const xmlString = xml.end({ pretty: true });
-
-
-    return xmlString;
 };
 
-
-// Function to create content from JSON data
-const createContent = (data) =>
-    JSON.parse(data).wp_data.map(
-        ({ wp_post_id, wp_author_id, wp_post_title, wp_post_name, wp_post_content, wp_post_date, wp_post_modified }) => ({
-            id: wp_post_id, // Group ID
-            idnumber: wp_author_id, // ID of the user who created the group
-            title: wp_post_title, // Group title
-            name: wp_post_name, // Group name
-            description: wp_post_content, // Group description
-            descriptionformat: 1, // Description format
-            enrolmentkey: "", // Enrolment key
-            picture: "", // Picture
-            hidepicture: 0, // Hide picture flag
-            timecreated: wp_post_date, // Time created
-            timemodified: wp_post_modified, // Time modified
-            group_members: [] // Group members (empty for now)
-        })
-    );
-
-
-// Function to write content to a file
-const writeFile = (filename, content, callback) =>
-    fs.writeFile(filename, content, callback);
-
-
-// Callback function to read file and generate XML
-const readFileCallback = (outputPath) => (err, data) => {
-    if (err) {
-        console.error("Error reading file:", err);
-        return;
-    }
-
-
-    const content = createContent(data);
-
-
-    const xml = generateGroupsXml(content);
-
-
-    writeFile(outputPath, xml, (err) => {
+// Function to read and modify the existing XML file
+const modifyXmlFile = (xmlFilePath, jsonData, outputFilePath) => {
+    fs.readFile(xmlFilePath, "utf8", (err, data) => {
         if (err) {
-            console.error("Error writing file:", err);
-        } else {
-            console.log("File written successfully to", outputPath);
+            console.error(`Error reading XML file: ${xmlFilePath}`);
+            throw err;
         }
+        xml2js.parseString(data, (err, result) => {
+            if (err) {
+                console.error(`Error parsing XML file: ${xmlFilePath}`);
+                throw err;
+            }
+
+            // Modify the XML content with JSON data
+            if (result.name) {
+                result.name._ = jsonData.wp_post_name;
+            } else {
+                result.name = jsonData.wp_post_name;
+            }
+
+            // Convert the modified XML object back to a string
+            const builder = new xml2js.Builder();
+            const xmlString = builder.buildObject(result);
+
+            // Ensure the output directory exists
+            const outputDir = path.dirname(outputFilePath);
+            if (!fs.existsSync(outputDir)) {
+                fs.mkdirSync(outputDir, { recursive: true });
+            }
+
+            // Write the updated XML file to the output directory
+            fs.writeFile(outputFilePath, xmlString, (err) => {
+                if (err) {
+                    console.error(`Error writing XML file: ${outputFilePath}`);
+                    throw err;
+                }
+                console.log(`XML file ${outputFilePath} updated successfully!`);
+            });
+        });
     });
 };
 
-
-// Function to build XML from JSON file
-const buildGroupsXml = (jsonFilePath, outputDir) => {
-    const outputPath = path.join(outputDir, "final-mbz/groups.xml");
-    fs.readFile(jsonFilePath, "utf8", readFileCallback(outputPath));
+// Function to read JSON content and modify XML files
+const integrateJsonToXml = async (jsonFilePath, xmlFilePath, outputFilePath) => {
+    try {
+        const jsonData = await readJsonFile(jsonFilePath);
+        console.log(jsonData);
+        modifyXmlFile(xmlFilePath, jsonData, outputFilePath);
+    } catch (err) {
+        console.error(err);
+    }
 };
 
+// Example usage:
+const jsonFilePath = "C:/Users/ainaral/Documents/proquiz-to-moodle/exported_data/json/export-file-groups-2024-07-01-11-30-19.json";
+const xmlFilePath = "C:/Users/ainaral/Documents/proquiz-to-moodle/output/mbz/groups.xml";
+const outputFilePath = "C:/Users/ainaral/Documents/proquiz-to-moodle/final-mbz/groups.xml";
 
-module.exports = { buildGroupsXml };
+integrateJsonToXml(jsonFilePath, xmlFilePath, outputFilePath);
+
