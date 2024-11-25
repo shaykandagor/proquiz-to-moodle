@@ -5,19 +5,19 @@ const xml2js = require("xml2js");
 // Function to create content from JSON data
 const createContent = (data) =>
     JSON.parse(data).wp_data.map(
-        ({ wp_post_id, wp_post_title, wp_post_name, wp_post_content, wp_post_date, wp_post_modified }) => ({
-            id: wp_post_id, // Group ID
-            title: wp_post_title || "", // Group title
-            name: wp_post_name || "", // Group name
-            description: wp_post_content || "", // Group description
-            descriptionformat: 1, // Description format
-            idnumber: wp_post_id || "", // Group ID number
-            enrolmentkey: "", // Enrolment key
-            picture: "", // Picture
-            hidepicture: 0, // Hide picture flag
-            timecreated: wp_post_date || "", // Time created
-            timemodified: wp_post_modified || "", // Time modified
-            group_members: [""] // Empty group members by default
+        ({ wp_post_id, wp_post_title, wp_post_name, wp_post_content, wp_post_date, wp_post_modified, wp_post_password }) => ({
+            id: wp_post_id,
+            title: wp_post_title || "",
+            name: wp_post_name || "",
+            description: wp_post_content || "",
+            descriptionformat: 1,
+            idnumber: "",
+            enrolmentkey: wp_post_password || "",
+            picture: "",
+            hidepicture: 0,
+            timecreated: wp_post_date || "",
+            timemodified: wp_post_modified || "",
+            group_members: [],
         })
     );
 
@@ -29,43 +29,28 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
     return new Promise((resolve, reject) => {
         parser.parseString(xmlData, (err, xmlResult) => {
             if (err) {
-                return reject(err);
+                return reject(`Error parsing XML: ${err.message}`);
             }
 
-            // Filter out empty groups
-            xmlResult.groups.group = xmlResult.groups.group.filter(group => group.$.id);
+            // Clear existing groups in XML
+            xmlResult.groups = { group: [] };
 
-            jsonContent.forEach(group => {
-                const groupId = group.id.toString();
-                const existingGroup = xmlResult.groups.group.find(g => g.$.id === groupId);
-
-                if (existingGroup) {
-                    existingGroup.idnumber = [group.idnumber.toString()];
-                    existingGroup.name = [group.title];
-                    existingGroup.description = [group.description];
-                    existingGroup.descriptionformat = [group.descriptionformat.toString()];
-                    existingGroup.enrolmentkey = [group.enrolmentkey];
-                    existingGroup.picture = [group.picture];
-                    existingGroup.hidepicture = [group.hidepicture.toString()];
-                    existingGroup.timecreated = [group.timecreated];
-                    existingGroup.timemodified = [group.timemodified];
-                    existingGroup.group_members = [group.group_members]; // Empty group members
-                } else {
-                    const newGroup = {
-                        $: { id: group.id.toString() },
-                        idnumber: [group.idnumber.toString()],
-                        name: [group.title],
-                        description: [group.description],
-                        descriptionformat: [group.descriptionformat.toString()],
-                        enrolmentkey: [group.enrolmentkey],
-                        picture: [group.picture],
-                        hidepicture: [group.hidepicture.toString()],
-                        timecreated: [group.timecreated],
-                        timemodified: [group.timemodified],
-                        group_members: [group.group_members] // Empty group members
-                    };
-                    xmlResult.groups.group.push(newGroup);
-                }
+            // Add JSON content to XML
+            jsonContent.forEach((group) => {
+                const newGroup = {
+                    $: { id: group.id.toString() },
+                    idnumber: [group.idnumber],
+                    name: [group.title],
+                    description: [group.description],
+                    descriptionformat: [group.descriptionformat],
+                    enrolmentkey: [group.enrolmentkey],
+                    picture: [group.picture],
+                    hidepicture: [group.hidepicture],
+                    timecreated: [group.timecreated],
+                    timemodified: [group.timemodified],
+                    group_members: group.group_members,
+                };
+                xmlResult.groups.group.push(newGroup);
             });
 
             const updatedXml = builder.buildObject(xmlResult);
@@ -75,138 +60,52 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
 };
 
 // Function to build XML from JSON file
-const buildGroupsXml = (jsonFilePath, finalDir) => {
-    const inputXmlFilePath = path.join('output', 'mbz', 'groups.xml');
-    const outputXmlFilePath = path.join(finalDir, 'groups.xml');
+const buildGroupsXml = (groupsJsonFilePath, finalDir) => {
+    const inputXmlFilePath = path.join('output', 'mbz', 'groups.xml');  // Original file
+    const outputXmlFilePath = path.join('output', 'final-mbz', 'groups.xml'); // Updated file
 
-    // Ensure the finalDir exists
+     // Check if the input XML file exists
+    if (!fs.existsSync(inputXmlFilePath)) {
+        console.error("Error: Input XML file does not exist at:", inputXmlFilePath);
+        return;
+    }
+
     fs.mkdir(finalDir, { recursive: true }, (err) => {
         if (err) {
-            console.error("Error creating directory:", err);
+            console.error("Error creating directory:", err.message);
             return;
         }
 
-        // Read the existing XML file
         fs.readFile(inputXmlFilePath, "utf8", (err, xmlData) => {
             if (err) {
-                console.error("Error reading XML file:", err);
+                console.error("Error reading XML file. Ensure the XML file exists:", err.message);
                 return;
             }
 
-            // Read the JSON file
-            fs.readFile(jsonFilePath, "utf8", (err, jsonData) => {
+            fs.readFile(groupsJsonFilePath, "utf8", (err, jsonData) => {
                 if (err) {
-                    console.error("Error reading JSON file:", err);
+                    console.error("Error reading JSON file. Ensure the JSON file exists:", err.message);
                     return;
                 }
 
                 const jsonContent = createContent(jsonData);
 
-                // Update XML with JSON content
                 updateXmlWithJsonContent(xmlData, jsonContent)
-                    .then(updatedXml => {
-                        // Write the updated XML back to the file
-                        fs.writeFile(outputXmlFilePath, updatedXml, (err) => {
+                    .then((updatedXml) => {
+                        fs.writeFile(outputXmlFilePath, updatedXml, "utf8", (err) => {
                             if (err) {
-                                console.error("Error writing file:", err);
-                            } else {
-                                console.log("File written successfully to", outputXmlFilePath);
+                                console.error("Error writing updated XML file:", err.message);
+                                return;
                             }
+                            console.log('Updated XML file has been written to', outputXmlFilePath);
                         });
                     })
-                    .catch(err => {
-                        console.error("Error updating XML:", err);
+                    .catch((error) => {
+                        console.error("Error updating XML with JSON content:", error);
                     });
             });
         });
     });
 };
 
-module.exports = { buildGroupsXml };/* const fs = require("fs");
-const path = require("path");
-const xmlbuilder = require("xmlbuilder");
-
-// Function to generate XML from groups data
-const generateGroupsXml = (groups) => {
-    const xml = xmlbuilder.create("groups");
-
-    groups.forEach((group) => {
-        const groupElement = xml.ele("group", { id: group.id });
-        groupElement.ele("idnumber", group.id);
-        groupElement.ele("description", group.description);
-        groupElement.ele("descriptionformat", group.descriptionformat);
-        groupElement.ele("enrolmentkey", group.enrolmentkey);
-        groupElement.ele("picture", group.picture);
-        groupElement.ele("hidepicture", group.hidepicture);
-        groupElement.ele("timecreated", group.timecreated);
-        groupElement.ele("timemodified", group.timemodified);
-        const membersElement = groupElement.ele("group_members");
-        group.group_members.forEach((member) => {
-            membersElement.ele("member", member);
-        });
-    });
-
-    const xmlString = xml.end({ pretty: true });
-
-    return xmlString;
-};
-
-// Function to create content from JSON data
-const createContent = (data) =>
-    JSON.parse(data).wp_data.map(
-        ({ wp_post_id, wp_post_title, wp_post_name, wp_post_content, wp_post_date }) => ({
-            id: wp_post_id, // Group ID
-            title: wp_post_title, // Group title
-            name: wp_post_name, // Group name
-            description: wp_post_content, // Group description
-            descriptionformat: 1, // Description format
-            idnumber: wp_post_id, // Group ID number
-            enrolmentkey: "", // Enrolment key
-            picture: "", // Picture
-            hidepicture: 0, // Hide picture flag
-            timecreated: wp_post_date, // Time created
-            timemodified: 0, // Time modified
-            group_members: [] // Group members (empty for now)
-        })
-    );
-
-// Function to write content to a file
-const writeFile = (filename, content, callback) =>
-    fs.writeFile(filename, content, callback);
-
-// Callback function to read file and generate XML
-const readFileCallback = (outputPath) => (err, data) => {
-    if (err) {
-        console.error("Error reading file:", err);
-        return;
-    }
-
-    const content = createContent(data);
-
-    const xml = generateGroupsXml(content);
-
-    writeFile(outputPath, xml, (err) => {
-        if (err) {
-            console.error("Error writing file:", err);
-        } else {
-            console.log("File written successfully to", outputPath);
-        }
-    });
-};
-
-// Function to build XML from JSON file
-const buildGroupsXml = (jsonFilePath, finalDir) => {
-    const outputPath = path.join(finalDir, "groups.xml");
-
-    // Ensure the finalDir exists
-    fs.mkdir(finalDir, { recursive: true }, (err) => {
-        if (err) {
-            console.error("Error creating directory:", err);
-            return;
-        }
-
-        fs.readFile(jsonFilePath, "utf8", readFileCallback(outputPath));
-    });
-};
-
-module.exports = { buildGroupsXml }; */
+module.exports = { buildGroupsXml };

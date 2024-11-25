@@ -1,15 +1,15 @@
 const path = require('path');
 const { buildGroupsXml } = require('./json-to-mbz/groups');
+const { buildCoursesXml } = require('./json-to-mbz/course/course');
 
-// Define output directory at the same level as the src folder
 const finalDir = path.join(__dirname, '..', 'final-mbz');
+const groupsJsonFilePath = "./exported_data/json/export-file-groups-2024-07-01-11-30-19.json";
+const courseJsonFilePath = "./exported_data/json/export-file-sfwd-courses-2024-07-01-11-30-19.json";
 
-// Correct the output path for groups.xml
-const jsonFilePath = "./exported_data/json/export-file-groups-2024-07-01-11-30-19.json";
-
-function createFinalMoodleBackup(finalDir) {
-    buildGroupsXml(jsonFilePath, finalDir);
+function createFinalMoodleBackup(finalDir, groupsJsonFilePath, courseJsonFilePath) {
+    buildGroupsXml(groupsJsonFilePath, finalDir);
+    buildCoursesXml(courseJsonFilePath, finalDir);
 }
 
-// Call the function to create the final Moodle backup
-createFinalMoodleBackup(finalDir);
+
+createFinalMoodleBackup(finalDir, groupsJsonFilePath, courseJsonFilePath);
