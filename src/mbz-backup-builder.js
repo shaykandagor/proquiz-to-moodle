@@ -31,8 +31,6 @@ const {
   generateBlockFiles,
 } = require("./components/course/blocks/generateBlocksFiles");
 
-// TODO: does these two imports conflict with the above imports? Philosopically, architecturally?
-const buildQuiz2XML = require("./xml-quiz2-builder");
 const { createFilePath } = require("./utils/utils");
 const config = require("../config.json");
 
@@ -61,9 +59,7 @@ function createMoodleBackup(outputDir) {
   generateGroupsXml(outputDir);
   generateMoodleBackup(outputDir);
   generateOutcomesXml(outputDir);
-  generateQuestionsXml(outputDir);
-
-  buildQuiz2XML(createFilePath(config, "quizPath"), "output/mbz/questions.xml");
+  generateQuestionsXml(createFilePath(config, "quizPath"), outputDir);
   generateRolesXml(outputDir);
   generateScalesXml(outputDir);
 

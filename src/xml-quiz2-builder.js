@@ -1,12 +1,9 @@
+// This file generates XML file which could be imported into Moodle as a quiz.
+
 const fs = require("fs");
 const xmlbuilder = require("xmlbuilder");
 const { parse } = require("./utils/quiz-parser");
 const { writeFileCallback } = require("./utils/utils");
-
-// TODO: this creates Moodle XML import format, does this work with MBZ?
-// Does the format differ in MBZ archive and Moodle XML import?
-
-// TODO: should this file be renamed and moved to the components directory?
 
 const createQuestion = (root) => (question) => {
   const questionEle = root.ele("question", { type: question.type });
