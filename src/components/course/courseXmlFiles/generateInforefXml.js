@@ -6,22 +6,13 @@ const xmlbuilder = require('xmlbuilder');
 // course\inforef.xml
 function generateInforefXml(courseDir) {
     const inforefXml = xmlbuilder.create('inforef', { encoding: 'UTF-8' })
-    .ele('groupref')
-        .ele('group',)
-            .ele('id', '').up()
+        .ele('roleref')
+            .ele('role')
+                .ele('id', '5').up()
+            .up()
         .up()
-    .up()
-    .ele('roleref')
-        .ele('role')
-            .ele('id', '').up()
-        .up()
-    .up()
-    .ele('question_categoryref')
-        .ele('question_category')
-            .ele('id', '').up()
-        .up()
-    .up()
-    .end({ pretty: true });
+        .end({ pretty: true });
+
     fs.writeFileSync(path.join(courseDir, 'inforef.xml'), inforefXml);
 
     return inforefXml;
