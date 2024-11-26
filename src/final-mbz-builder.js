@@ -21,8 +21,8 @@ const questionsJsonFilePath =
   "./exported_data/json/export-file-quiz_pro_1-2024-07-01-11-30-19.json";
 
 function createFinalMoodleBackup() {
-  buildGroupsXml(groupsJsonFilePath, finalDir);
-  buildCoursesXml(courseJsonFilePath, finalDir);
+  buildGroupsXml(groupsJsonFilePath, outputDir);
+  //buildCoursesXml(courseJsonFilePath, finalDir);
   buildQuestionsXml(questionsJsonFilePath, finalDir);
 }
 
