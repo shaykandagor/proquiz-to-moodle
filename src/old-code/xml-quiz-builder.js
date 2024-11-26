@@ -5,8 +5,8 @@
 
 const fs = require("fs");
 const xmlbuilder = require("xmlbuilder");
-const { parse } = require("./utils/quiz-parser");
-const { writeFileCallback } = require("./utils/utils");
+const { parse } = require("../utils/quiz-parser");
+const { writeFileCallback } = require("../utils/utils");
 
 const createQuestion = (root) => (question) => {
   const questionEle = root.ele("question");
