@@ -8,7 +8,6 @@ const createContent = (data) =>
         ({ wp_post_id, wp_post_title, wp_post_name, wp_post_content, wp_post_date, wp_post_modified, wp_post_password }) => ({
             id: wp_post_id,
             title: wp_post_title || "",
-            name: wp_post_name || "",
             description: wp_post_content || "",
             descriptionformat: 1,
             idnumber: "",
@@ -24,7 +23,7 @@ const createContent = (data) =>
 // Function to update XML with JSON content
 const updateXmlWithJsonContent = (xmlData, jsonContent) => {
     const parser = new xml2js.Parser();
-    const builder = new xml2js.Builder();
+    const builder = new xml2js.Builder({ xmldec: { standalone: null, encoding: "UTF-8" } });
 
     return new Promise((resolve, reject) => {
         parser.parseString(xmlData, (err, xmlResult) => {
@@ -36,11 +35,13 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
             xmlResult.groups = { group: [] };
 
             // Add JSON content to XML
+            // Iterates over each group in the jsonContent array and constructs a new XML group object. 
+            // Each property of the group object from the JSON is mapped to the corresponding XML element.
             jsonContent.forEach((group) => {
                 const newGroup = {
                     $: { id: group.id.toString() },
-                    idnumber: [group.idnumber],
                     name: [group.title],
+                    idnumber: [group.idnumber],
                     description: [group.description],
                     descriptionformat: [group.descriptionformat],
                     enrolmentkey: [group.enrolmentkey],
@@ -48,7 +49,7 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
                     hidepicture: [group.hidepicture],
                     timecreated: [group.timecreated],
                     timemodified: [group.timemodified],
-                    group_members: group.group_members,
+                    group_members: [group.group_members],
                 };
                 xmlResult.groups.group.push(newGroup);
             });
@@ -59,7 +60,10 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
     });
 };
 
-// Function to build XML from JSON file
+// The function reads the original XML file, reads the JSON file, creates content from the JSON data
+// Takes two arguments: groupsJsonFilePath (the path to the JSON file) 
+// FinalDir (the directory where the final XML file will be saved)
+// Defines 
 const buildGroupsXml = (groupsJsonFilePath, finalDir) => {
     const inputXmlFilePath = path.join('output', 'mbz', 'groups.xml');  // Original file
     const outputXmlFilePath = path.join('output', 'final-mbz', 'groups.xml'); // Updated file
