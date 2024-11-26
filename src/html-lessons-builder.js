@@ -14,7 +14,7 @@ const createContent = (data) =>
 const writeFile = (filename, content) =>
   fs.writeFile(filename, content, writeFileCallback);
 
-const readFileCallback = (path) => (err, data) => {
+const readFileCallback = (filePath) => (err, data) => {
   if (err) {
     console.error("Error reading file:", err);
     return;
@@ -23,13 +23,12 @@ const readFileCallback = (path) => (err, data) => {
   createContent(data).forEach((lesson) => {
     writeFile(
       `output/html/lessons/${lesson.name}.html`,
-      generateHtml(lesson, path, "lessons")
+      generateHtml(lesson, filePath, "lessons")
     );
   });
 };
 
-const main = (path) => fs.readFile(path, "utf8", readFileCallback(path));
+const buildLessonsHtml = (filePath) =>
+  fs.readFile(filePath, "utf8", readFileCallback(filePath));
 
-const inputPath = process.argv[2];
-
-main(inputPath);
+module.exports = buildLessonsHtml;

@@ -1,3 +1,5 @@
+// This file generates XML file which could be imported into Moodle as a quiz.
+
 const fs = require("fs");
 const xmlbuilder = require("xmlbuilder");
 const { parse } = require("./utils/quiz-parser");
@@ -8,7 +10,8 @@ const createQuestion = (root) => (question) => {
   questionEle.ele("name").ele("text", question.title);
   questionEle
     .ele("questiontext", { format: "html" })
-    .ele("text", `<![CDATA[${question.question}]]>`);
+    .ele("text")
+    .raw(`<![CDATA[${question.question}]]>`);
   questionEle
     .ele("generalfeedback")
     .ele("text", question.generalfeedback || "");
@@ -20,7 +23,9 @@ const createQuestion = (root) => (question) => {
 
   question.answers.forEach((answer) => {
     const answerEle = answersEle.ele("answer", { fraction: answer.fraction });
-    answerEle.ele("text", `<![CDATA[${answer.answer}]]>`);
+    answerEle
+      .ele("text", { format: "html" })
+      .raw(`<![CDATA[${answer.answer}]]>`);
     answerEle.ele("feedback").ele("text", answer.feedback || "");
   });
 };
