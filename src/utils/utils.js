@@ -6,6 +6,11 @@ const writeFileCallback = (err) => {
   console.log("file has been saved.");
 };
 
+const createFilePath = (config, key) => {
+  return `${config.basePath}/${config[key]}`;
+};
+
 module.exports = {
   writeFileCallback,
+  createFilePath,
 };
