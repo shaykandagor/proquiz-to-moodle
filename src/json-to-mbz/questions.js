@@ -75,21 +75,23 @@ const createQuestionBankEntryForMultiChoice =
       answerEle.ele("feedbackformat", 0);
     });
 
+    const multichoiceId = generateRandomNumber();
+
     const multichoiceEle = pluginQtype.ele("multichoice", {
-      id: question.multichoiceid,
+      id: multichoiceId
     });
     multichoiceEle.ele("layout", 0);
-    multichoiceEle.ele("single", 0);
+    multichoiceEle.ele("single", 1);
     multichoiceEle.ele("shuffleanswers", 1);
-    multichoiceEle.ele("correctfeedback", "");
-    multichoiceEle.ele("correctfeedbackformat", 0);
-    multichoiceEle.ele("partiallycorrectfeedback", "");
-    multichoiceEle.ele("partiallycorrectfeedbackformat", 0);
-    multichoiceEle.ele("incorrectfeedback", "");
-    multichoiceEle.ele("incorrectfeedbackformat", 0);
+    multichoiceEle.ele("correctfeedback", "Vastauksesi on oikein.");
+    multichoiceEle.ele("correctfeedbackformat", 1);
+    multichoiceEle.ele("partiallycorrectfeedback", "Vastauksesi on osittain oikein.");
+    multichoiceEle.ele("partiallycorrectfeedbackformat", 1);
+    multichoiceEle.ele("incorrectfeedback", "Vastauksesi on väärin.");
+    multichoiceEle.ele("incorrectfeedbackformat", 1);
     multichoiceEle.ele("answernumbering", "none");
-    multichoiceEle.ele("shownumcorrect", 0);
-    multichoiceEle.ele("showstandardinstruction", 1);
+    multichoiceEle.ele("shownumcorrect", 1);
+    multichoiceEle.ele("showstandardinstruction", 0);
 
     questionEle.ele("plugin_qbank_comment_question").ele("comments");
     questionEle.ele("plugin_qbank_customfields_question").ele("customfields");
@@ -149,7 +151,7 @@ function buildQuestionsXml(filePath, outputDir) {
     contextid: "1233448",
     contextlevel: "50",
     contextinstanceid: "5412",
-    info: "",
+    info: "Questions for the top category",
     infoformat: "0",
     stamp,
     parent: topLevelCategory.id,
