@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const xmlbuilder = require('xmlbuilder');
 
-function generateInforefXml(outputDir) {
+function generateActivityAssignInforefXml(outputDir) {
     const inforefXml = xmlbuilder.create('inforef', { encoding: 'UTF-8' })
         .ele('grade_itemref')
             .ele('grade_item',)
@@ -20,4 +20,4 @@ function generateInforefXml(outputDir) {
     return inforefXml;
 }
 
-module.exports = generateInforefXml;
+module.exports = generateActivityAssignInforefXml;

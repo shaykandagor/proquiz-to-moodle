@@ -1,9 +1,19 @@
-const { generateInforefXml } = require("./sectionXmlFiles/generateInforefXml");
+const createSectionFolder = require("../../json-to-mbz/sections/create-section-folder");
+const {
+  generateSectionsInforefXml,
+} = require("./sectionXmlFiles/generateInforefXml");
 const { generateSectionXml } = require("./sectionXmlFiles/generateSectionXml");
 
 function generateSectionFiles(sectionDir) {
-    generateInforefXml(sectionDir);
-    generateSectionXml(sectionDir);
+  const id = 12345; // TODO: Replace with the section ID
+
+  const dir = `${sectionDir}/section_${id}`;
+
+  // generates section_<ID> folder in the sections folder
+  createSectionFolder(id);
+
+  generateSectionsInforefXml(dir, id);
+  generateSectionXml(dir, id);
 }
 
-module.exports = { generateSectionFiles }
+module.exports = { generateSectionFiles };

@@ -78,7 +78,7 @@ function createMoodleBackup(outputDir) {
   // Defines 'sections' path
   // const sectionsDir = path.join(outputDir, 'sections');
   // Creates subdirectory sections/section
-  // const sectionDir = path.join(sectionsDir, 'section');
+  // const sectionDir = path.join(sectionsDir);
   // generateSectionFiles(sectionDir);
 }
 
