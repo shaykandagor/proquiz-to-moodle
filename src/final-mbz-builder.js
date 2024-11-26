@@ -6,11 +6,9 @@ const { buildQuestionsXml } = require("./json-to-mbz/questions");
 
 const finalDir = path.join(__dirname, "..", "final-mbz");
 
-const outputDir = path.join(__dirname, "..", "output", "final-mbz");
-
 // Ensure the output directory exists
-if (!fs.existsSync(outputDir)) {
-  fs.mkdirSync(outputDir, { recursive: true });
+if (!fs.existsSync(finalDir)) {
+  fs.mkdirSync(finalDir, { recursive: true });
 }
 
 const groupsJsonFilePath =
@@ -23,7 +21,7 @@ const questionsJsonFilePath =
 function createFinalMoodleBackup() {
   buildGroupsXml(groupsJsonFilePath, finalDir);
   //buildCoursesXml(courseJsonFilePath, finalDir);
-  buildQuestionsXml(questionsJsonFilePath, outputDir);
+  buildQuestionsXml(questionsJsonFilePath, finalDir);
 }
 
 createFinalMoodleBackup();
