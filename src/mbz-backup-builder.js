@@ -10,11 +10,10 @@ const generateScalesXml = require("./components/generateScalesXml");
 const { generateCompletionXml } = require("./components/generateCompletionXml");
 const { generateFilesXml } = require("./components/generateFilesXml");
 
-const { generateGradehistoryXml } = require("./components/generateGradehistoryXml");
-const { generateGradebookXml } = require("./components/generateGradebookXml");
-
-const { generateGroupsXml } = require("./components/generateGroupsXml");
-
+const {
+  generateGradehistoryXml,
+} = require("./components/generateGradehistoryXml");
+const generateGradebookXml = require("./components/generateGradebookXml");
 
 // Imports for Courses directory
 const {
@@ -29,9 +28,10 @@ const {
 // Imports for Activities directory
 const generateActivitiesFiles = require("./components/activities/generateActivitiesFiles");
 
-const { generateBlockFiles } = require("./components/course/blocks/generateBlocksFiles");
+const {
+  generateBlockFiles,
+} = require("./components/course/blocks/generateBlocksFiles");
 const { generateGroupsXml } = require("./components/generateGroupsXml");
-
 
 const { createFilePath } = require("./utils/utils");
 const config = require("../config.json");
