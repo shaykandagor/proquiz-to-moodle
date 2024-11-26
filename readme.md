@@ -21,30 +21,16 @@ Create `config.json` file in the root (same level as `package.json`) of the proj
 }
 ```
 
-```bash
-npm run build-all
-```
-
-### Lessons
-
-#### Lessons HTML
-
-```bash
-npm run build-lessons-html <path-to-exported-json>
-```
-
-### Topics
-
-#### Topics HTML
-
-```bash
-npm run build-topics-html <path-to-exported-json>
-```
-
 ### Generate Moodle archive (MBZ)
 
 ```bash
-sh ./create-mbz.sh <path-to-generated-xml-folder>
+npm run run-all
+```
+
+or if you want to build only the MBZ archive:
+
+```bash
+npm run create-mbz-archive
 ```
 
 This command will generate a `output.mbz` file in the `mbz-archive/` folder.
