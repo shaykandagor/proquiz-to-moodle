@@ -5,27 +5,34 @@ const { parse } = require("../utils/quiz-parser");
 
 const stamp = "moodle.stamp+241010084236+sD8fiO";
 
+// TODO: should not be used in the final product?
+const generateRandomNumber = () => Math.random().toString(36).substring(7);
+
+
 const createQuestionBankEntryForMultiChoice =
   (questionBankEntries) => (question) => {
-    const id = Math.random().toString(36).substring(7);
+    const id = generateRandomNumber();
+
     const questionBankEntry = questionBankEntries.ele("question_bank_entry", {
       id,
     });
 
-    questionBankEntry.ele("questioncategoryid", "NOT_SURE");
+    questionBankEntry.ele("questioncategoryid", "$@NULL@$"); // "NOT_SURE");
     questionBankEntry.ele("idnumber", "$@NULL@$");
-    questionBankEntry.ele("ownerid", "NOT_SURE");
+    questionBankEntry.ele("ownerid", "$@NULL@$"); // "NOT_SURE");
 
     const questionVersion = questionBankEntry.ele("question_version");
     const questionVersions = questionVersion.ele("question_versions", {
-      id: "NOT_SURE",
+      id: "$@NULL@$",
+      // id: "NOT_SURE",
     });
     questionVersions.ele("version", 1);
     questionVersions.ele("status", "ready");
 
     const questionsEle = questionVersions.ele("questions");
     const questionEle = questionsEle.ele("question", {
-      id: "NOT_SURE",
+      id: "$@NULL@$",
+      // id: "NOT_SURE",
     });
     questionEle.ele("parent", 0);
     questionEle.ele("name", question.title.trim());
@@ -40,8 +47,8 @@ const createQuestionBankEntryForMultiChoice =
     questionEle.ele("stamp", stamp);
     questionEle.ele("timecreated", +new Date());
     questionEle.ele("timemodified", +new Date());
-    questionEle.ele("createdby", "NOT_SURE");
-    questionEle.ele("modifiedby", "NOT_SURE");
+    questionEle.ele("createdby", "$@NULL@$"); // "NOT_SURE");
+    questionEle.ele("modifiedby", "$@NULL@$"); // "NOT_SURE");
 
     const pluginQtype = questionEle.ele("plugin_qtype_multichoice_question");
     const answersEle = pluginQtype.ele("answers");

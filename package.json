@@ -10,7 +10,8 @@
     "node:build-final-mbz-backup": "node src/final-mbz-builder.js",
     "copy-output-to-final": "sh ./copy-output-to-final.sh",
     "create-mbz-archive": "sh ./create-mbz.sh final-mbz",
-    "run-all": "npm run node:build-mbz-backup && npm run copy-output-to-final && npm run node:build-final-mbz-backup && npm run create-mbz-archive"
+    "run-all": "npm run node:build-mbz-backup && npm run copy-output-to-final && npm run node:build-final-mbz-backup && npm run create-mbz-archive",
+    "mac:open-archive-folder": "open ./mbz-archive"
   },
   "author": "",
   "license": "ISC",

@@ -9,7 +9,7 @@ const generateCompetenciesXml = require("./assign-xml-files/generateCompetencies
 const generateFiltersXml = require("./assign-xml-files/generateFiltersXml");
 const generateGradesXml = require("./assign-xml-files/generateGradesXml");
 const generateGradingXml = require("./assign-xml-files/generateGradingXml");
-const generateInforefXml = require("./assign-xml-files/generateInforefXml");
+const generateActivityAssignInforefXml = require("./assign-xml-files/generateInforefXml");
 const generateModuleXml = require("./assign-xml-files/generateModuleXml");
 const generateAttCalendarXml = require("./attendance-xml-files/generateAttCalendarXml");
 const generateAttendanceXml = require("./attendance-xml-files/generateAttendanceXml");
@@ -45,14 +45,14 @@ function generateActivitiesFiles(outputDir) {
     generateFiltersXml(activitiesAssignDir);
     generateGradesXml(activitiesAssignDir);
     generateGradingXml(activitiesAssignDir);
-    generateInforefXml(activitiesAssignDir);
+    generateActivityAssignInforefXml(activitiesAssignDir);
     generateModuleXml(activitiesAssignDir);
     generateAssignRolesXml(activitiesAssignDir);
 
     // activities/attendance
     const activitiesAttendanceDir = path.join(outputDir, 'activities/attendance');
     generateAttendanceXml(activitiesAttendanceDir);
-    generateAttCalendarXml(activitiesAttendanceDir); 
+    generateAttCalendarXml(activitiesAttendanceDir);
     generateCompetenciesXml(activitiesAttendanceDir);
     generateFiltersXml(activitiesAttendanceDir);
     generateGradesXml(activitiesAttendanceDir);
