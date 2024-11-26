@@ -2,76 +2,110 @@ const fs = require("fs");
 const path = require("path");
 const xml2js = require("xml2js");
 
-// Function to read JSON content
-const readJsonFile = (jsonFilePath) => {
+// Function to create content from JSON data
+const createContent = (data) =>
+    JSON.parse(data).wp_data.map(
+        ({ wp_post_id, wp_post_title, wp_post_name, wp_post_content, wp_post_date, wp_post_modified, wp_post_password }) => ({
+            id: wp_post_id,
+            title: wp_post_title || "",
+            name: wp_post_name || "",
+            description: wp_post_content || "",
+            descriptionformat: 1,
+            idnumber: "",
+            enrolmentkey: wp_post_password || "",
+            picture: "",
+            hidepicture: 0,
+            timecreated: wp_post_date || "",
+            timemodified: wp_post_modified || "",
+            group_members: [],
+        })
+    );
+
+// Function to update XML with JSON content
+const updateXmlWithJsonContent = (xmlData, jsonContent) => {
+    const parser = new xml2js.Parser();
+    const builder = new xml2js.Builder();
+
     return new Promise((resolve, reject) => {
-        fs.readFile(jsonFilePath, "utf8", (err, data) => {
+        parser.parseString(xmlData, (err, xmlResult) => {
             if (err) {
-                reject(err);
-            } else {
-                resolve(JSON.parse(data));
+                return reject(`Error parsing XML: ${err.message}`);
             }
+
+            // Clear existing groups in XML
+            xmlResult.groups = { group: [] };
+
+            // Add JSON content to XML
+            jsonContent.forEach((group) => {
+                const newGroup = {
+                    $: { id: group.id.toString() },
+                    idnumber: [group.idnumber],
+                    name: [group.title],
+                    description: [group.description],
+                    descriptionformat: [group.descriptionformat],
+                    enrolmentkey: [group.enrolmentkey],
+                    picture: [group.picture],
+                    hidepicture: [group.hidepicture],
+                    timecreated: [group.timecreated],
+                    timemodified: [group.timemodified],
+                    group_members: group.group_members,
+                };
+                xmlResult.groups.group.push(newGroup);
+            });
+
+            const updatedXml = builder.buildObject(xmlResult);
+            resolve(updatedXml);
         });
     });
 };
 
-// Function to read and modify the existing XML file
-const modifyXmlFile = (xmlFilePath, jsonData, outputFilePath) => {
-    fs.readFile(xmlFilePath, "utf8", (err, data) => {
+// Function to build XML from JSON file
+const buildGroupsXml = (groupsJsonFilePath, finalDir) => {
+    const inputXmlFilePath = path.join('output', 'mbz', 'groups.xml');  // Original file
+    const outputXmlFilePath = path.join('output', 'final-mbz', 'groups.xml'); // Updated file
+
+     // Check if the input XML file exists
+    if (!fs.existsSync(inputXmlFilePath)) {
+        console.error("Error: Input XML file does not exist at:", inputXmlFilePath);
+        return;
+    }
+
+    fs.mkdir(finalDir, { recursive: true }, (err) => {
         if (err) {
-            console.error(`Error reading XML file: ${xmlFilePath}`);
-            throw err;
+            console.error("Error creating directory:", err.message);
+            return;
         }
-        xml2js.parseString(data, (err, result) => {
+
+        fs.readFile(inputXmlFilePath, "utf8", (err, xmlData) => {
             if (err) {
-                console.error(`Error parsing XML file: ${xmlFilePath}`);
-                throw err;
+                console.error("Error reading XML file. Ensure the XML file exists:", err.message);
+                return;
             }
 
-            // Modify the XML content with JSON data
-            if (result.name) {
-                result.name._ = jsonData.wp_post_name;
-            } else {
-                result.name = jsonData.wp_post_name;
-            }
-
-            // Convert the modified XML object back to a string
-            const builder = new xml2js.Builder();
-            const xmlString = builder.buildObject(result);
-
-            // Ensure the output directory exists
-            const outputDir = path.dirname(outputFilePath);
-            if (!fs.existsSync(outputDir)) {
-                fs.mkdirSync(outputDir, { recursive: true });
-            }
-
-            // Write the updated XML file to the output directory
-            fs.writeFile(outputFilePath, xmlString, (err) => {
+            fs.readFile(groupsJsonFilePath, "utf8", (err, jsonData) => {
                 if (err) {
-                    console.error(`Error writing XML file: ${outputFilePath}`);
-                    throw err;
+                    console.error("Error reading JSON file. Ensure the JSON file exists:", err.message);
+                    return;
                 }
-                console.log(`XML file ${outputFilePath} updated successfully!`);
+
+                const jsonContent = createContent(jsonData);
+
+                updateXmlWithJsonContent(xmlData, jsonContent)
+                    .then((updatedXml) => {
+                        fs.writeFile(outputXmlFilePath, updatedXml, "utf8", (err) => {
+                            if (err) {
+                                console.error("Error writing updated XML file:", err.message);
+                                return;
+                            }
+                            console.log('Updated XML file has been written to', outputXmlFilePath);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error updating XML with JSON content:", error);
+                    });
             });
         });
     });
 };
 
-// Function to read JSON content and modify XML files
-const integrateJsonToXml = async (jsonFilePath, xmlFilePath, outputFilePath) => {
-    try {
-        const jsonData = await readJsonFile(jsonFilePath);
-        console.log(jsonData);
-        modifyXmlFile(xmlFilePath, jsonData, outputFilePath);
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-// Example usage:
-const jsonFilePath = "C:/Users/ainaral/Documents/proquiz-to-moodle/exported_data/json/export-file-groups-2024-07-01-11-30-19.json";
-const xmlFilePath = "C:/Users/ainaral/Documents/proquiz-to-moodle/output/mbz/groups.xml";
-const outputFilePath = "C:/Users/ainaral/Documents/proquiz-to-moodle/final-mbz/groups.xml";
-
-integrateJsonToXml(jsonFilePath, xmlFilePath, outputFilePath);
-
+module.exports = { buildGroupsXml };
