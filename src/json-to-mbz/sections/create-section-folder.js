@@ -4,7 +4,7 @@ const path = require("path");
 const baseDir = "./final-mbz/sections";
 
 if (!fs.existsSync(baseDir)) {
-  fs.mkdirSync(baseDir);
+  fs.mkdirSync(baseDir, { recursive: true });
 }
 
 function createSectionFolder(id) {
