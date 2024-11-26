@@ -10,8 +10,7 @@ const generateScalesXml = require('./components/generateScalesXml');
 const { generateCompletionXml } = require("./components/generateCompletionXml");
 const { generateFilesXml } = require("./components/generateFilesXml");
 const { generateGradehistoryXml } = require("./components/generateGradehistoryXml");
-const generateGradebookXml = require("./components/generateGradebookXml");
-const { generateGroupsXml } = require("./components/generateGroupsXml");
+const { generateGradebookXml } = require("./components/generateGradebookXml");
 
 // Imports for Courses directory
 const { generateCourseFiles } = require("./components/course/generateCourseFiles");
@@ -22,6 +21,7 @@ const { generateSectionFiles } = require("./components/section/generateSectionFi
 // Imports for Activities directory
 const generateActivitiesFiles = require("./components/activities/generateActivitiesFiles");
 const { generateBlockFiles } = require("./components/course/blocks/generateBlocksFiles");
+const { generateGroupsXml } = require("./components/generateGroupsXml");
 
 function createMoodleBackup(outputDir) {
   // Create subdirectories
@@ -45,7 +45,7 @@ function createMoodleBackup(outputDir) {
     generateFilesXml(outputDir);
     generateGradebookXml(outputDir);
     generateGradehistoryXml(outputDir);
-    //generateGroupsXml(outputDir);
+    generateGroupsXml(outputDir);
     generateMoodleBackup(outputDir);
     generateOutcomesXml(outputDir);
     generateQuestionsXml(outputDir);

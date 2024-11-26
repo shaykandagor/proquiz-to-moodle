@@ -7,7 +7,8 @@
     "build-lessons-html": "nodemon src/html-lessons-builder.js",
     "build-topics-html": "nodemon src/html-topics-builder.js",
     "build-mbz-backup": "nodemon src/mbz-backup-builder.js",
-    "build-groups": "nodemon src/json-to-mbz/groups.js"
+    "build-groups": "nodemon src/json-to-mbz/groups.js",
+    "build-final-mbz-backup": "nodemon src/final-mbz-builder.js"
   },
   "author": "",
   "license": "ISC",
