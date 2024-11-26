@@ -79,10 +79,10 @@ function createMoodleBackup(outputDir) {
   // generateBlockFiles(completionProgressDir);
 
   // Defines 'sections' path
-  // const sectionsDir = path.join(outputDir, 'sections');
+  const sectionsDir = path.join(outputDir, 'sections');
   // Creates subdirectory sections/section
-  // const sectionDir = path.join(sectionsDir, 'section');
-  // generateSectionFiles(sectionDir);
+  const sectionDir = path.join(sectionsDir, 'section');
+  generateSectionFiles(sectionDir);
 }
 
 createMoodleBackup("output/mbz");
