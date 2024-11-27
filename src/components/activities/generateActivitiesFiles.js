@@ -28,6 +28,7 @@ const generateQuizInforefXml = require("./quiz-xml-files/generateQuizInforefXml"
 const generateResourceXml = require("./resource-xml-files/generateResourceXml");
 const generateUrlXml = require("./url-xml-files/generateUrlXml");
 const generateActivitiesFolders = require("./generateActivitiesFolders");
+const generateBookGradesXml = require("./book-xml-files/generateBookGradeXml");
 
 function generateActivitiesFiles(outputDir) {
 
@@ -37,7 +38,7 @@ function generateActivitiesFiles(outputDir) {
 
     // Generate xml files inside "activities" directories
     // activities/assign
-    const activitiesAssignDir = path.join(outputDir, 'activities/assign');
+    /* const activitiesAssignDir = path.join(outputDir, 'activities/assign');
     generateAssignXml(activitiesAssignDir);
     generateAssignGradeHistoryXml(activitiesAssignDir);
     generateCalendarXml(activitiesAssignDir);
@@ -48,9 +49,9 @@ function generateActivitiesFiles(outputDir) {
     generateActivityAssignInforefXml(activitiesAssignDir);
     generateModuleXml(activitiesAssignDir);
     generateAssignRolesXml(activitiesAssignDir);
-
+ */
     // activities/attendance
-    const activitiesAttendanceDir = path.join(outputDir, 'activities/attendance');
+    /* const activitiesAttendanceDir = path.join(outputDir, 'activities/attendance');
     generateAttendanceXml(activitiesAttendanceDir);
     generateAttCalendarXml(activitiesAttendanceDir);
     generateCompetenciesXml(activitiesAttendanceDir);
@@ -59,10 +60,10 @@ function generateActivitiesFiles(outputDir) {
     generateAssignGradeHistoryXml(activitiesAttendanceDir);
     generateAttInforefXml(activitiesAttendanceDir);
     generateModuleXml(activitiesAttendanceDir);
-    generateAssignRolesXml(activitiesAttendanceDir);
+    generateAssignRolesXml(activitiesAttendanceDir); */
 
     // activities/board
-    const activitiesBoardDir = path.join(outputDir, 'activities/board');
+    /* const activitiesBoardDir = path.join(outputDir, 'activities/board');
     generateBoardXml(activitiesBoardDir);
     generateCalendarXml(activitiesBoardDir);
     generateCompetenciesXml(activitiesBoardDir);
@@ -71,10 +72,10 @@ function generateActivitiesFiles(outputDir) {
     generateAssignGradeHistoryXml(activitiesBoardDir);
     generateBoaInforefXml(activitiesBoardDir);
     generateModuleXml(activitiesBoardDir);
-    generateAssignRolesXml(activitiesBoardDir);
+    generateAssignRolesXml(activitiesBoardDir); */
 
     // activities/chat
-    const activitiesChatDir = path.join(outputDir, 'activities/chat');
+    /* const activitiesChatDir = path.join(outputDir, 'activities/chat');
     generateCalendarXml(activitiesChatDir);
     generateChatXml(activitiesChatDir);
     generateCompetenciesXml(activitiesChatDir);
@@ -83,10 +84,10 @@ function generateActivitiesFiles(outputDir) {
     generateAssignGradeHistoryXml(activitiesChatDir);
     generateBoaInforefXml(activitiesChatDir);
     generateModuleXml(activitiesChatDir);
-    generateAssignRolesXml(activitiesChatDir);
+    generateAssignRolesXml(activitiesChatDir); */
 
     // activities/feedback
-    const activitiesFeedbackDir = path.join(outputDir, 'activities/feedback');
+    /* const activitiesFeedbackDir = path.join(outputDir, 'activities/feedback');
     generateCalendarXml(activitiesFeedbackDir);
     generateCompetenciesXml(activitiesFeedbackDir);
     generateFeedbackXml(activitiesFeedbackDir);
@@ -95,10 +96,10 @@ function generateActivitiesFiles(outputDir) {
     generateAssignGradeHistoryXml(activitiesFeedbackDir);
     generateBoaInforefXml(activitiesFeedbackDir);
     generateModuleXml(activitiesFeedbackDir);
-    generateAssignRolesXml(activitiesFeedbackDir);
+    generateAssignRolesXml(activitiesFeedbackDir); */
 
     // activities/folder
-    const activitiesFolderDir = path.join(outputDir, 'activities/folder');
+    /* const activitiesFolderDir = path.join(outputDir, 'activities/folder');
     generateCalendarXml(activitiesFolderDir);
     generateCompetenciesXml(activitiesFolderDir);
     generateFiltersXml(activitiesFolderDir);
@@ -108,9 +109,9 @@ function generateActivitiesFiles(outputDir) {
     generateFoldInforefXml(activitiesFolderDir);
     generateModuleXml(activitiesFolderDir);
     generateAssignRolesXml(activitiesFolderDir);
-
+ */
     // activities/label
-    const activitiesLabelDir = path.join(outputDir, 'activities/label');
+    /* const activitiesLabelDir = path.join(outputDir, 'activities/label');
     generateCalendarXml(activitiesLabelDir);
     generateCompetenciesXml(activitiesLabelDir);
     generateFiltersXml(activitiesLabelDir);
@@ -119,7 +120,19 @@ function generateActivitiesFiles(outputDir) {
     generateBoaInforefXml(activitiesLabelDir);
     generateLabelXml(activitiesLabelDir);
     generateModuleXml(activitiesLabelDir);
-    generateAssignRolesXml(activitiesLabelDir);
+    generateAssignRolesXml(activitiesLabelDir); */
+
+    // activities/page
+    const activitiesBookDir = path.join(outputDir, 'activities/book');
+    generateAssignGradeHistoryXml(activitiesBookDir);
+    generateCalendarXml(activitiesBookDir);
+    generateCompetenciesXml(activitiesBookDir);
+    generateFiltersXml(activitiesBookDir);
+    generateBookGradesXml(activitiesBookDir);
+    generateGradingXml(activitiesBookDir);
+    generateActivityAssignInforefXml(activitiesBookDir);
+    generateModuleXml(activitiesBookDir);
+    generateAssignRolesXml(activitiesBookDir);
 
     // activities/page
     const activitiesPageDir = path.join(outputDir, 'activities/page');
@@ -146,7 +159,7 @@ function generateActivitiesFiles(outputDir) {
     generateAssignRolesXml(activitiesQuizDir);
 
     // activities/resource
-    const activitiesResourceDir = path.join(outputDir, 'activities/resource');
+    /* const activitiesResourceDir = path.join(outputDir, 'activities/resource');
     generateCalendarXml(activitiesResourceDir);
     generateCompetenciesXml(activitiesResourceDir);
     generateFiltersXml(activitiesResourceDir);
@@ -155,10 +168,10 @@ function generateActivitiesFiles(outputDir) {
     generateFoldInforefXml(activitiesResourceDir);
     generateModuleXml(activitiesResourceDir);
     generateResourceXml(activitiesResourceDir);
-    generateAssignRolesXml(activitiesResourceDir);
+    generateAssignRolesXml(activitiesResourceDir); */
 
     // activities/url
-    const activitiesUrlDir = path.join(outputDir, 'activities/url');
+    /* const activitiesUrlDir = path.join(outputDir, 'activities/url');
     generateCalendarXml(activitiesUrlDir);
     generateCompetenciesXml(activitiesUrlDir);
     generateFiltersXml(activitiesUrlDir);
@@ -167,7 +180,7 @@ function generateActivitiesFiles(outputDir) {
     generateFoldInforefXml(activitiesUrlDir);
     generateModuleXml(activitiesUrlDir);
     generateAssignRolesXml(activitiesUrlDir);
-    generateUrlXml(activitiesUrlDir);
+    generateUrlXml(activitiesUrlDir); */
 
 }
 
