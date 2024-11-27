@@ -7,12 +7,8 @@ const createAnswer = (answer, i, allAnswers) => {
   const correctAnswers = allAnswers.filter((a) => a.correct).length;
 
   // moodle needs the precision to be five decimals
-  const pointsFromCorrect =
-    totalAnswers === 1 ? 100 : (100 / correctAnswers).toFixed(5);
-  const pointsFromIncorrect =
-    totalAnswers === 1
-      ? 100
-      : (100 / (totalAnswers - correctAnswers)).toFixed(5);
+  const pointsFromCorrect = (100 / correctAnswers).toFixed(5);
+  const pointsFromIncorrect =  (100 / (totalAnswers - correctAnswers)).toFixed(5);
 
   const correct = answer.correct
     ? `~%${pointsFromCorrect}%`
