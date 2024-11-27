@@ -2,8 +2,22 @@ const fs = require("fs");
 const { parse } = require("../utils/quiz-parser");
 const { writeFileCallback } = require("../utils/utils");
 
-const createAnswer = (answer) => {
-  const correct = answer.correct ? "=" : "~";
+const createAnswer = (answer, i, allAnswers) => {
+  const totalAnswers = allAnswers.length;
+  const correctAnswers = allAnswers.filter((a) => a.correct).length;
+
+  // moodle needs the precision to be five decimals
+  const pointsFromCorrect =
+    totalAnswers === 1 ? 100 : (100 / correctAnswers).toFixed(5);
+  const pointsFromIncorrect =
+    totalAnswers === 1
+      ? 100
+      : (100 / (totalAnswers - correctAnswers)).toFixed(5);
+
+  const correct = answer.correct
+    ? `~%${pointsFromCorrect}%`
+    : `~%-${pointsFromIncorrect}%`;
+
   return `${correct} ${answer.answer.trim()}`;
 };
 
