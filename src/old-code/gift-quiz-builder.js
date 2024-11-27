@@ -4,17 +4,16 @@ const { writeFileCallback } = require("../utils/utils");
 
 const createAnswer = (answer) => {
   const correct = answer.correct ? "=" : "~";
-  return `${correct} ${answer.answer}`;
+  return `${correct} ${answer.answer.trim()}`;
 };
+
+const escapeColon = (str) => str.replace(/:/g, "\\:");
 
 const createQuestion = (question) => {
   const answers = question.answers.map(createAnswer);
 
-  return `
-::${question.title}::
-${question.question}
-
-{
+  return `::${question.title.trim()}::
+${escapeColon(question.question.trim())}{
   ${answers.join("\n  ")}
 }`;
 };
