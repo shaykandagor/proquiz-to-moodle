@@ -73,7 +73,6 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
 // The function reads the original XML file, reads the JSON file, creates content from the JSON data
 // Takes two arguments: groupsJsonFilePath (the path to the JSON file)
 // FinalDir (the directory where the final XML file will be saved)
-// Defines
 const buildGroupsXml = (groupsJsonFilePath, finalDir) => {
   const inputXmlFilePath = path.join("output", "mbz", "groups.xml"); // Original file
   const outputXmlFilePath = path.join("final-mbz", "groups.xml"); // Updated file

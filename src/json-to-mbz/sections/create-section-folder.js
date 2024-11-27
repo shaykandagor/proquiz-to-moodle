@@ -9,7 +9,7 @@ if (!fs.existsSync(baseDir)) {
 
 function createSectionFolder(id) {
   const folderName = `section_${id}`;
-  const folderPath = path.join(baseDir, folderName);
+  const folderPath= path.join(baseDir, folderName);
 
   // Check if the folder already exists
   if (!fs.existsSync(folderPath)) {
@@ -19,6 +19,7 @@ function createSectionFolder(id) {
   } else {
     console.log(`Folder already exists: ${folderPath}`);
   }
+
 }
 
 module.exports = createSectionFolder;
