@@ -33,9 +33,6 @@ const {
 } = require("./components/course/blocks/generateBlocksFiles");
 const { generateGroupsXml } = require("./components/generateGroupsXml");
 
-const { createFilePath } = require("./utils/utils");
-const config = require("../config.json");
-
 function createMoodleBackup(outputDir) {
   // Create subdirectories
   const backupDirs = ["course"];
@@ -61,7 +58,7 @@ function createMoodleBackup(outputDir) {
   generateGroupsXml(outputDir);
   generateMoodleBackup(outputDir);
   generateOutcomesXml(outputDir);
-  generateQuestionsXml(createFilePath(config, "quizPath"), outputDir);
+  generateQuestionsXml(outputDir);
   generateRolesXml(outputDir);
   generateScalesXml(outputDir);
 
@@ -81,7 +78,7 @@ function createMoodleBackup(outputDir) {
   // Defines 'sections' path
   // const sectionsDir = path.join(outputDir, 'sections');
   // Creates subdirectory sections/section
-  // const sectionDir = path.join(sectionsDir, 'section');
+  // const sectionDir = path.join(sectionsDir);
   // generateSectionFiles(sectionDir);
 }
 
