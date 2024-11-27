@@ -4,6 +4,7 @@ const fs = require("fs");
 const config = require("../config.json");
 
 const buildQuizGift = require("./old-code/gift-quiz-builder");
+const buildQuizJson = require("./old-code/json-quiz-builder");
 const buildQuiz2XML = require("./old-code/xml-quiz2-builder");
 const buildLessonsXml = require("./old-code/xml-lessons-builder");
 const buildQuizTrueFalseXml = require("./old-code/xml-quiz3-builder");
@@ -18,8 +19,12 @@ if (!fs.existsSync("output/gift")) {
 if (!fs.existsSync("output/xml")) {
   fs.mkdirSync("output/xml", { recursive: true });
 }
+if (!fs.existsSync("output/json")) {
+  fs.mkdirSync("output/json", { recursive: true });
+}
 
 buildQuizGift(createFilePath(config, "quizPath"), "output/gift/quiz.gift");
+buildQuizJson(createFilePath(config, "quizPath"), "output/json/quiz.json");
 
 buildLessonsXml(
   createFilePath(config, "lessonsPath"),
