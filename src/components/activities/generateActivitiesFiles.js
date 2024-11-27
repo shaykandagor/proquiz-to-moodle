@@ -29,6 +29,7 @@ const generateResourceXml = require("./resource-xml-files/generateResourceXml");
 const generateUrlXml = require("./url-xml-files/generateUrlXml");
 const generateActivitiesFolders = require("./generateActivitiesFolders");
 const generateBookGradesXml = require("./book-xml-files/generateBookGradeXml");
+const createActivitiesFolders = require("../../json-to-mbz/activities/create-activities-folders");
 
 function generateActivitiesFiles(outputDir) {
 
@@ -122,7 +123,7 @@ function generateActivitiesFiles(outputDir) {
     generateModuleXml(activitiesLabelDir);
     generateAssignRolesXml(activitiesLabelDir); */
 
-    // activities/page
+    // activities/book
     const activitiesBookDir = path.join(outputDir, 'activities/book');
     generateAssignGradeHistoryXml(activitiesBookDir);
     generateCalendarXml(activitiesBookDir);

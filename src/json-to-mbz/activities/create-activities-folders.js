@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const createActivitiesfiles = require("./create-activities-files");
 
 function createActivitiesFolders(outputDir, jsonData) {
   const activities = [
@@ -43,6 +44,10 @@ function createActivitiesFolders(outputDir, jsonData) {
       } else {
         console.log(`Folder already exists: ${dirPath}`);
       }
+
+      // Generate XML files inside the created subdirectory
+      createActivitiesfiles(activity.type, dirPath);
+
     });
   });
 }
