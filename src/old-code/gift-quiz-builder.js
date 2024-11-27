@@ -1,6 +1,6 @@
 const fs = require("fs");
-const { parse } = require("./utils/quiz-parser");
-const { writeFileCallback } = require("./utils/utils");
+const { parse } = require("../utils/quiz-parser");
+const { writeFileCallback } = require("../utils/utils");
 
 const createAnswer = (answer) => {
   const correct = answer.correct ? "=" : "~";

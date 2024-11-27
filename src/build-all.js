@@ -1,13 +1,15 @@
+// TODO: is this file needed after json-to-mbz folder is completed?
+
 const config = require("../config.json");
 
-const buildQuizGift = require("./gift-quiz-builder");
-const buildQuiz2XML = require("./xml-quiz2-builder");
-const buildLessonsXml = require("./xml-lessons-builder");
-const buildQuizTrueFalseXml = require("./xml-quiz3-builder");
-const buildTopicsXml = require("./xml-topics-builder");
+const buildQuizGift = require("./old-code/gift-quiz-builder");
+const buildQuiz2XML = require("./old-code/xml-quiz2-builder");
+const buildLessonsXml = require("./old-code/xml-lessons-builder");
+const buildQuizTrueFalseXml = require("./old-code/xml-quiz3-builder");
+const buildTopicsXml = require("./old-code/xml-topics-builder");
 const { createFilePath } = require("./utils/utils");
-const buildTopicsHtml = require("./html-topics-builder");
-const buildLessonsHtml = require("./html-lessons-builder");
+const buildTopicsHtml = require("./old-code/html-topics-builder");
+const buildLessonsHtml = require("./old-code/html-lessons-builder");
 
 buildQuizGift(createFilePath(config, "quizPath"), "output/quiz.gift");
 buildLessonsXml(createFilePath(config, "lessonsPath"), "output/lessons.xml");

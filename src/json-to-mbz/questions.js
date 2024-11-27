@@ -5,27 +5,40 @@ const { parse } = require("../utils/quiz-parser");
 
 const stamp = "moodle.stamp+241010084236+sD8fiO";
 
+// TODO: should not be used in the final product?
+const generateRandomNumber = () => parseInt(Math.random() * 1000000000);
+
+// generating random number for now
+const ownerid = generateRandomNumber();
+
 const createQuestionBankEntryForMultiChoice =
-  (questionBankEntries) => (question) => {
-    const id = Math.random().toString(36).substring(7);
+  (questionBankEntries, category) => (question) => {
+    const id = generateRandomNumber();
+
+    const questioncategoryid = category.id;
+
     const questionBankEntry = questionBankEntries.ele("question_bank_entry", {
       id,
     });
 
-    questionBankEntry.ele("questioncategoryid", "NOT_SURE");
+    questionBankEntry.ele("questioncategoryid", questioncategoryid);
     questionBankEntry.ele("idnumber", "$@NULL@$");
-    questionBankEntry.ele("ownerid", "NOT_SURE");
+    questionBankEntry.ele("ownerid", ownerid);
+
+    const questionVersionId = generateRandomNumber();
 
     const questionVersion = questionBankEntry.ele("question_version");
     const questionVersions = questionVersion.ele("question_versions", {
-      id: "NOT_SURE",
+      id: questionVersionId,
     });
     questionVersions.ele("version", 1);
     questionVersions.ele("status", "ready");
 
+    const questionId = generateRandomNumber();
+
     const questionsEle = questionVersions.ele("questions");
     const questionEle = questionsEle.ele("question", {
-      id: "NOT_SURE",
+      id: questionId,
     });
     questionEle.ele("parent", 0);
     questionEle.ele("name", question.title.trim());
@@ -40,8 +53,8 @@ const createQuestionBankEntryForMultiChoice =
     questionEle.ele("stamp", stamp);
     questionEle.ele("timecreated", +new Date());
     questionEle.ele("timemodified", +new Date());
-    questionEle.ele("createdby", "NOT_SURE");
-    questionEle.ele("modifiedby", "NOT_SURE");
+    questionEle.ele("createdby", ownerid);
+    questionEle.ele("modifiedby", ownerid);
 
     const pluginQtype = questionEle.ele("plugin_qtype_multichoice_question");
     const answersEle = pluginQtype.ele("answers");
@@ -49,7 +62,8 @@ const createQuestionBankEntryForMultiChoice =
     const numberOfAnswers = question.answers.length;
 
     question.answers.forEach((answer) => {
-      const answerEle = answersEle.ele("answer", { id: answer.id });
+      const answerId = generateRandomNumber();
+      const answerEle = answersEle.ele("answer", { id: answer.id || answerId });
       answerEle.ele("answertext", answer.answer.trim());
       answerEle.ele("answerformat", 0);
       // 1 for correct, negative fraction for incorrect
@@ -61,21 +75,23 @@ const createQuestionBankEntryForMultiChoice =
       answerEle.ele("feedbackformat", 0);
     });
 
+    const multichoiceId = generateRandomNumber();
+
     const multichoiceEle = pluginQtype.ele("multichoice", {
-      id: question.multichoiceid,
+      id: multichoiceId
     });
     multichoiceEle.ele("layout", 0);
-    multichoiceEle.ele("single", 0);
+    multichoiceEle.ele("single", 1);
     multichoiceEle.ele("shuffleanswers", 1);
-    multichoiceEle.ele("correctfeedback", "");
-    multichoiceEle.ele("correctfeedbackformat", 0);
-    multichoiceEle.ele("partiallycorrectfeedback", "");
-    multichoiceEle.ele("partiallycorrectfeedbackformat", 0);
-    multichoiceEle.ele("incorrectfeedback", "");
-    multichoiceEle.ele("incorrectfeedbackformat", 0);
+    multichoiceEle.ele("correctfeedback", "Vastauksesi on oikein.");
+    multichoiceEle.ele("correctfeedbackformat", 1);
+    multichoiceEle.ele("partiallycorrectfeedback", "Vastauksesi on osittain oikein.");
+    multichoiceEle.ele("partiallycorrectfeedbackformat", 1);
+    multichoiceEle.ele("incorrectfeedback", "Vastauksesi on väärin.");
+    multichoiceEle.ele("incorrectfeedbackformat", 1);
     multichoiceEle.ele("answernumbering", "none");
-    multichoiceEle.ele("shownumcorrect", 0);
-    multichoiceEle.ele("showstandardinstruction", 1);
+    multichoiceEle.ele("shownumcorrect", 1);
+    multichoiceEle.ele("showstandardinstruction", 0);
 
     questionEle.ele("plugin_qbank_comment_question").ele("comments");
     questionEle.ele("plugin_qbank_customfields_question").ele("customfields");
@@ -83,7 +99,7 @@ const createQuestionBankEntryForMultiChoice =
     questionEle.ele("tags");
   };
 
-const generateQuestionCategory = (questionsXml, category, questions) => {
+const generateQuestionCategory = (questionsXml, category) => {
   const questionCategory = questionsXml.ele("question_category");
   questionCategory.att("id", category.id);
   questionCategory.ele("name", category.name.trim());
@@ -98,18 +114,19 @@ const generateQuestionCategory = (questionsXml, category, questions) => {
   questionCategory.ele("idnumber", category.idnumber || "$@NULL@$");
   const questionBankEntries = questionCategory.ele("question_bank_entries");
 
-  questions.forEach(createQuestionBankEntryForMultiChoice(questionBankEntries));
+  return questionBankEntries;
 };
 
 function buildQuestionsXml(filePath, outputDir) {
   const file = fs.readFileSync(filePath, "utf8");
+  const questions = parse(file);
 
   const questionsXml = xmlbuilder.create("question_categories", {
     encoding: "UTF-8",
   });
 
   // TODO: Mock data
-  const category = {
+  const topLevelCategory = {
     id: "160594",
     name: "top",
     contextid: "1233447",
@@ -120,12 +137,31 @@ function buildQuestionsXml(filePath, outputDir) {
     stamp,
     parent: "0",
     sortorder: "0",
-    idnumber: "$@NULL@$",
   };
 
-  const questions = parse(file);
+  // first create "empty" top level category
+  generateQuestionCategory(questionsXml, topLevelCategory);
 
-  generateQuestionCategory(questionsXml, category, questions);
+  // TODO: Mock data
+  // id and contextid are +1 from topLevelCategory
+  // parent is topLevelCategory.id
+  const category = {
+    id: "160595",
+    name: "top",
+    contextid: "1233448",
+    contextlevel: "50",
+    contextinstanceid: "5412",
+    info: "Questions for the top category",
+    infoformat: "0",
+    stamp,
+    parent: topLevelCategory.id,
+    sortorder: "999",
+  };
+
+  const questionBankEntries = generateQuestionCategory(questionsXml, category);
+  questions.forEach(
+    createQuestionBankEntryForMultiChoice(questionBankEntries, category)
+  );
 
   fs.writeFileSync(
     path.join(outputDir, "questions.xml"),
