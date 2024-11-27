@@ -3,7 +3,7 @@ const writeFileCallback = (err) => {
     console.error("Error writing file:", err);
     return;
   }
-  console.log("file has been saved.");
+  // console.log("file has been saved.");
 };
 
 const createFilePath = (config, key) => {
