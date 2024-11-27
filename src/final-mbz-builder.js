@@ -6,11 +6,9 @@ const { buildQuestionsXml } = require("./json-to-mbz/questions");
 
 const finalDir = path.join(__dirname, "..", "final-mbz");
 
-const outputDir = `./output/${finalDir}`;
-
 // Ensure the output directory exists
-if (!fs.existsSync(outputDir)) {
-  fs.mkdirSync(outputDir, { recursive: true });
+if (!fs.existsSync(finalDir)) {
+  fs.mkdirSync(finalDir, { recursive: true });
 }
 
 const groupsJsonFilePath =
@@ -21,7 +19,7 @@ const questionsJsonFilePath =
   "./exported_data/json/export-file-quiz_pro_1-2024-07-01-11-30-19.json";
 
 function createFinalMoodleBackup() {
-  buildGroupsXml(groupsJsonFilePath, outputDir);
+  buildGroupsXml(groupsJsonFilePath, finalDir);
   //buildCoursesXml(courseJsonFilePath, finalDir);
   buildQuestionsXml(questionsJsonFilePath, finalDir);
 }

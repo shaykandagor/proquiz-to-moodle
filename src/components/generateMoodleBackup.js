@@ -122,7 +122,7 @@ function generateMoodleBackup(outputDir) {
                 .ele('setting')
                     .ele('level', 'root').up()
                     .ele('name', 'questionbank').up()
-                    .ele('value', '0').up()
+                    .ele('value', '1').up()
                 .up()
                 .ele('setting')
                     .ele('level', 'root').up()

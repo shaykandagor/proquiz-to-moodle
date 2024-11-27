@@ -1,6 +1,6 @@
 const fs = require("fs");
-const { writeFileCallback } = require("./utils/utils");
-const { generateHtml } = require("./utils/html");
+const { writeFileCallback } = require("../utils/utils");
+const { generateHtml } = require("../utils/html");
 
 const createContent = (data) =>
   JSON.parse(data).wp_data.map(

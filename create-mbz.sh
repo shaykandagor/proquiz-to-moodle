@@ -18,15 +18,19 @@ fi
 # Define the output zip and mbz file names
 OUTPUT_ZIP="$OUTPUT_DIR/output.zip"
 OUTPUT_MBZ="$OUTPUT_DIR/output.mbz"
-# Create the zip file
-zip -r $OUTPUT_ZIP $DIRECTORY_TO_ZIP
+
+# Change to the directory to be zipped
+cd "$DIRECTORY_TO_ZIP"
+
+# Create the zip file without including the root folder
+zip -r "../$OUTPUT_ZIP" *
 
 # Check if the zip command was successful
 if [ $? -eq 0 ]; then
   echo "Zip file created successfully."
 
   # Rename the zip file to .mbz
-  mv $OUTPUT_ZIP $OUTPUT_MBZ
+  mv "../$OUTPUT_ZIP" "../$OUTPUT_MBZ"
 
   # Check if the mv command was successful
   if [ $? -eq 0 ]; then
