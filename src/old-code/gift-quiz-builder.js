@@ -2,13 +2,19 @@ const fs = require("fs");
 const { parse } = require("../utils/quiz-parser");
 const { writeFileCallback } = require("../utils/utils");
 
+const createPointFractions = (points) => {
+  const isFullPoints = points % 1 === 0;
+  return isFullPoints ? points : points.toFixed(5);
+};
+
 const createAnswer = (answer, i, allAnswers) => {
   const totalAnswers = allAnswers.length;
   const correctAnswers = allAnswers.filter((a) => a.correct).length;
 
-  // moodle needs the precision to be five decimals
-  const pointsFromCorrect = (100 / correctAnswers).toFixed(5);
-  const pointsFromIncorrect =  (100 / (totalAnswers - correctAnswers)).toFixed(5);
+  const pointsFromCorrect = createPointFractions(100 / correctAnswers);
+  const pointsFromIncorrect = createPointFractions(
+    100 / (totalAnswers - correctAnswers)
+  );
 
   const correct = answer.correct
     ? `~%${pointsFromCorrect}%`
