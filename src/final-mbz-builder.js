@@ -4,8 +4,11 @@ const { buildGroupsXml } = require("./json-to-mbz/groups");
 const { buildCoursesXml } = require("./json-to-mbz/course/course");
 const { buildQuestionsXml } = require("./json-to-mbz/questions");
 const createSectionFolder = require("./json-to-mbz/sections/create-section-folder");
-const { buildSectionXml } = require("./json-to-mbz/sections/section");
+const { buildSectionXml } = require("./json-to-mbz/sections/section_5630");
 const { create } = require("lodash");
+const { buildFirstSectionXml } = require("./json-to-mbz/sections/section_5630");
+const { buildSecondSectionXml } = require("./json-to-mbz/sections/section_5631");
+const { buildThirdSection } = require("./json-to-mbz/sections/section_5632");
 
 const finalDir = path.join(__dirname, "..", "final-mbz");
 
@@ -48,7 +51,9 @@ function createFinalMoodleBackup() {
   buildGroupsXml(groupsJsonFilePath, finalDir);
   //buildCoursesXml(courseJsonFilePath, finalDir);
   buildQuestionsXml(questionsJsonFilePath, finalDir);
-  buildSectionXml(sectionJsonFilePath, initialPostId);
+  buildFirstSectionXml(sectionJsonFilePath, initialPostId);
+  buildSecondSectionXml(sectionJsonFilePath, initialPostId + 1);
+  buildThirdSection(sectionJsonFilePath, initialPostId + 2);
 }
 
 
