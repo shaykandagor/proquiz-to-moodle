@@ -17,18 +17,19 @@ const removeEscapeChars = (str) => str.replace(/\\/g, "");
 
 const unserialize = (value) => phpUnserialize.unserialize(value, classMap);
 
+const parseAnswer = (answer) =>
+  Object.entries(answer).reduce(
+    (a, [key, value]) => ({ ...a, [remove0x0_chars(key)]: value }),
+    {}
+  );
+
 const parse = (data) => {
   const { quiz_pro } = JSON.parse(data);
 
   return quiz_pro.questions.map(unserialize).map((question) => {
     const answer_data = removeEscapeChars(question.answer_data);
 
-    const answers = unserialize(answer_data).map((answer) =>
-      Object.entries(answer).reduce(
-        (a, [key, value]) => ({ ...a, [remove0x0_chars(key)]: value }),
-        {}
-      )
-    );
+    const answers = unserialize(answer_data).map(parseAnswer);
 
     const data = omit(question, ["answer_data"]);
 
@@ -39,4 +40,4 @@ const parse = (data) => {
   });
 };
 
-module.exports = { parse };
+module.exports = { parse, unserialize, removeEscapeChars, parseAnswer };

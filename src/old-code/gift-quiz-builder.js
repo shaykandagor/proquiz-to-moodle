@@ -2,19 +2,34 @@ const fs = require("fs");
 const { parse } = require("../utils/quiz-parser");
 const { writeFileCallback } = require("../utils/utils");
 
-const createAnswer = (answer) => {
-  const correct = answer.correct ? "=" : "~";
-  return `${correct} ${answer.answer}`;
+const createPointFractions = (points) => {
+  const isFullPoints = points % 1 === 0;
+  return isFullPoints ? points : points.toFixed(5);
 };
+
+const createAnswer = (answer, i, allAnswers) => {
+  const totalAnswers = allAnswers.length;
+  const correctAnswers = allAnswers.filter((a) => a.correct).length;
+
+  const pointsFromCorrect = createPointFractions(100 / correctAnswers);
+  const pointsFromIncorrect = createPointFractions(
+    100 / (totalAnswers - correctAnswers)
+  );
+
+  const correct = answer.correct
+    ? `~%${pointsFromCorrect}%`
+    : `~%-${pointsFromIncorrect}%`;
+
+  return `${correct} ${answer.answer.trim()}`;
+};
+
+const escapeColon = (str) => str.replace(/:/g, "\\:");
 
 const createQuestion = (question) => {
   const answers = question.answers.map(createAnswer);
 
-  return `
-::${question.title}::
-${question.question}
-
-{
+  return `::${question.title.trim()}::
+${escapeColon(question.question.trim())}{
   ${answers.join("\n  ")}
 }`;
 };
