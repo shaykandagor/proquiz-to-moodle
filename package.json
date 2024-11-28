@@ -18,6 +18,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "he": "^1.2.0",
     "lodash": "^4.17.21",
     "nodemon": "^3.1.7",
     "php-serialize": "^5.0.1",
