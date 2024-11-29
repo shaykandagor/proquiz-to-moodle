@@ -4,7 +4,6 @@ const xml2js = require("xml2js");
 
 const generateRandomNumber = () => parseInt(Math.random() * 10000000);
 const att_id = () => parseInt(Math.random() * 20000);
-const section_id = () => parseInt(Math.random() * 50000);
 
 // Function to create content from JSON data
 const createContent = (data) => {
@@ -85,7 +84,7 @@ const updateModuleXmlWithStaticContent = (xmlData, folderId, folderName) => {
     cdata: true
   });
 
-  const sectionId = section_id();
+  const sectionId = 5634;
   const timestamp = Math.floor(Date.now() / 1000);
 
   return new Promise((resolve, reject) => {
