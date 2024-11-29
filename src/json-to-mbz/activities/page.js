@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const xml2js = require("xml2js");
-const he = require("he");
 
 const generateRandomNumber = () => parseInt(Math.random() * 10000000);
 const att_id = () => parseInt(Math.random() * 20000);
@@ -191,17 +190,16 @@ const processPageXmlFiles = (jsonFilePath, xmlDirPath) => {
           .then((updatedXml) => {
             fs.writeFile(moduleXmlFilePath, updatedXml, "utf8", (err) => {
               if (err) {
-                console.error(`Error writing module XML file: ${moduleXmlFilePath}`, err);
+                console.error(`Error writing page module XML file: ${moduleXmlFilePath}`, err);
                 return;
               }
-              console.log(`Updated module XML file: ${moduleXmlFilePath}`);
+              console.log(`Updated page module XML file: ${moduleXmlFilePath}`);
             });
           })
           .catch((err) => {
-            console.error("Error updating module XML content:", err);
+            console.error("Error updating page module XML content:", err);
           });
-      });
-
+        });
      });
   });
 };

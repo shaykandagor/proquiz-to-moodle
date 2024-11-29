@@ -1,10 +1,11 @@
 const fs = require("fs");
 const path = require("path");
-const { title } = require("process");
 const xml2js = require("xml2js");
 
 const generateRandomNumber = () => parseInt(Math.random() * 10000000);
 const bookatt_id = () => parseInt(Math.random() * 10000);
+const section_id = () => parseInt(Math.random() * 50000);
+
 
 // Function to create content from JSON data
 const createContent = (data) => {
@@ -104,6 +105,53 @@ const updateBookXmlWithJsonContent = (xmlData,  bookJsonContent, sortedChaptersJ
   });
 };
 
+// Function to update module.xml with static content
+const updateModuleXmlWithStaticContent = (xmlData, folderId, folderName) => {
+  const parser = new xml2js.Parser();
+  const builder = new xml2js.Builder({
+    xmldec: { standalone: null, encoding: "UTF-8" },
+    cdata: true
+  });
+
+  const sectionId = section_id();
+  const timestamp = Math.floor(Date.now() / 1000);
+
+  return new Promise((resolve, reject) => {
+    parser.parseString(xmlData, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+
+      // Update the XML content with static values
+      result.module.$.id = folderId;
+      result.module.$.version = "2022112800";
+      result.module.modulename[0] = folderName;
+      result.module.sectionid[0] = sectionId;
+      result.module.sectionnumber[0] = 1;
+      result.module.idnumber[0] = "";
+      result.module.added[0] = timestamp;
+      result.module.score[0] = 0;
+      result.module.indent[0] = 0;
+      result.module.visible[0] = 1;
+      result.module.visibleoncoursepage[0] = 1;
+      result.module.visibleold[0] = 1;
+      result.module.groupmode[0] = 0;
+      result.module.groupingid[0] = 0;
+      result.module.completion[0] = 0;
+      result.module.completiongradeitemnumber[0] = "$@NULL@$";
+      result.module.completionpassgrade[0] = 0;
+      result.module.completionview[0] = 0;
+      result.module.completionexpected[0] = 0;
+      result.module.availability[0] = "$@NULL@$";
+      result.module.showdescription[0] = 0;
+      result.module.downloadcontent[0] = 1;
+
+      const updatedXml = builder.buildObject(result);
+      resolve(updatedXml);
+    });
+  });
+};
+
 // Function to read, update, and write XML files
 const processBookXmlFiles = (lessonsJsonPath, topicsJsonPath, xmlDirPath) => {
   fs.readFile(lessonsJsonPath, "utf8", (err, lessonsData) => {
@@ -127,9 +175,10 @@ const processBookXmlFiles = (lessonsJsonPath, topicsJsonPath, xmlDirPath) => {
       bookDirs.forEach((dir) => {
         const dirPath = path.join(xmlDirPath, dir);
         const xmlFilePath = path.join(dirPath, "book.xml");
+        const moduleXmlFilePath = path.join(dirPath, "module.xml");
 
-        // Extract the folder ID from the directory name
-        const folderId = dir.split('_')[1];
+        // Extract the folder ID and name from the directory name
+        const [folderName, folderId] = dir.split('_');
 
         // Find the corresponding JSON content based on folderId
         const bookJsonContent = lessonsContentArray.find(content => content.moduleid == folderId);
@@ -144,7 +193,9 @@ const processBookXmlFiles = (lessonsJsonPath, topicsJsonPath, xmlDirPath) => {
         }
 
         console.log(`Processing book XML file: ${xmlFilePath}`);
+        console.log(`Processing module XML file: ${moduleXmlFilePath}`);
 
+        // Update book.xml
         fs.readFile(xmlFilePath, "utf8", (err, xmlData) => {
           if (err) {
             console.error(`Error reading XML file: ${xmlFilePath}`, err);
@@ -164,6 +215,28 @@ const processBookXmlFiles = (lessonsJsonPath, topicsJsonPath, xmlDirPath) => {
             .catch((err) => {
               console.error("Error updating book XML content:", err);
             });
+        });
+
+        // Update module.xml
+        fs.readFile(moduleXmlFilePath, "utf8", (err, xmlData) => {
+          if (err) {
+            console.error(`Error reading XML file: ${moduleXmlFilePath}`, err);
+            return;
+          }
+
+        updateModuleXmlWithStaticContent(xmlData, folderId, folderName)
+          .then((updatedXml) => {
+            fs.writeFile(moduleXmlFilePath, updatedXml, "utf8", (err) => {
+              if (err) {
+                console.error(`Error writing book module XML file: ${moduleXmlFilePath}`, err);
+                return;
+              }
+              console.log(`Updated book module XML file: ${moduleXmlFilePath}`);
+            });
+          })
+          .catch((err) => {
+            console.error("Error updating book module XML content:", err);
+          });
         });
       });
     });
