@@ -4,13 +4,13 @@ const { buildGroupsXml } = require("./json-to-mbz/groups");
 const { buildCoursesXml } = require("./json-to-mbz/course/course");
 const { buildQuestionsXml } = require("./json-to-mbz/questions");
 const createSectionFolder = require("./json-to-mbz/sections/create-section-folder");
-const { buildSectionXml } = require("./json-to-mbz/sections/section_5630");
+const { buildSectionXml, buildFirstSectionXml } = require("./json-to-mbz/sections/section_5630");
 const { create } = require("lodash");
-const { buildFirstSectionXml } = require("./json-to-mbz/sections/section_5630");
 const { buildSecondSectionXml } = require("./json-to-mbz/sections/section_5631");
 const { buildThirdSection } = require("./json-to-mbz/sections/section_5632");
 
 const finalDir = path.join(__dirname, "..", "final-mbz");
+const sectionsDir = path.join(finalDir, "sections");
 
 // Ensure the output directory exists
 if (!fs.existsSync(finalDir)) {
@@ -21,17 +21,8 @@ const groupsJsonFilePath = "./exported_data/json/export-file-groups-2024-07-01-1
 const questionsJsonFilePath = "./exported_data/json/export-file-quiz_pro_1-2024-07-01-11-30-19.json";
 const sectionJsonFilePath = "./exported_data/json/export-file-sfwd-courses-2024-07-01-11-30-19.json";
 
-// Read and parse the JSON file
-let sectionsData;
-try {
-  const jsonData = fs.readFileSync(sectionJsonFilePath, "utf8");
-  sectionsData = JSON.parse(jsonData);
-} catch (error) {
-  console.error("Error reading or parsing JSON file:", error);
-  process.exit(1);
-}
 
-// Extract the initial post ID from the first element in the wp_data array
+/* // Extract the initial post ID from the first element in the wp_data array
 const initialPostId = sectionsData.wp_data[0].wp_post_id;
 
 if (typeof initialPostId !== "number") {
@@ -43,17 +34,17 @@ if (typeof initialPostId !== "number") {
 for (let i = 0; i < 3; i++) {
   const sectionId = initialPostId + i;
   createSectionFolder(sectionId);
-}
+} */
 
-console.log("Section folders created for IDs:", initialPostId, initialPostId + 1, initialPostId + 2);
+// console.log("Section folders created for IDs:", initialPostId, initialPostId + 1, initialPostId + 2);
 
 function createFinalMoodleBackup() {
   buildGroupsXml(groupsJsonFilePath, finalDir);
   //buildCoursesXml(courseJsonFilePath, finalDir);
   buildQuestionsXml(questionsJsonFilePath, finalDir);
-  buildFirstSectionXml(sectionJsonFilePath, initialPostId);
-  buildSecondSectionXml(sectionJsonFilePath, initialPostId + 1);
-  buildThirdSection(sectionJsonFilePath, initialPostId + 2);
+  buildFirstSectionXml(sectionJsonFilePath, sectionsDir);
+  // buildSecondSectionXml(sectionJsonFilePath, initialPostId + 1);
+  // buildThirdSection(sectionJsonFilePath, initialPostId + 2);
 }
 
 
