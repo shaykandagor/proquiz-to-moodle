@@ -17,6 +17,7 @@ const createContent = (data) => {
       wp_post_date_gmt,
       wp_post_date,
       wp_postmeta,
+      wp_menu_order,
     } = post;
 
     const context_id = generateRandomNumber();
@@ -42,6 +43,7 @@ const createContent = (data) => {
       lessonId: lessonId,
       title: wp_post_title,
       content: wp_post_content,
+      order: wp_menu_order,
     };
   });
 
@@ -49,7 +51,7 @@ const createContent = (data) => {
 };
 
 // Function to update XML with JSON content
-const updateBookXmlWithJsonContent = (xmlData,  bookJsonContent, chaptersJsonContent) => {
+const updateBookXmlWithJsonContent = (xmlData,  bookJsonContent, sortedChaptersJsonContent) => {
   const parser = new xml2js.Parser();
   const builder = new xml2js.Builder({
     xmldec: { standalone: null, encoding: "UTF-8" },
@@ -80,7 +82,7 @@ const updateBookXmlWithJsonContent = (xmlData,  bookJsonContent, chaptersJsonCon
       const chaptersArray = result.activity.book[0].chapters[0].chapter || [];
       chaptersArray.length = 0; // Clear existing chapters
 
-      chaptersJsonContent.forEach((chapter, index) => {
+      sortedChaptersJsonContent.forEach((chapter, index) => {
         chaptersArray.push({
           $: { id: chapter.chapterId || "" },
           pagenum: [index + 1],
@@ -134,6 +136,7 @@ const processBookXmlFiles = (lessonsJsonPath, topicsJsonPath, xmlDirPath) => {
         
         // Filter chapters that match the book's ID (lessonId matches book_id)
         const chaptersJsonContent = topicsContentArray.filter(content => content.lessonId == folderId);
+        const sortedChaptersJsonContent = chaptersJsonContent.sort((a, b) => a.order - b.order);
 
         if (!bookJsonContent) {
           console.error(`No book JSON content found for folder ID: ${folderId}`);
@@ -148,7 +151,7 @@ const processBookXmlFiles = (lessonsJsonPath, topicsJsonPath, xmlDirPath) => {
             return;
           }
 
-          updateBookXmlWithJsonContent(xmlData, bookJsonContent, chaptersJsonContent)
+          updateBookXmlWithJsonContent(xmlData, bookJsonContent, sortedChaptersJsonContent)
             .then((updatedXml) => {
               fs.writeFile(xmlFilePath, updatedXml, "utf8", (err) => {
                 if (err) {
