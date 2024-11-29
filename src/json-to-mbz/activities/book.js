@@ -155,14 +155,14 @@ const processBookXmlFiles = (lessonsJsonPath, topicsJsonPath, xmlDirPath) => {
             .then((updatedXml) => {
               fs.writeFile(xmlFilePath, updatedXml, "utf8", (err) => {
                 if (err) {
-                  console.error(`Error writing XML file: ${xmlFilePath}`, err);
+                  console.error(`Error writing book XML file: ${xmlFilePath}`, err);
                   return;
                 }
-                console.log(`Updated XML file: ${xmlFilePath}`);
+                console.log(`Updated XML book file: ${xmlFilePath}`);
               });
             })
             .catch((err) => {
-              console.error("Error updating XML content:", err);
+              console.error("Error updating book XML content:", err);
             });
         });
       });

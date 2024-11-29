@@ -14,6 +14,7 @@ const generateBookXml = require("../../components/activities/book-xml-files/gene
 const generatePageXml = require("../../components/activities/page-xml-files/generatePageXml");
 const generateQuizInforefXml = require("../../components/activities/quiz-xml-files/generateQuizInforefXml");
 const generateQuizXml = require("../../components/activities/quiz-xml-files/generateQuixXml");
+const generateBoaInforefXml = require("../../components/activities/board-xml-files/generateBoaInforefXml");
 
 // function to generate the appropriate XML files for a given activity-subdirectory type.
 function createActivitiesfiles(activityType, dirPath) {
@@ -33,7 +34,7 @@ function createBookXml(activityInstancePath) {
     generateFiltersXml(activityInstancePath);
     generateBookGradesXml(activityInstancePath);
     generateAssignGradeHistoryXml(activityInstancePath);;
-    generateActivityAssignInforefXml(activityInstancePath);
+    generateBoaInforefXml(activityInstancePath);
     generateModuleXml(activityInstancePath);
     generateAssignRolesXml(activityInstancePath);
 }
@@ -44,7 +45,7 @@ function createPageXml(activityInstancePath) {
     generateFiltersXml(activityInstancePath);
     generateBoaGradesXml(activityInstancePath);
     generateAssignGradeHistoryXml(activityInstancePath);
-    generateFoldInforefXml(activityInstancePath);
+    generateBoaInforefXml(activityInstancePath);
     generatePageXml(activityInstancePath);
     generateModuleXml(activityInstancePath);
     generateAssignRolesXml(activityInstancePath);

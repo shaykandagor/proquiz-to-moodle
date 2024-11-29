@@ -131,7 +131,7 @@ function generateActivitiesFiles(outputDir) {
     generateFiltersXml(activitiesBookDir);
     generateBookGradesXml(activitiesBookDir);
     generateGradingXml(activitiesBookDir);
-    generateActivityAssignInforefXml(activitiesBookDir);
+    generateBoaInforefXml(activitiesBookDir);
     generateModuleXml(activitiesBookDir);
     generateAssignRolesXml(activitiesBookDir);
 
@@ -142,7 +142,7 @@ function generateActivitiesFiles(outputDir) {
     generateFiltersXml(activitiesPageDir);
     generateBoaGradesXml(activitiesPageDir);
     generateAssignGradeHistoryXml(activitiesPageDir);
-    generateFoldInforefXml(activitiesPageDir);
+    generateBoaInforefXml(activitiesPageDir);
     generatePageXml(activitiesPageDir);
     generateModuleXml(activitiesPageDir);
     generateAssignRolesXml(activitiesPageDir);

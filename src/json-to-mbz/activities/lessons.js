@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
-const createActivitiesFolders = require("./create-activities-folders");
-const { processPageXmlFiles } = require("./page");
 const { processBookXmlFiles } = require("./book");
+const { processPageXmlFiles } = require("./page");
+const createActivitiesFolders = require("./create-activities-folders");
 
 function buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir) {
   
@@ -23,6 +23,7 @@ function buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir) {
       console.log("Activities folders created successfully at", finalDir);
 
       // Process the XML files, passing both JSON datasets
+      processPageXmlFiles(lessonsJsonFilePath, path.join(finalDir, "activities"));
       processBookXmlFiles(lessonsJsonFilePath, topicsJsonFilePath, path.join(finalDir, "activities"));
       console.log("XMLs processed and created in", finalDir);
     });

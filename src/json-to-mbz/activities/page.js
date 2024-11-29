@@ -53,12 +53,6 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
       if (err) {
         return reject(err);
       }
-      // TODO: Fix XML content 
-      // Encode the HTML content for XML
-      const encodedContent = he.encode(jsonContent.content, {
-        useNamedReferences: true,  // Use named entities like &lt; for readability
-        allowUnsafeSymbols: true  // Allow characters like '>' and '"'
-      });
 
       // Update the XML content with JSON content
       result.activity.$.id = jsonContent.id;
@@ -124,14 +118,14 @@ const processPageXmlFiles = (jsonFilePath, xmlDirPath) => {
            .then((updatedXml) => {
              fs.writeFile(xmlFilePath, updatedXml, "utf8", (err) => {
                if (err) {
-                 console.error(`Error writing XML file: ${xmlFilePath}`, err);
+                 console.error(`Error writing page XML file: ${xmlFilePath}`, err);
                  return;
                }
-               console.log(`Updated XML file: ${xmlFilePath}`);
+               console.log(`Updated XML page file: ${xmlFilePath}`);
              });
            })
            .catch((err) => {
-             console.error("Error updating XML content:", err);
+             console.error("Error updating page XML content:", err);
            });
        });
      });
