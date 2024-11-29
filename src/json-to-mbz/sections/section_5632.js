@@ -20,6 +20,7 @@ const createSectionContent = (data) =>
       wp_post_content,
       wp_post_modified,
     }) => {
+      // Extract headings from the post content
       const { thirdHeading } = extractHeadingsAndParagraphs(wp_post_content);
       return {
         id: wp_post_id,
@@ -50,10 +51,23 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
       }
 
       // Clear existing sections in XML
-      xmlResult.sections = { section: [] };
+      xmlResult = { section: [] };
 
-      // Add new sections from JSON content
-      xmlResult.sections.section = jsonContent;
+      // Add JSON content to XML
+      jsonContent.forEach((section) => {
+        const newSection = {
+          $: { id: section.id ? section.id.toString() : '' },
+          number: [section.number || ''],
+          name: [section.name || ''],
+          summary: [section.summary || ''],
+          summaryformat: [section.summaryformat || ''],
+          sequence: [section.sequence || ''],
+          visible: [section.visible || ''],
+          availabilityjson: [section.availabilityjson || ''],
+          timemodified: [section.timemodified || '']
+        };
+        xmlResult.section = newSection;
+      });
 
       const updatedXml = builder.buildObject(xmlResult);
       resolve(updatedXml);
@@ -62,52 +76,51 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
 };
 
 // Function to build section XML
-const buildThirdSection = (sectionJsonFilePath, sectionId) => {
+const buildThirdSection = (sectionJsonFilePath, finalDir) => {
   const inputXmlFilePath = path.join("output", "mbz", "sections", "section_12345", "section.xml"); // Original path
-  const outputSectionFolderPath = path.join("final-mbz", "sections", `section_${sectionId}`); // Updated folder path
-  const outputXmlFilePath = path.join(outputSectionFolderPath, "section.xml"); // Updated file path
+  const outputXmlFilePath = path.join(finalDir, "section_5632", "section.xml"); // Updated folder path
 
   // Check if the input XML file exists
   if (!fs.existsSync(inputXmlFilePath)) {
     console.error("Error: Input XML file does not exist at:", inputXmlFilePath);
     return;
   }
-
-  fs.readFile(inputXmlFilePath, "utf8", (err, xmlData) => {
+  fs.mkdir(finalDir, { recursive: true }, (err) => {
     if (err) {
-      console.error("Error reading XML file. Ensure the XML file exists:", err.message);
+      console.error("Error creating directory:", err.message);
       return;
     }
 
-    fs.readFile(sectionJsonFilePath, "utf8", (err, jsonData) => {
+    fs.readFile(inputXmlFilePath, "utf8", (err, xmlData) => {
       if (err) {
-        console.error("Error reading JSON file. Ensure the JSON file exists:", err.message);
+        console.error("Error reading XML file. Ensure the XML file exists:", err.message);
         return;
       }
 
-      const jsonContent = createSectionContent(jsonData);
+      fs.readFile(sectionJsonFilePath, "utf8", (err, jsonData) => {
+        if (err) {
+          console.error("Error reading JSON file. Ensure the JSON file exists:", err.message);
+          return;
+        }
 
-      updateXmlWithJsonContent(xmlData, jsonContent)
-        .then((updatedXml) => {
-          if (!fs.existsSync(outputSectionFolderPath)) {
-            fs.mkdirSync(outputSectionFolderPath, { recursive: true });
-          }
+        const jsonContent = createSectionContent(jsonData);
 
-          fs.writeFile(outputXmlFilePath, updatedXml, "utf8", (err) => {
-            if (err) {
-              console.error("Error writing updated XML file:", err.message);
-            } else {
-              console.log("Updated XML file has been written to:", outputXmlFilePath);
-            }
+        updateXmlWithJsonContent(xmlData, jsonContent)
+          .then((updatedXml) => {
+            fs.writeFile(outputXmlFilePath, updatedXml, (err) => {
+              if (err) {
+                console.error("Error writing updated XML file:", err.message);
+                return;
+              }
+              console.log("Updated XML file has been saved to:", outputXmlFilePath);
+            });
+          })
+          .catch((error) => {
+            console.error(error);
           });
-        })
-        .catch((error) => {
-          console.error("Error updating XML with JSON content:", error);
-        });
+      });
     });
   });
 };
 
-module.exports = {
-  buildThirdSection,
-};
+module.exports = { buildThirdSection};

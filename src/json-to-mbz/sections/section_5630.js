@@ -43,7 +43,6 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
   const parser = new xml2js.Parser();
   const builder = new xml2js.Builder({
     xmldec: { standalone: null, encoding: "UTF-8" },
-    renderOpts: { 'pretty': true }
   });
 
   return new Promise((resolve, reject) => {
