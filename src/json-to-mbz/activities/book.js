@@ -1,9 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const xml2js = require("xml2js");
-const he = require("he");
-const { time } = require("console");
-const { title } = require("process");
 
 const generateRandomNumber = () => parseInt(Math.random() * 10000000);
 const bookatt_id = () => parseInt(Math.random() * 10000);
@@ -77,7 +74,7 @@ const updateBookXmlWithJsonContent = (xmlData, jsonContent) => {
       result.activity.book[0].$.id= jsonContent.id;
       result.activity.book[0].name[0] = jsonContent.name;
       result.activity.book[0].intro[0] = jsonContent.intro;
-      result.activity.book[0].introformat[0] = jsonContent.contentformat;
+      result.activity.book[0].introformat[0] = jsonContent.introformat;
       result.activity.book[0].numbering[0] = jsonContent.numbering;
       result.activity.book[0].navstyle[0] = jsonContent.navstyle;
       result.activity.book[0].customtitles[0] = jsonContent.customtitles;
@@ -116,10 +113,10 @@ const processBookXmlFiles = (jsonFilePath, xmlDirPath) => {
 
     const jsonContentArray = createContent(jsonData);
 
-     // List directories in xmlDirPath that start with "page_"
-     const pageDirs = fs.readdirSync(xmlDirPath).filter(dir => dir.startsWith('book_'));
+     // List directories in xmlDirPath that start with "book_"
+     const bookDirs = fs.readdirSync(xmlDirPath).filter(dir => dir.startsWith('book_'));
 
-     pageDirs.forEach((dir) => {
+     bookDirs.forEach((dir) => {
        const dirPath = path.join(xmlDirPath, dir);
        const xmlFilePath = path.join(dirPath, "book.xml");
  
