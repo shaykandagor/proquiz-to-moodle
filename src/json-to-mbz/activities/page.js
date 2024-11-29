@@ -84,7 +84,7 @@ const updateModuleXmlWithStaticContent = (xmlData, folderId, folderName) => {
     cdata: true
   });
 
-  const sectionId = 5634;
+  const sectionId = 5633;
   const timestamp = Math.floor(Date.now() / 1000);
 
   return new Promise((resolve, reject) => {

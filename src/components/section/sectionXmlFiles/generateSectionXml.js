@@ -2,17 +2,16 @@ const fs = require("fs");
 const path = require("path");
 const xmlbuilder = require("xmlbuilder");
 
-// Generates section.xml inside 'sections' directory inside 'section'
-// sections\section\section.xml
-function generateSectionXml(sectionDir, id) {
+// function to generate the section.xml file
+function generateSectionXml(outputDir) {
 
     // Ensure the directory exists
-    if (!fs.existsSync(sectionDir)) {
-        fs.mkdirSync(sectionDir, { recursive: true });
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
     }
 
     const sectionXml = xmlbuilder.create('section', { encoding: 'UTF-8' })
-        .att('id', id)
+        .att('id', "")
         .ele('number', '').up()
         .ele('name', '').up()
         .ele('summary', '').up()
@@ -22,8 +21,7 @@ function generateSectionXml(sectionDir, id) {
         .ele('availabilityjson', '').up()
         .ele('timemodified', '').up()
         .end({ pretty: true });
-
-    fs.writeFileSync(path.join(sectionDir, 'section.xml'), sectionXml);
+    fs.writeFileSync(path.join(outputDir, 'section.xml'), sectionXml);
 
     return sectionXml;
 }
