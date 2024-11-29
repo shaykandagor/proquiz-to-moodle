@@ -32,6 +32,7 @@ const {
   generateBlockFiles,
 } = require("./components/course/blocks/generateBlocksFiles");
 const { generateGroupsXml } = require("./components/generateGroupsXml");
+const { generateSectionFolders } = require("./components/section/generateSectionFolder");
 
 function createMoodleBackup(outputDir) {
   // Create subdirectories
@@ -75,11 +76,16 @@ function createMoodleBackup(outputDir) {
   // Generate xml files in courses/blocks/completion_progress
   // generateBlockFiles(completionProgressDir);
 
-  // Defines 'sections' path
+ /*  // Defines 'sections' path
   const sectionsDir = path.join(outputDir, 'sections');
   // Creates subdirectory sections/section
   const sectionDir = path.join(sectionsDir);
-  generateSectionFiles(sectionDir);
+  generateSectionFiles(sectionDir); */
+
+  // Create xml files inside 'sections' directory
+  generateSectionFiles(outputDir);
+
+
 }
 
 createMoodleBackup("output/mbz");
