@@ -4,21 +4,28 @@ const createActivitiesFolders = require("./create-activities-folders");
 const { processPageXmlFiles } = require("./page");
 const { processBookXmlFiles } = require("./book");
 
-function buildLessonsXml(lessonsJsonFilePath, finalDir) {
-  // Read the JSON file to get the ids and pass its content to createActivitiesFolders
-  fs.readFile(lessonsJsonFilePath, "utf8", (err, data) => {
+function buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir) {
+  
+  fs.readFile(lessonsJsonFilePath, "utf8", (err, lessonsData) => {
     if (err) {
-      console.error("Error reading JSON file:", err);
+      console.error("Error reading lessons JSON file:", err);
       return;
     }
 
-    createActivitiesFolders(finalDir, data);
-    console.log("Activities folders created successfully at ", finalDir);
+    fs.readFile(topicsJsonFilePath, "utf8", (err, topicsData) => {
+      if (err) {
+        console.error("Error reading topics JSON file:", err);
+        return;
+      }
 
-    // Process XML files
-    //processPageXmlFiles(lessonsJsonFilePath, path.join(finalDir, "activities"));
-    processBookXmlFiles(lessonsJsonFilePath, path.join(finalDir, "activities"));
-    console.log("XMLs created ", finalDir);
+      // Create activities folders
+      createActivitiesFolders(finalDir, lessonsData);
+      console.log("Activities folders created successfully at", finalDir);
+
+      // Process the XML files, passing both JSON datasets
+      processBookXmlFiles(lessonsJsonFilePath, topicsJsonFilePath, path.join(finalDir, "activities"));
+      console.log("XMLs processed and created in", finalDir);
+    });
   });
 }
 

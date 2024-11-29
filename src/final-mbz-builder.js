@@ -22,12 +22,14 @@ const questionsJsonFilePath =
   "./exported_data/json/export-file-quiz_pro_1-2024-07-01-11-30-19.json";
 const lessonsJsonFilePath =
   "./exported_data/json/export-file-sfwd-lessons-2024-07-01-11-30-19.json";
+const topicsJsonFilePath =
+  "./exported_data/json/export-file-sfwd-topic-2024-07-01-11-30-19.json";
 
 function createFinalMoodleBackup() {
-  buildGroupsXml(groupsJsonFilePath, finalDir);
+  //buildGroupsXml(groupsJsonFilePath, finalDir);
   //buildCoursesXml(courseJsonFilePath, finalDir);
-  buildQuestionsXml(questionsJsonFilePath, finalDir);
-  buildLessonsXml(lessonsJsonFilePath, finalDir);
+  //buildQuestionsXml(questionsJsonFilePath, finalDir);
+  buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir);
 }
 
 createFinalMoodleBackup();
