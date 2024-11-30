@@ -4,6 +4,15 @@ const generateBoaInforefXml = require('../../components/activities/board-xml-fil
 const { generateSectionXml } = require('../../components/section/sectionXmlFiles/generateSectionXml');
 
 function createSectionsFolders(outputDir, startId, numberOfSections) {
+
+    // Ensure the parent "sections" folder exists
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+        console.log(`Created parent folder: ${outputDir}`);
+    } else {
+        console.log(`Parent folder already exists: ${outputDir}`);
+    }
+
     // create sections folders
     for (let i = startId; i < startId + numberOfSections; i++) {
         const folderName = `section_${i}`;
