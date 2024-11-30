@@ -1,37 +1,50 @@
-/* const fs = require("fs");
+const fs = require("fs");
 const path = require("path");
+const { buildFirstSectionXml } = require("./buildFirstSectionXml");
+const { buildSecondSectionXml } = require("./buildSecondSectionXml");
+const { buildThirdSectionXml } = require("./buildThirdSectionXml");
+const { generateSectionsInforefXml } = require("../../components/section/sectionXmlFiles/generateInforefXml");
 
-function createSectionsFolders(outputDir, jsonFilePath, numberFolders) {
-    // Read JSON file
-    const jsonData = fs.readFileSync(jsonFilePath, 'utf8');
-    const data = JSON.parse(jsonData);
+function createSectionsFolders(sectionsDir, coursesJsonFilePath, numberFolders) {
+    // Read the JSON file to fetch the starting ID
+    const jsonData = fs.readFileSync(coursesJsonFilePath, "utf8");
+    const jsonContent = JSON.parse(jsonData);
+    const wp_post_id = jsonContent.wp_data[0].wp_post_id; // Starting ID for the sections
 
-    // Ensure the output directory exists
-    if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
-    }
-
-    // Extract the first wp_post_id
-    if (data.wp_data.length === 0) {
-        console.error("No wp_data found in JSON file.");
+    if (typeof wp_post_id !== 'number' || isNaN(wp_post_id)) {
+        console.error("Invalid wp_post_id in JSON file");
         return;
     }
-    const firstId = data.wp_data[0].wp_post_id;
 
-    // Create the specified number of folders starting from the first wp_post_id
+    const tempDir = path.join(sectionsDir, 'temp');
+    if (!fs.existsSync(tempDir)) {
+        fs.mkdirSync(tempDir, { recursive: true });
+    }
+    generateSectionsInforefXml(tempDir, wp_post_id);
+
+    // Path to the generated infoRef.xml
+    const infoRefFilePath = path.join(tempDir, 'infoRef.xml');
+
+    // Loop to create the specified number of folders
     for (let i = 0; i < numberFolders; i++) {
-        const currentId = firstId + i;
-        const dirPath = path.join(outputDir, `section_${currentId}`);
-        if (!fs.existsSync(dirPath)) {
-            fs.mkdirSync(dirPath, { recursive: true });
+        const currentId = wp_post_id + i;
+        console.log(`Creating section folder for ID: ${currentId}`); // Debugging line
+        const dir = path.join(sectionsDir, `section_${currentId}`);
+
+        // Ensure the section directory exists
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
         }
+
+        // Copy the infoRef.xml file to each section directory
+        const targetInfoRefFilePath = path.join(dir, 'infoRef.xml');
+        fs.copyFileSync(infoRefFilePath, targetInfoRefFilePath);
+
+        // Create section.xml files
+        buildFirstSectionXml(dir, coursesJsonFilePath, currentId);
+        buildSecondSectionXml(dir, coursesJsonFilePath, currentId);
+        buildThirdSectionXml(dir, coursesJsonFilePath, currentId);
     }
 }
 
-// Example usage
-const outputDir = './output';
-const jsonFilePath = './export-file-sfwd-courses-2024-07-01-11-30-19.json'; // Path to your JSON file
-const numberFolders = 3; // Number of folders to create
-generateSectionsFolders(outputDir, jsonFilePath, numberFolders);
-
-module.exports = createSectionsFolders; */
+module.exports = { createSectionsFolders };

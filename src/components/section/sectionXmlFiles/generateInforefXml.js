@@ -4,7 +4,7 @@ const xmlbuilder = require("xmlbuilder");
 
 // Generates inforef.xml inside 'sections' directory inside 'section'
 // sections\section\inforef.xml
-function generateSectionsInforefXml(sectionDir, id) {
+function generateSectionsInforefXml(sectionDir) {
   // Ensure the directory exists
   if (!fs.existsSync(sectionDir)) {
     fs.mkdirSync(sectionDir, { recursive: true });

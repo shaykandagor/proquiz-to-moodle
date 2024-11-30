@@ -1,13 +1,13 @@
-const fs = require('fs');
-const path = require('path');
-const xml2js = require('xml2js');
+const fs = require("fs");
+const path = require("path");
+const xml2js = require("xml2js");
 
 // Function to extract the first heading and paragraphs from wp_post_content
 const extractHeadingAndParagraphs = (content) => {
   const headingMatch = content.match(/<h3>(.*?)<\/h3>/);
   const paragraphMatches = content.match(/<p>(.*?)<\/p>/g);
   return {
-    heading: headingMatch && headingMatch[0] ? headingMatch[0].replace(/<\/?h3>/g, '') : "",
+    firstHeading: headingMatch && headingMatch[0] ? headingMatch[0].replace(/<\/?h3>/g, '') : "",
     firstParagraph: paragraphMatches && paragraphMatches[0] ? paragraphMatches[0].replace(/<\/?p>/g, '') : "",
     secondParagraph: paragraphMatches && paragraphMatches[1] ? paragraphMatches[1].replace(/<\/?p>/g, '') : ""
   };
@@ -21,7 +21,7 @@ const createSectionContent = (data) =>
       wp_post_modified,
     }) => {
       // Extract heading and paragraphs from the post content
-      const { heading, firstParagraph, secondParagraph } = extractHeadingAndParagraphs(wp_post_content);
+      const { firstHeading: heading, firstParagraph, secondParagraph } = extractHeadingAndParagraphs(wp_post_content);
       const summary = `${firstParagraph} ${secondParagraph}`.trim();
       return {
         id: wp_post_id,
@@ -76,10 +76,10 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
   });
 };
 
-// Function to build section XML
-const buildFirstSectionXml = (sectionJsonFilePath, finalDir) => {
+
+const buildFirstSectionXml = (finalDir, coursesJsonFilePath) => {
   const inputXmlFilePath = path.join("output", "mbz", "sections", "section_12345", "section.xml"); // Original path
-  const outputXmlFilePath = path.join(finalDir, "section_5630", "section.xml"); // Updated folder path
+  const outputXmlFilePath = path.join(finalDir, "section.xml"); // Updated folder path
 
   // Check if the input XML file exists
   if (!fs.existsSync(inputXmlFilePath)) {
@@ -99,7 +99,7 @@ const buildFirstSectionXml = (sectionJsonFilePath, finalDir) => {
         return;
       }
 
-      fs.readFile(sectionJsonFilePath, "utf8", (err, jsonData) => {
+      fs.readFile(coursesJsonFilePath, "utf8", (err, jsonData) => {
         if (err) {
           console.error("Error reading JSON file. Ensure the JSON file exists:", err.message);
           return;
@@ -111,14 +111,14 @@ const buildFirstSectionXml = (sectionJsonFilePath, finalDir) => {
           .then((updatedXml) => {
             fs.writeFile(outputXmlFilePath, updatedXml, (err) => {
               if (err) {
-                console.error("Error writing updated XML file:", err.message);
+                console.error("Error writing XML file:", err.message);
                 return;
               }
-              console.log("Updated XML file has been saved to:", outputXmlFilePath);
+              console.log("XML file updated successfully.");
             });
           })
           .catch((error) => {
-            console.error(error);
+            console.error("Error updating XML content:", error.message);
           });
       });
     });

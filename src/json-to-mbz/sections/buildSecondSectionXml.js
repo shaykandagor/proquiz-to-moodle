@@ -8,7 +8,6 @@ const extractHeadingsAndParagraphs = (content) => {
   const paragraphMatches = content.match(/<p>(.*?)<\/p>/g);
   const listMatches = content.match(/<li>(.*?)<\/li>/g);
   return {
-    firstHeading: headingMatches && headingMatches[0] ? headingMatches[0].replace(/<\/?h3>/g, '') : "",
     secondHeading: headingMatches && headingMatches[1] ? headingMatches[1].replace(/<\/?h3>/g, '') : "",
     firstParagraph: paragraphMatches && paragraphMatches[0] ? paragraphMatches[0].replace(/<\/?p>/g, '') : "",
     secondParagraph: paragraphMatches && paragraphMatches[1] ? paragraphMatches[1].replace(/<\/?p>/g, '') : "",
@@ -83,10 +82,11 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
   });
 };
 
+
 // Function to build section XML
-const buildSecondSectionXml = (sectionJsonFilePath, finalDir) => {
+const buildSecondSectionXml = (finalDir, coursesJsonFilePath) => {
   const inputXmlFilePath = path.join("output", "mbz", "sections", "section_12345", "section.xml"); // Original path
-  const outputXmlFilePath = path.join(finalDir, "section_5631", "section.xml"); // Updated folder path
+  const outputXmlFilePath = path.join(finalDir, "section.xml"); // Updated folder path
 
  // Check if the input XML file exists
  if (!fs.existsSync(inputXmlFilePath)) {
@@ -106,7 +106,7 @@ fs.mkdir(finalDir, { recursive: true }, (err) => {
       return;
     }
 
-    fs.readFile(sectionJsonFilePath, "utf8", (err, jsonData) => {
+    fs.readFile(coursesJsonFilePath, "utf8", (err, jsonData) => {
       if (err) {
         console.error("Error reading JSON file. Ensure the JSON file exists:", err.message);
         return;
@@ -132,6 +132,6 @@ fs.mkdir(finalDir, { recursive: true }, (err) => {
 });
 };
 
-
-
 module.exports = { buildSecondSectionXml };
+
+
