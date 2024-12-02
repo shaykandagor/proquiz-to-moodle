@@ -8,6 +8,16 @@ const createActivitiesFolders = require("./json-to-mbz/activities/create-activit
 const buildLessonsXml = require("./json-to-mbz/activities/lessons");
 const createSectionsFolders = require("./json-to-mbz/sections/create-section-folders");
 const processSectionXmlFiles = require("./json-to-mbz/sections/section");
+const { createCompletionXml } = require("./json-to-mbz/completion");
+const { createFileXml } = require("./json-to-mbz/file");
+const { createScalesXml } = require("./json-to-mbz/scales");
+const { createOutcomesXml } = require("./json-to-mbz/outcomes");
+const { createMoodleBackup } = require("./json-to-mbz/moodle_backup");
+const { createGradebookXml } = require("./json-to-mbz/gradebook");
+const { createGradehistoryXml } = require("./json-to-mbz/grade_history");
+const { createGroupsXml } = require("./json-to-mbz/groups2");
+const createQuestionsXml = require("./json-to-mbz/questions2");
+const { createRolesXml } = require("./json-to-mbz/roles");
 
 const finalDir = path.join(__dirname, "..", "final-mbz");
 
@@ -28,10 +38,22 @@ const topicsJsonFilePath =
   "./exported_data/json/export-file-sfwd-topic-2024-07-01-11-30-19.json";
 
 function createFinalMoodleBackup() {
-  //buildGroupsXml(groupsJsonFilePath, finalDir);
   //buildCoursesXml(courseJsonFilePath, finalDir);
   //buildQuestionsXml(questionsJsonFilePath, finalDir);
+  //buildGroupsXml(groupsJsonFilePath, finalDir);
   buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir);
+  createCompletionXml(finalDir)
+  createFileXml(finalDir)
+  createGradebookXml(finalDir)
+  createScalesXml(finalDir)
+  createOutcomesXml(finalDir)
+  createMoodleBackup(finalDir)
+  createGradebookXml(finalDir)
+  createGradehistoryXml(finalDir)
+  createGroupsXml(finalDir)
+  createQuestionsXml(finalDir)
+  createRolesXml(finalDir)
+
 
   const outputDir = './final-mbz/sections';
   const startId = 5630;
