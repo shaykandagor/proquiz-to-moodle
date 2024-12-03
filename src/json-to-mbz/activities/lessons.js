@@ -4,6 +4,7 @@ const { processBookXmlFiles } = require("./book");
 const { processPageXmlFiles } = require("./page");
 const createActivitiesFolders = require("./create-activities-folders");
 
+// This function reads the lessons JSON file and the topics JSON file, and creates the XML files for the lessons
 function buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir) {
   
   fs.readFile(lessonsJsonFilePath, "utf8", (err, lessonsData) => {
