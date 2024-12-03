@@ -4,7 +4,7 @@ const generateCourseXml = require("../../components/course/courseXmlFiles/genera
 const generateEnrolmentXml = require("../../components/course/courseXmlFiles/generateEnrolmentXml");
 const { generateRolesXml } = require("../../components/course/courseXmlFiles/generateRolesXml");
 
-function generateCoursefiles(outputDir) {
+async function generateCoursefiles(outputDir) {
     generateCourseXml(outputDir);
     generateEnrolmentXml(outputDir);
     generateCourseInforefXml(outputDir);
