@@ -55,12 +55,12 @@ function createFinalMoodleBackup() {
   createRolesXml(finalDir)
 
 
-  const outputDir = './final-mbz/sections';
+  const sectionsDir = path.join(finalDir, "sections");
   const startId = 5630;
   const numberOfSections = 4;
-  createSectionsFolders(outputDir, startId, numberOfSections);
+  createSectionsFolders(sectionsDir, startId, numberOfSections);
 
-  processSectionXmlFiles(courseJsonFilePath, outputDir);
+  processSectionXmlFiles(courseJsonFilePath, sectionsDir);
   }
 
 createFinalMoodleBackup();

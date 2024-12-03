@@ -3,20 +3,20 @@ const path = require('path');
 const generateBoaInforefXml = require('../../components/activities/board-xml-files/generateBoaInforefXml');
 const { generateSectionXml } = require('../../components/section/sectionXmlFiles/generateSectionXml');
 
-function createSectionsFolders(outputDir, startId, numberOfSections) {
+function createSectionsFolders(finalDir, startId, numberOfSections) {
 
     // Ensure the parent "sections" folder exists
-    if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
-        console.log(`Created parent folder: ${outputDir}`);
+    if (!fs.existsSync(finalDir)) {
+        fs.mkdirSync(finalDir, { recursive: true });
+        console.log(`Created parent folder: ${finalDir}`);
     } else {
-        console.log(`Parent folder already exists: ${outputDir}`);
+        console.log(`Parent folder already exists: ${finalDir}`);
     }
 
     // create sections folders
     for (let i = startId; i < startId + numberOfSections; i++) {
         const folderName = `section_${i}`;
-        const folderPath = path.join(outputDir, folderName);
+        const folderPath = path.join(finalDir, folderName);
 
         // Check if the folder already exists
         if (!fs.existsSync(folderPath)) {
