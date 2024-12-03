@@ -8,6 +8,7 @@ const createActivitiesFolders = require("./json-to-mbz/activities/create-activit
 const buildLessonsXml = require("./json-to-mbz/activities/lessons");
 const createSectionsFolders = require("./json-to-mbz/sections/create-section-folders");
 const processSectionXmlFiles = require("./json-to-mbz/sections/section");
+const createCourseFolder = require("./json-to-mbz/course/create-course-folder");
 
 const finalDir = path.join(__dirname, "..", "final-mbz");
 
@@ -32,6 +33,8 @@ function createFinalMoodleBackup() {
   //buildCoursesXml(courseJsonFilePath, finalDir);
   //buildQuestionsXml(questionsJsonFilePath, finalDir);
   buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir);
+
+  createCourseFolder(finalDir);
 
   const outputDir = './final-mbz/sections';
   const startId = 5630;
