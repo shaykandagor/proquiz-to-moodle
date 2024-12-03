@@ -13,4 +13,4 @@ function generateCompletionXml(outputDir) {
   return completionXml;
 }
 
-module.exports = { generateCompletionXml };
+module.exports = generateCompletionXml;

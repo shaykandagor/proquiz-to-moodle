@@ -4,7 +4,19 @@ const xmlbuilder = require('xmlbuilder');
 
 // Generates gradebook.xml file inside 'output' directory
 // output\gradebook.xml
-function generateGradebookXml(outputDir) {
+
+const grade_categ_id = () => parseInt(Math.random() * 10000);
+const grade_item_id = () => parseInt(Math.random() * 100000);
+const timestamp = Math.floor(Date.now() / 1000);
+
+
+function generateMainGradebookXml(outputDir) {
+
+    const grade_category = grade_categ_id();
+    const grade_item = grade_item_id();
+    const timecreated = timestamp;
+    const timemodified = timestamp;
+
     // Ensure the output directory exists
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
@@ -13,28 +25,30 @@ function generateGradebookXml(outputDir) {
     const gradebookXml = xmlbuilder.create('gradebook', { encoding: 'UTF-8' })
         .ele('attributes').up()
         .ele('grade_categories')
-            .ele('grade_category', { id: '6643' })
+            .ele('grade_category')
+            .att('id', grade_category)
                 .ele('parent', '$@NULL@$').up()
                 .ele('depth', '1').up()
-                .ele('path', '/6643/').up()
+                .ele('path', `/${grade_category}/`).up()
                 .ele('fullname', '?').up()
                 .ele('aggregation', '13').up()
                 .ele('keephigh', '0').up()
                 .ele('droplow', '0').up()
                 .ele('aggregateonlygraded', '0').up()
                 .ele('aggregateoutcomes', '0').up()
-                .ele('timecreated', '1723628835').up()
-                .ele('timemodified', '1723628835').up()
+                .ele('timecreated', timecreated).up()
+                .ele('timemodified', timemodified).up()
                 .ele('hidden', '0').up()
             .up()
         .up()
         .ele('grade_items')
-            .ele('grade_item', { id: '79694' })
+            .ele('grade_item')
+            .att('id', grade_item)
                 .ele('categoryid', '$@NULL@$').up()
                 .ele('itemname', '$@NULL@$').up()
                 .ele('itemtype', 'course').up()
                 .ele('itemmodule', '$@NULL@$').up()
-                .ele('iteminstance', '6643').up()
+                .ele('iteminstance', grade_category).up()
                 .ele('itemnumber', '$@NULL@$').up()
                 .ele('iteminfo', '$@NULL@$').up()
                 .ele('idnumber', '$@NULL@$').up()
@@ -57,8 +71,8 @@ function generateGradebookXml(outputDir) {
                 .ele('locked', '0').up()
                 .ele('locktime', '0').up()
                 .ele('needsupdate', '0').up()
-                .ele('timecreated', '1723628835').up()
-                .ele('timemodified', '1723628835').up()
+                .ele('timecreated', timecreated).up()
+                .ele('timemodified', timemodified).up()
                 .ele('grade_grades').up()
             .up()
         .up()
@@ -76,4 +90,4 @@ function generateGradebookXml(outputDir) {
     return gradebookXml;
 }
 
-module.exports = generateGradebookXml;
+module.exports = generateMainGradebookXml;
