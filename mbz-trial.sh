@@ -45,7 +45,7 @@ if [ ! -f "$TEMP_DIR/moodle_backup.xml" ]; then
 fi
 
 # Define the output mbz file name
-OUTPUT_MBZ="$OUTPUT_DIR/course_backup.mbz"
+OUTPUT_MBZ="$OUTPUT_DIR/pro-quiz.mbz"
 
 echo "Output mbz file: $OUTPUT_MBZ"
 
