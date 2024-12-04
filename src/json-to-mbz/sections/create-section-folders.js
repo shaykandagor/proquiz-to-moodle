@@ -33,4 +33,4 @@ function createSectionsFolders(finalDir, startId, numberOfSections) {
     }
 }
 
-module.exports = createSectionsFolders;
+module.exports = { createSectionsFolders };

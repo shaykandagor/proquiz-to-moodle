@@ -1,4 +1,3 @@
-const createSectionFolder = require("../../json-to-mbz/sections/create-section-folder");
 const {
   generateSectionsInforefXml,
 } = require("./sectionXmlFiles/generateInforefXml");
