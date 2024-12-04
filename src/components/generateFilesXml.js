@@ -12,4 +12,4 @@ function generateFilesXml(outputDir) {
     return fileXml;
 }
 
-module.exports = { generateFilesXml };
+module.exports = generateFilesXml;

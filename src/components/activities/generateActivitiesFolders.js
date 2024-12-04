@@ -2,18 +2,10 @@ const fs = require("fs");
 const path = require("path");
 
 function generateActivitiesFolders(outputDir) {
-  const activities = [
-    'assign', 
-    'attendance', 
-    'board', 
-    'chat', 
-    'feedback', 
-    'folder',
-    'label', 
+  const activities = [ 
+    'book',
     'page',
-    'quiz',
-    'resource',
-    'url',];
+    'quiz',];
   
     // Ensure the output directory exists
   if (!fs.existsSync(outputDir)) {

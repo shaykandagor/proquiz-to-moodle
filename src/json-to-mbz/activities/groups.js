@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const xml2js = require("xml2js");
+const groupsJsonFilePath =
+  "./exported_data/json/export-file-groups-2024-07-01-11-30-19.json";
 
 // Function to create content from JSON data
 const createContent = (data) =>
@@ -131,4 +133,4 @@ const buildGroupsXml = (groupsJsonFilePath, finalDir) => {
   });
 };
 
-module.exports = { buildGroupsXml };
+module.exports = buildGroupsXml;

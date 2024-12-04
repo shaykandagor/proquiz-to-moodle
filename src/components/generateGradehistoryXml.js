@@ -13,4 +13,4 @@ function generateGradehistoryXml(outputDir) {
     return gradehistoryXml;
 }
 
-module.exports = { generateGradehistoryXml };
+module.exports = generateGradehistoryXml;

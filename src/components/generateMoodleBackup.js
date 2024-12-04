@@ -1,33 +1,45 @@
 const fs = require('fs');
 const path = require('path');
 const xmlbuilder = require('xmlbuilder');
+const crypto = require("crypto");
+
+function generateBackupId() {
+    const hash = crypto.createHash('md5');
+    return hash.update(Date.now().toString()).digest('hex');
+}
+
+const backup_id = generateBackupId();
+const timestamp = Math.floor(Date.now() / 1000);
+const oneYearInSeconds = 365 * 24 * 60 * 60;
+const oneYearFromNow = timestamp + oneYearInSeconds;
 
 // Generates moodle_backup.xml file inside 'output' directory
 // output\moodle_backup.xml
 function generateMoodleBackup(outputDir) {
     const backupXml = xmlbuilder.create('moodle_backup', { encoding: 'UTF-8' })
         .ele('information')
-            .ele('name', 'backup-moodle2-course-4457-empty_course_10-20241115-1445-nu-nf.mbz').up()
+            .ele('name', '.mbz').up()
             .ele('moodle_version', '2022112814.03').up()
             .ele('moodle_release', '4.1.14+ (Build: 20241101)').up()
             .ele('backup_version', '2022112800').up()
             .ele('backup_release', '4.1').up()
-            .ele('backup_date', '1731674744').up()
+            .ele('backup_date', timestamp).up()
             .ele('mnet_remoteusers', '0').up()
             .ele('include_files', '0').up()
             .ele('include_file_references_to_external_content', '0').up()
             .ele('original_wwwroot', 'https://moodle.metropolia.fi').up()
             .ele('original_site_identifier_hash', 'ddc026eaa3a68b0dc3bf0f757a1ba639').up()
-            .ele('original_course_id', '4457').up()
+            .ele('original_course_id', '').up()
             .ele('original_course_format', 'topics').up()
-            .ele('original_course_fullname', 'Empty course 10').up()
-            .ele('original_course_shortname', 'empty course 10').up()
-            .ele('original_course_startdate', '1717621200').up()
-            .ele('original_course_enddate', '1749157200').up()
-            .ele('original_course_contextid', '1050905').up()
+            .ele('original_course_fullname', '').up()
+            .ele('original_course_shortname', '').up()
+            .ele('original_course_startdate', timestamp).up()
+            .ele('original_course_enddate', oneYearFromNow).up()
+            .ele('original_course_contextid', '').up()
             .ele('original_system_contextid', '1').up()
             .ele('details')
-                .ele('detail', { backup_id: '46a34a7756b995108a6dd87c4b00e270' })
+                .ele('detail')
+                .att('backup_id', backup_id)
                     .ele('type', 'course').up()
                     .ele('format', 'moodle2').up()
                     .ele('interactive', '1').up()
@@ -37,17 +49,12 @@ function generateMoodleBackup(outputDir) {
                 .up()
             .up()
             .ele('contents')
-                .ele('course')
-                    .ele('courseid', '4457').up()
-                    .ele('title', 'empty course 10').up()
-                    .ele('directory', 'course').up()
-                .up()
             .up()
             .ele('settings')
                 .ele('setting')
                     .ele('level', 'root').up()
                     .ele('name', 'filename').up()
-                    .ele('value', 'backup-moodle2-course-4457-empty_course_10-20241115-1445-nu-nf.mbz').up()
+                    .ele('value', '.mbz').up()
                 .up()
                 .ele('setting')
                     .ele('level', 'root').up()
@@ -72,7 +79,7 @@ function generateMoodleBackup(outputDir) {
                 .ele('setting')
                     .ele('level', 'root').up()
                     .ele('name', 'activities').up()
-                    .ele('value', '0').up()
+                    .ele('value', '1').up()
                 .up()
                 .ele('setting')
                     .ele('level', 'root').up()
@@ -122,7 +129,7 @@ function generateMoodleBackup(outputDir) {
                 .ele('setting')
                     .ele('level', 'root').up()
                     .ele('name', 'questionbank').up()
-                    .ele('value', '1').up()
+                    .ele('value', '0').up()
                 .up()
                 .ele('setting')
                     .ele('level', 'root').up()

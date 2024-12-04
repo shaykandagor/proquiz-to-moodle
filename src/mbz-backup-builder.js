@@ -63,7 +63,7 @@ function createMoodleBackup(outputDir) {
   generateScalesXml(outputDir);
 
   // Generate xml files inside "activities" directories
-  // generateActivitiesFiles(outputDir);
+  generateActivitiesFiles(outputDir);
 
   // Creates xml files inside 'course' directory
   const courseDir = path.join(outputDir, "course");
