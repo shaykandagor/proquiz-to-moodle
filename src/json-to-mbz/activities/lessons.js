@@ -27,6 +27,7 @@ function buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir) {
       processPageXmlFiles(lessonsJsonFilePath, path.join(finalDir, "activities"));
       processBookXmlFiles(lessonsJsonFilePath, topicsJsonFilePath, path.join(finalDir, "activities"));
       console.log("XMLs processed and created in", finalDir);
+
     });
   });
 }

@@ -47,27 +47,32 @@ function generateRandomId() {
 }
 
 // Generates files.xml file inside 'output' directory
-async function createFilesXml(finalDir, inputFile, fileToHash, component = 'book', filearea = 'chapter') {
-    console.log('createFilesXml called with:', { finalDir, inputFile, fileToHash });
-
-    if (!fileToHash) {
-        throw new TypeError('The "fileToHash" argument must be of type string or an instance of Buffer or URL. Received undefined');
+async function createFilesXml(inputFile, audioFile, finalDir, component = 'book', filearea = 'chapter') {
+    if (!inputFile) {
+        throw new TypeError('The "inputFile" argument must be of type string. Received undefined');
     }
+    if (!audioFile) {
+        throw new TypeError('The "audioFile" argument must be of type string or an instance of Buffer or URL. Received undefined');
+    }
+    if (!finalDir) {
+        throw new TypeError('The "finalDir" argument must be of type string. Received undefined');
+    }
+    
 
     const info = extractInfoFromXml(inputFile);
-    const contentHash = computeFileHash(fileToHash);
-    const filename = path.basename(fileToHash);
-    const filesize = fs.statSync(fileToHash).size;
+    const contentHash = computeFileHash(audioFile);
+    const filename = path.basename(audioFile);
+    const filesize = fs.statSync(audioFile).size;
 
     // Dynamically import the mime package
     const mimeModule = await import('mime');
     const mime = mimeModule.default;
-    const mimetype = mime.getType(fileToHash);
+    const mimetype = mime.getType(audioFile);
 
     const timestamp = Math.floor(Date.now() / 1000);
 
     // Extract the directory path for the filepath attribute
-    const filepath = path.dirname(fileToHash) + '/';
+    const filepath = path.dirname(audioFile) + '/';
 
     const fileXml = xmlbuilder.create('files', { encoding: 'UTF-8' })
         .ele('file', { id: generateRandomId() }) // Generate a random 8-digit number

@@ -37,6 +37,7 @@ async function buildCourseXml(courseJsonFilePath, finalDir) {
 
     // Update the XML files with the new data
     await processCourseXmlFile(courseJsonFilePath, courseDir);
+
   }
 }
 
