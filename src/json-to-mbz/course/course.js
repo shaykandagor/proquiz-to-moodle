@@ -88,65 +88,48 @@ const updateEnrolmentsXml = (xmlData, jsonContent) => {
 }
 
 // Function to read, update, and write XML files
-const processCourseXmlFile = (jsonFilePath, xmlDirPath) => {
+const processCourseXmlFile = async (jsonFilePath, xmlDirPath) => {
+try {
+  const jsonData = await fs.promises.readFile(jsonFilePath, "utf8"); // read json file
+  const jsonContentArray = createCourseContent(jsonData);
 
-    fs.readFile(jsonFilePath, "utf8", (err, jsonData) => {
-      if (err) {
-        console.error("Error reading course JSON file:", err);
-        return;
-      }
+  const courseXmlFilePath = path.join(xmlDirPath, "course.xml");
+  const enrolmentsXmlFilePath = path.join(xmlDirPath, "enrolments.xml");
 
-      const jsonContentArray = createCourseContent(jsonData);
-      const xmlFilePath = path.join(xmlDirPath, "course.xml");
-      const enrolmentsXmlFilePath = path.join(xmlDirPath, "enrolments.xml");
-      
-      fs.readFile(xmlFilePath, "utf8", (err, xmlData) => {
-        if (err) {
-          console.error("Error reading course XML file:", err);
-          return;
-        }
+  // Read both XML files asynchronously
+  const [courseXmlData, enrolmentsXmlData] = await Promise.all([
+    fs.promises.readFile(courseXmlFilePath, "utf8"),
+    fs.promises.readFile(enrolmentsXmlFilePath, "utf8"),
+  ]);
 
-        fs.readFile(enrolmentsXmlFilePath, "utf8", (err, enrolmentsXmlData) => {
-          if (err) {
-            console.error("Error reading enrolments XML file:", err);
-            return;
-          }
+  // Initialize variables to hold the updated XML data
+  let updatedCourseXml = courseXmlData;
+  let updatedEnrolmentsXml = enrolmentsXmlData;
 
-          jsonContentArray.forEach((jsonContent) => {
-            updateCourseXmlWithJsonContent(xmlData, jsonContent)
-              .then((updatedXml) => {
-                fs.writeFile(xmlFilePath, updatedXml, (err) => {
-                  if (err) {
-                    console.error("Error writing course XML file:", err);
-                  } else {
-                    console.log("course XML file updated successfully.");
-                  }
-                });
-              })
-              .catch((err) => {
-                console.error("Error updating course XML content:", err);
-              });
+  // Process each jsonContent
+  for (const jsonContent of jsonContentArray) {
+    try {
+      updatedCourseXml = await updateCourseXmlWithJsonContent(updatedCourseXml, jsonContent ); // Update course XML data
+    } catch (err) {
+      console.error("Error updating course XML content:", err);
+    }
 
-            updateEnrolmentsXml(enrolmentsXmlData, jsonContent)
-              .then((updatedEnrolmentsXml) => {
-                fs.writeFile(
-                  enrolmentsXmlFilePath,
-                  updatedEnrolmentsXml,
-                  (err) => {
-                    if (err) {
-                      console.error("Error writing enrolments XML file:", err);
-                    } else {
-                      console.log("Enrolments XML file updated successfully.");
-                    }
-                  }
-                );
-              })
-              .catch((err) => {
-                console.error("Error updating enrolments XML content:", err);
-              });
-          });
-      });
-    });
-  });
+    try {
+      updatedEnrolmentsXml = await updateEnrolmentsXml(updatedEnrolmentsXml, jsonContent); // Update enrolments XML data
+    } catch (err) {
+      console.error("Error updating enrolments XML content:", err);
+    }
+  }
+
+  // After processing all jsonContent, write the updated XML files
+  await Promise.all([
+    fs.promises.writeFile(courseXmlFilePath, updatedCourseXml, "utf8"),
+    fs.promises.writeFile(enrolmentsXmlFilePath, updatedEnrolmentsXml, "utf8"),
+  ]);
+
+  console.log("XML files updated successfully.");
+} catch (err) {
+  console.error("Error processing course XML file:", err);
+}
 };
 exports.processCourseXmlFile = processCourseXmlFile;
