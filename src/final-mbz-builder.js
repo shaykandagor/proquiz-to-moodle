@@ -20,9 +20,6 @@ if (!fs.existsSync(finalDir)) {
   console.log(`Directory already exists: ${finalDir}`);
 }
 
-//const groupsJsonFilePath = "./exported_data/json/export-file-groups-2024-07-01-11-30-19.json";
-//const questionsJsonFilePath = "./exported_data/json/export-file-quiz_pro_1-2024-07-01-11-30-19.json";
-
 const sectionsJsonFilePath = "./exported_data/json/sections.json";
 const courseJsonFilePath = "./exported_data/json/export-file-sfwd-courses-2024-07-01-11-30-19.json";
 const lessonsJsonFilePath = "./exported_data/json/export-file-sfwd-lessons-2024-07-01-11-30-19.json";
@@ -36,12 +33,7 @@ async function createFinalMoodleBackup() {
   await buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir); // creates activities folder
   // Step 3: Create sections folder
   // await buildSections(finalDir)
-  //createSectionsFolders(finalDir); // creates sections folder
-
-  //jsonContent();
-  //sectionsJsonContent(finalDir);
   // processSectionXmlFiles(sectionsJsonFilePath, sectionsDir);
-
   // Step 4: Create main files
   //generateMainFiles(finalDir);
 }
