@@ -8,7 +8,6 @@ const createActivitiesFolders = require("./json-to-mbz/activities/create-activit
 const buildLessonsXml = require("./json-to-mbz/activities/lessons");
 const processSectionXmlFiles = require("./json-to-mbz/sections/section");
 const { createCompletionXml } = require("./json-to-mbz/completion");
-const { createFileXml } = require("./json-to-mbz/file");
 const { createScalesXml } = require("./json-to-mbz/scales");
 const { createOutcomesXml } = require("./json-to-mbz/outcomes");
 const { createMoodleBackup } = require("./json-to-mbz/moodle_backup");
@@ -19,6 +18,7 @@ const createQuestionsXml = require("./json-to-mbz/questions2");
 const { createRolesXml } = require("./json-to-mbz/roles");
 const { jsonContent } = require("./json-to-mbz/sections/jsonContent");
 const { createSectionsFolders } = require("./json-to-mbz/sections/create-section-folders");
+const { createFilesXml } = require("./json-to-mbz/files");
 
 const finalDir = path.join(__dirname, "..", "final-mbz");
 
@@ -38,13 +38,16 @@ const lessonsJsonFilePath =
 const topicsJsonFilePath =
   "./exported_data/json/export-file-sfwd-topic-2024-07-01-11-30-19.json";
 
+const inputFile = "final-mbz/activities/book_5874/book.xml"
+const audioFile = "./exported_data/json/audio/Rakentamisen-muovit_Hiilineutraalius_Paivi-Piispa.mp3"
+
+
 function createFinalMoodleBackup() {
   //buildCoursesXml(courseJsonFilePath, finalDir);
   //buildQuestionsXml(questionsJsonFilePath, finalDir);
   //buildGroupsXml(groupsJsonFilePath, finalDir);
   buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir);
   createCompletionXml(finalDir)
-  createFileXml(finalDir)
   createGradebookXml(finalDir)
   createScalesXml(finalDir)
   createOutcomesXml(finalDir)
@@ -54,6 +57,7 @@ function createFinalMoodleBackup() {
   createGroupsXml(finalDir)
   createQuestionsXml(finalDir)
   createRolesXml(finalDir)
+  createFilesXml(finalDir, inputFile, audioFile)
 
   // jsonContent()
 

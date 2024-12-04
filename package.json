@@ -20,9 +20,13 @@
   "dependencies": {
     "he": "^1.2.0",
     "lodash": "^4.17.21",
+    "mime": "^4.0.4",
     "nodemon": "^3.1.7",
     "php-serialize": "^5.0.1",
+    "uuid": "^11.0.3",
     "xml2js": "^0.6.2",
-    "xmlbuilder": "^15.1.1"
+    "xmlbuilder": "^15.1.1",
+    "xmldom": "^0.6.0",
+    "xpath": "^0.0.34"
   }
 }
