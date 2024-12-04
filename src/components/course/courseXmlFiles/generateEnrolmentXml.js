@@ -4,10 +4,10 @@ const xmlbuilder = require('xmlbuilder');
 
 // Generates enrolments.xml inside 'course'
 // course\enrolments.xml
-function generateEnrolmentXml(courseDir) {
+function generateEnrolmentXml(outputDir) {
     const enrolmentsXml = xmlbuilder.create('enrolments', { encoding: 'UTF-8' })
         .ele('enrols')
-            .ele('enrol', { id: '13660' })
+            .ele('enrol', { id: '' })
                 .ele('enrol', 'manual').up()
                 .ele('status', '0').up()
                 .ele('name', '$@NULL@$').up()
@@ -38,11 +38,11 @@ function generateEnrolmentXml(courseDir) {
                 .ele('customtext2', '$@NULL@$').up()
                 .ele('customtext3', '$@NULL@$').up()
                 .ele('customtext4', '$@NULL@$').up()
-                .ele('timecreated', '1717536492').up()
-                .ele('timemodified', '1717536492').up()
+                .ele('timecreated', '').up()
+                .ele('timemodified', '').up()
                 .ele('user_enrolments').up()
             .up()
-            .ele('enrol', { id: '13661' })
+            .ele('enrol', { id: '' })
                 .ele('enrol', 'guest').up()
                 .ele('status', '1').up()
                 .ele('name', '$@NULL@$').up()
@@ -73,14 +73,14 @@ function generateEnrolmentXml(courseDir) {
                 .ele('customtext2', '$@NULL@$').up()
                 .ele('customtext3', '$@NULL@$').up()
                 .ele('customtext4', '$@NULL@$').up()
-                .ele('timecreated', '1717536492').up()
-                .ele('timemodified', '1717536492').up()
+                .ele('timecreated', '').up()
+                .ele('timemodified', '').up()
                 .ele('user_enrolments').up()
             .up()
         .up()
         .end({ pretty: true });
 
-    fs.writeFileSync(path.join(courseDir, 'enrolments.xml'), enrolmentsXml);
+    fs.writeFileSync(path.join(outputDir, 'enrolments.xml'), enrolmentsXml);
 
     return enrolmentsXml;
 }

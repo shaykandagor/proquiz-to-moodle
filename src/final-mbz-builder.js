@@ -1,71 +1,48 @@
 const fs = require("fs");
 const path = require("path");
-const { buildGroupsXml } = require("./json-to-mbz/groups");
-const { buildCoursesXml } = require("./json-to-mbz/course/course");
-const { buildQuestionsXml } = require("./json-to-mbz/questions");
-const { create } = require("lodash");
-const createActivitiesFolders = require("./json-to-mbz/activities/create-activities-folders");
 const buildLessonsXml = require("./json-to-mbz/activities/lessons");
 const processSectionXmlFiles = require("./json-to-mbz/sections/section");
-const { createCompletionXml } = require("./json-to-mbz/completion");
-const { createScalesXml } = require("./json-to-mbz/scales");
-const { createOutcomesXml } = require("./json-to-mbz/outcomes");
-const { createMoodleBackup } = require("./json-to-mbz/moodle_backup");
-const { createGradebookXml } = require("./json-to-mbz/gradebook");
-const { createGradehistoryXml } = require("./json-to-mbz/grade_history");
-const { createGroupsXml } = require("./json-to-mbz/groups2");
-const createQuestionsXml = require("./json-to-mbz/questions2");
-const { createRolesXml } = require("./json-to-mbz/roles");
-const { jsonContent } = require("./json-to-mbz/sections/jsonContent");
-const { createSectionsFolders } = require("./json-to-mbz/sections/create-section-folders");
-const { createFilesXml } = require("./json-to-mbz/files");
+const buildCourseXml = require("./json-to-mbz/course/build-course");
+const generateMainFiles = require("./json-to-mbz/main-files/create-main-files");
+const jsonContent = require("./json-to-mbz/sections/jsonContent");
+const sectionsJsonContent = require("./json-to-mbz/sections/jsonContent");
+const buildSections = require("./json-to-mbz/sections/build-sections");
 
-const finalDir = path.join(__dirname, "..", "final-mbz");
+// const finalDir = path.join(__dirname, "..", "final-mbz");
+const finalDir = path.join(__dirname, "..", "test-final-mbz");
 
 // Ensure the output directory exists
 if (!fs.existsSync(finalDir)) {
   fs.mkdirSync(finalDir, { recursive: true });
+  console.log(`Directory created: ${finalDir}`);
+} else {
+  console.log(`Directory already exists: ${finalDir}`);
 }
 
-const groupsJsonFilePath =
-  "./exported_data/json/export-file-groups-2024-07-01-11-30-19.json";
-const courseJsonFilePath =
-  "./exported_data/json/sections.json";
-const questionsJsonFilePath =
-  "./exported_data/json/export-file-quiz_pro_1-2024-07-01-11-30-19.json";
-const lessonsJsonFilePath =
-  "./exported_data/json/export-file-sfwd-lessons-2024-07-01-11-30-19.json";
-const topicsJsonFilePath =
-  "./exported_data/json/export-file-sfwd-topic-2024-07-01-11-30-19.json";
+//const groupsJsonFilePath = "./exported_data/json/export-file-groups-2024-07-01-11-30-19.json";
+//const questionsJsonFilePath = "./exported_data/json/export-file-quiz_pro_1-2024-07-01-11-30-19.json";
 
-const inputFile = "final-mbz/activities/book_5874/book.xml"
-const audioFile = "./exported_data/json/audio/Rakentamisen-muovit_Hiilineutraalius_Paivi-Piispa.mp3"
+const sectionsJsonFilePath = "./exported_data/json/sections.json";
+const courseJsonFilePath = "./exported_data/json/export-file-sfwd-courses-2024-07-01-11-30-19.json";
+const lessonsJsonFilePath = "./exported_data/json/export-file-sfwd-lessons-2024-07-01-11-30-19.json";
+const topicsJsonFilePath = "./exported_data/json/export-file-sfwd-topic-2024-07-01-11-30-19.json";
 
+async function createFinalMoodleBackup() {
 
-function createFinalMoodleBackup() {
-  //buildCoursesXml(courseJsonFilePath, finalDir);
-  //buildQuestionsXml(questionsJsonFilePath, finalDir);
-  //buildGroupsXml(groupsJsonFilePath, finalDir);
-  buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir);
-  createCompletionXml(finalDir)
-  createGradebookXml(finalDir)
-  createScalesXml(finalDir)
-  createOutcomesXml(finalDir)
-  createMoodleBackup(finalDir)
-  createGradebookXml(finalDir)
-  createGradehistoryXml(finalDir)
-  createGroupsXml(finalDir)
-  createQuestionsXml(finalDir)
-  createRolesXml(finalDir)
-  createFilesXml(finalDir, inputFile, audioFile)
+  // Step 1: Create course folder
+  await buildCourseXml(courseJsonFilePath, finalDir); // creates course folder
+  // Step 2: Create activities folder
+  await buildLessonsXml(lessonsJsonFilePath, topicsJsonFilePath, finalDir); // creates activities folder
+  // Step 3: Create sections folder
+  // await buildSections(finalDir)
+  //createSectionsFolders(finalDir); // creates sections folder
 
-  // jsonContent()
+  //jsonContent();
+  //sectionsJsonContent(finalDir);
+  // processSectionXmlFiles(sectionsJsonFilePath, sectionsDir);
 
-  const sectionsDir = path.join(finalDir, "sections");
-  const startId = 5630;
-  const numberOfSections = 4;
-  createSectionsFolders(sectionsDir, startId, numberOfSections);
-  processSectionXmlFiles(courseJsonFilePath, sectionsDir);
-  }
+  // Step 4: Create main files
+  //generateMainFiles(finalDir);
+}
 
 createFinalMoodleBackup();
