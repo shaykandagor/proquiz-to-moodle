@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { writeFileCallback } = require("../utils/utils");
+const { write } = require("../utils/utils");
 const { generateHtml } = require("../utils/html");
 
 const createContent = (data) =>
@@ -11,24 +11,16 @@ const createContent = (data) =>
     })
   );
 
-const writeFile = (filename, content) =>
-  fs.writeFile(filename, content, writeFileCallback);
-
-const readFileCallback = (filePath) => (err, data) => {
-  if (err) {
-    console.error("Error reading file:", err);
-    return;
-  }
+const buildLessonsHtml = (filePath) => {
+  const data = fs.readFileSync(filePath, "utf8");
 
   createContent(data).forEach((lesson) => {
-    writeFile(
+    write(
+      "output/html/lessons",
       `output/html/lessons/${lesson.name}.html`,
       generateHtml(lesson, filePath, "lessons")
     );
   });
 };
-
-const buildLessonsHtml = (filePath) =>
-  fs.readFile(filePath, "utf8", readFileCallback(filePath));
 
 module.exports = buildLessonsHtml;
