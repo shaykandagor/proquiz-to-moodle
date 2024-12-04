@@ -12,13 +12,13 @@ function generateSectionXml(outputDir) {
 
     const sectionXml = xmlbuilder.create('section', { encoding: 'UTF-8' })
         .att('id', "")
-        .ele('number', '').up()
-        .ele('name', '').up()
+        .ele('number', '0').up()
+        .ele('name', '$@NULL@$').up()
         .ele('summary', '').up()
-        .ele('summaryformat', '').up()
+        .ele('summaryformat', '1').up()
         .ele('sequence', '').up()
-        .ele('visible', '').up()
-        .ele('availabilityjson', '').up()
+        .ele('visible', '1').up()
+        .ele('availabilityjson', '$@NULL@$').up()
         .ele('timemodified', '').up()
         .end({ pretty: true });
     fs.writeFileSync(path.join(outputDir, 'section.xml'), sectionXml);
