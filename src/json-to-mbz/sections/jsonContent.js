@@ -13,7 +13,6 @@ const sectionsJsonContent = (finalDir) => {
           return { wp_post_id: parseInt(folderId) };
         });
 
-      console.log("json", result);
       return result;
     } catch (error) {
       console.error("Error generating JSON content:", error);
@@ -21,9 +20,7 @@ const sectionsJsonContent = (finalDir) => {
     }
 }
 
-module.exports = sectionsJsonContent;
-
-const jsonContent = () => {
+const jsonContent = (sectionData) => {
   // Read the JSON data from a file
   const data = JSON.parse(
     fs.readFileSync(
@@ -38,23 +35,12 @@ const jsonContent = () => {
     throw new Error("Post with wp_post_id 5630 not found.");
   }
 
-  // Extract full <p> tags and the first <h1> to <h6> heading using regex
+  // Extract content (paragraphs, headings, lists) from the wp_post_content
   const content = post5630.wp_post_content;
+  const paragraphs = [...content.matchAll(/<p>.*?<\/p>/gs)].map((match) =>match[0]);
+  const headings = [...content.matchAll(/<h[1-6]>.*?<\/h[1-6]>/gs)].map((match) => match[0]);
+  const lists = [...content.matchAll(/<li>.*?<\/li>/gs)].map((match) => match[0]);
 
-  // Match all <p> tags, including nested HTML elements like <strong>, <em>, etc.
-  const paragraphs = [...content.matchAll(/<p>.*?<\/p>/gs)].map(
-    (match) => match[0]
-  );
-
-  // Match all <h1> to <h6> headings (preserving the tags)
-  const headings = [...content.matchAll(/<h[1-6]>.*?<\/h[1-6]>/gs)].map(
-    (match) => match[0]
-  );
-
-  // Optionally, extract <ul>, <ol>, <li> tags if needed
-  const lists = [...content.matchAll(/<li>.*?<\/li>/gs)].map(
-    (match) => match[0]
-  );
   // Ensure there are enough paragraphs
   if (paragraphs.length < 2) {
     throw new Error(
@@ -62,20 +48,41 @@ const jsonContent = () => {
     );
   }
 
-  // Construct the JSON result 
-  const result = headings.map((heading, index) => {
+  // Construct the JSON result
+  // TODO: Check the layout in the website to ensure the correct data of sections
+  const result = sectionData.map((section, index) => {
     return {
+      wp_post_id: section.wp_post_id, 
       wp_post_content: [
-        heading || "", // Heading for this section (if exists)
+        headings[index] || "", // Heading for this section (if exists)
         ...paragraphs.slice(index * 2, index * 2 + 2), // Two paragraphs per section
         ...lists, // Include lists if available
       ],
     };
   });
 
-  console.log("Generated JSON Content from json data");
-
+  return result;
 };
 
-module.exports = jsonContent;
+// Main function to run both tasks asynchronously
+const generateCombinedJsonData = async (finalDir) => {
+  try {
+    // Step 1: Generate section data
+    const sectionData = sectionsJsonContent(finalDir);
 
+    // Step 2: Generate content JSON and combine it with section data
+    const finalJson = jsonContent(sectionData);
+
+    // Save the final combined JSON data to a file
+    fs.writeFileSync(
+      "./exported_data/json/combined_sections.json",
+      JSON.stringify({ wp_data: finalJson }, null, 2)
+    );
+
+    console.log("JSON file created with the final combined data.");
+  } catch (error) {
+    console.error("Error during JSON generation:", error);
+  }
+};
+
+module.exports = generateCombinedJsonData;

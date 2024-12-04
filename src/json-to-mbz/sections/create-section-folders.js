@@ -14,6 +14,13 @@ function createSectionsFolders(finalDir) {
     }
 
     const sectionsDir = path.join(finalDir, "sections");
+    if (!fs.existsSync(sectionsDir)) {
+      fs.mkdirSync(sectionsDir, { recursive: true });
+      console.log(`Created sections directory: ${sectionsDir}`);
+    } else {
+      console.log(`Sections directory already exists: ${sectionsDir}`);
+    }
+    
     startId = 5631;
     numberOfSections = 4;
 
