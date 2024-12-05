@@ -4,7 +4,7 @@ const xmlbuilder = require('xmlbuilder');
 
 // Generates files.xml file inside 'output' directory
 // output\files.xml
-function generateFilesXml(outputDir) {
+function generateMainFilesXml(outputDir) {
     const fileXml = xmlbuilder.create('files', { encoding: 'UTF-8' })
         .ele('file', { id: '' })
             .ele('contenthash', '').up()
@@ -33,4 +33,4 @@ function generateFilesXml(outputDir) {
     return fileXml;
 }
 
-module.exports = generateFilesXml;
+module.exports = generateMainFilesXml;

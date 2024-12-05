@@ -4,7 +4,7 @@ const xmlbuilder = require("xmlbuilder");
  
 // Generates completion.xml file inside 'output' directory
 // output\completion.xml
-function generateCompletionXml(outputDir) {
+function generateMainCompletionXml(outputDir) {
   const completionXml = xmlbuilder
     .create("course_completion", { encoding: "UTF-8" })
     .end({ pretty: true });
@@ -13,4 +13,4 @@ function generateCompletionXml(outputDir) {
   return completionXml;
 }
 
-module.exports = generateCompletionXml;
+module.exports = generateMainCompletionXml;

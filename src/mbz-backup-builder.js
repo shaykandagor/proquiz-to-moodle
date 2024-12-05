@@ -5,15 +5,16 @@ const path = require("path");
 const generateQuestionsXml = require("./components/generateQuestionsXml");
 const generateMoodleBackup = require("./components/generateMoodleBackup");
 const generateOutcomesXml = require("./components/generateOutcomesXml");
-const generateRolesXml = require("./components/generateRolesXml");
 const generateScalesXml = require("./components/generateScalesXml");
-const { generateCompletionXml } = require("./components/generateCompletionXml");
-const { generateFilesXml } = require("./components/generateFilesXml");
+const generateMainRolesXml = require("./components/generateMainRolesXml");
+const generateMainGradebookXml = require("./components/generateMainGradebookXml");
+const generateMainCompletionXml = require("./components/generateMainCompletionXml");
+const generateMainFilesXml = require("./components/generateMainFilesXml");
+const generateMainGradehistoryXml = require("./components/generateGradehistoryXml");
+const generateGroupsXml = require("./components/generateGroupsXml");
 
 const {
-  generateGradehistoryXml,
 } = require("./components/generateGradehistoryXml");
-const generateGradebookXml = require("./components/generateGradebookXml");
 
 // Imports for Courses directory
 const {
@@ -31,7 +32,6 @@ const generateActivitiesFiles = require("./components/activities/generateActivit
 const {
   generateBlockFiles,
 } = require("./components/course/blocks/generateBlocksFiles");
-const { generateGroupsXml } = require("./components/generateGroupsXml");
 
 function createMoodleBackup(outputDir) {
   // Create subdirectories
@@ -51,15 +51,15 @@ function createMoodleBackup(outputDir) {
   });
 
   // Generate xml files inside "main" directory
-  generateCompletionXml(outputDir);
-  generateFilesXml(outputDir);
-  generateGradebookXml(outputDir);
-  generateGradehistoryXml(outputDir);
+  generateMainCompletionXml(outputDir);
+  generateMainFilesXml(outputDir);
+  generateMainGradebookXml(outputDir);
+  generateMainGradehistoryXml(outputDir);
   generateGroupsXml(outputDir);
   generateMoodleBackup(outputDir);
   generateOutcomesXml(outputDir);
   generateQuestionsXml(outputDir);
-  generateRolesXml(outputDir);
+  generateMainRolesXml(outputDir);
   generateScalesXml(outputDir);
 
   // Generate xml files inside "activities" directories

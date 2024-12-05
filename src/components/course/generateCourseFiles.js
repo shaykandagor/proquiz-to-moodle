@@ -4,9 +4,9 @@ const { generateCompletiondefaultsXml } = require("./courseXmlFiles/generateComp
 const { generateContentbankXml } = require("./courseXmlFiles/generateContentbankXml");
 const generateCourseXml = require("./courseXmlFiles/generateCourseXml");
 const generateEnrolmentXml = require("./courseXmlFiles/generateEnrolmentXml");
-const { generateInforefXml } = require("./courseXmlFiles/generateInforefXml");
 const { generateFiltersXml } = require("./courseXmlFiles/generateFiltersXml");
 const { generateRolesXml } = require("./courseXmlFiles/generateRolesXml");
+const { generateCourseInforefXml } = require("./courseXmlFiles/generateCourseInforefXml");
 
 // Generates xml files inside 'course' directory
 function generateCourseFiles (courseDir) {
@@ -17,7 +17,7 @@ function generateCourseFiles (courseDir) {
     generateCourseXml(courseDir);
     generateEnrolmentXml(courseDir);
     // generateFiltersXml(courseDir);
-    generateInforefXml(courseDir);
+    generateCourseInforefXml(courseDir);
     generateRolesXml(courseDir);
 
 }

@@ -13,7 +13,7 @@ const generateFoldInforefXml = require("../../components/activities/folder-xml-f
 const generateBookXml = require("../../components/activities/book-xml-files/generateBookXml");
 const generatePageXml = require("../../components/activities/page-xml-files/generatePageXml");
 const generateQuizInforefXml = require("../../components/activities/quiz-xml-files/generateQuizInforefXml");
-const generateQuizXml = require("../../components/activities/quiz-xml-files/generateQuixXml");
+const generateQuizXml = require("../../components/activities/quiz-xml-files/generateQuizXml");
 const generateBoaInforefXml = require("../../components/activities/board-xml-files/generateBoaInforefXml");
 
 // function to generate the appropriate XML files for a given activity-subdirectory type.
