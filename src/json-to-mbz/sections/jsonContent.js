@@ -21,7 +21,6 @@ const sectionsJsonContent = (finalDir) => {
 }
 
 const jsonContent = (sectionData) => {
-  // Read the JSON data from a file
   const data = JSON.parse(
     fs.readFileSync(
       "./exported_data/json/export-file-sfwd-courses-2024-07-01-11-30-19.json",
@@ -35,29 +34,58 @@ const jsonContent = (sectionData) => {
     throw new Error("Post with wp_post_id 5630 not found.");
   }
 
-  // Extract content (paragraphs, headings, lists) from the wp_post_content
-  const content = post5630.wp_post_content;
-  const paragraphs = [...content.matchAll(/<p>.*?<\/p>/gs)].map((match) =>match[0]);
-  const headings = [...content.matchAll(/<h[1-6]>.*?<\/h[1-6]>/gs)].map((match) => match[0]);
-  const lists = [...content.matchAll(/<li>.*?<\/li>/gs)].map((match) => match[0]);
+  const content = post5630.wp_post_content; // Extract content
+  // Find all the headings (wp:heading tags) and content between them
+  const headings = [
+    ...content.matchAll(
+      /<!-- wp:heading \{.*?\} -->.*?<\/h[1-6]>.*?<!-- \/wp:heading -->/gs
+    ),
+  ];
 
-  // Ensure there are enough paragraphs
-  if (paragraphs.length < 2) {
-    throw new Error(
-      "Not enough paragraphs in the content to extract the first two."
-    );
+  const sections = [];
+
+  // Start processing sections based on headings
+  let currentSectionContent = "";
+  let lastHeadingIndex = 0;
+
+  // Loop through the content and collect text between headings
+  headings.forEach((headingMatch, index) => {
+    const heading = headingMatch[0];
+    const nextHeadingIndex = headings[index + 1]
+      ? headings[index + 1].index
+      : content.length;
+
+    // Extract content between the current heading and the next heading
+    currentSectionContent = content
+      .slice(lastHeadingIndex, nextHeadingIndex)
+      .trim();
+
+    // Add the section to the sections array
+    sections.push({
+      wp_post_id: 5630, // You can modify the wp_post_id for each section if needed
+      wp_post_content: currentSectionContent,
+    });
+
+    // Update the last heading index for the next loop iteration
+    lastHeadingIndex = nextHeadingIndex;
+  });
+
+  // Ensure there is content for the last section if no more headings exist
+  if (lastHeadingIndex < content.length) {
+    sections.push({
+      wp_post_id: 5630,
+      wp_post_content: content.slice(lastHeadingIndex).trim(),
+    });
   }
 
-  // Construct the JSON result
-  // TODO: Check the layout in the website to ensure the correct data of sections
+  // Now we map this to sectionData (your original logic for combining data)
   const result = sectionData.map((section, index) => {
+    const sectionContent = sections[index]
+      ? sections[index].wp_post_content
+      : "";
     return {
-      wp_post_id: section.wp_post_id, 
-      wp_post_content: [
-        headings[index] || "", // Heading for this section (if exists)
-        ...paragraphs.slice(index * 2, index * 2 + 2), // Two paragraphs per section
-        ...lists, // Include lists if available
-      ],
+      wp_post_id: section.wp_post_id,
+      wp_post_content: sectionContent,
     };
   });
 
