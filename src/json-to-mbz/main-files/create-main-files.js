@@ -1,8 +1,8 @@
 const { generateCompletiondefaultsXml } = require("../../components/course/courseXmlFiles/generateCompletiondefaultsXml");
-const generateCompletionXml = require("../../components/generateCompletionXml");
-const generateFilesXml = require("../../components/generateFilesXml");
 const generateGradehistoryXml = require("../../components/generateGradehistoryXml");
 const generateGroupsXml = require("../../components/generateGroupsXml");
+const generateMainCompletionXml = require("../../components/generateMainCompletionXml");
+const generateMainFilesXml = require("../../components/generateMainFilesXml");
 const generateMainGradebookXml = require("../../components/generateMainGradebookXml");
 const generateMainRolesXml = require("../../components/generateMainRolesXml");
 const generateMoodleBackup = require("../../components/generateMoodleBackup");
@@ -11,8 +11,8 @@ const generateQuestionsXml = require("../../components/generateQuestionsXml");
 const generateScalesXml = require("../../components/generateScalesXml");
 
 function generateMainFiles(outputDir){
-    generateCompletionXml(outputDir);
-    generateFilesXml(outputDir);
+    generateMainCompletionXml(outputDir);
+    generateMainFilesXml(outputDir);
     generateMainGradebookXml(outputDir);
     generateGradehistoryXml(outputDir);
     generateGroupsXml(outputDir);
