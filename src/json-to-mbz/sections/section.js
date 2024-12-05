@@ -1,9 +1,9 @@
-const fs = require("fs");
+const fs = require("fs").promises;
 const path = require("path");
 const xml2js = require("xml2js");
 
 // Function to create content from JSON data
-const createContent = (data) => {
+const createContent = async (data) => {
   const jsonData = JSON.parse(data);
   return jsonData.wp_data.map(post => {
       const { wp_post_id, wp_post_content } = post;
@@ -15,7 +15,7 @@ const createContent = (data) => {
 };
 
 // Function to update section.xml 
-const updateSectionXml = (xmlData, jsonContent) => {
+const updateSectionXml = async (xmlData, jsonContent) => {
   const parser = new xml2js.Parser();
   const builder = new xml2js.Builder({
       xmldec: { standalone: null, encoding: "UTF-8" },
@@ -42,76 +42,70 @@ const updateSectionXml = (xmlData, jsonContent) => {
 };
 
 // Function to read, update, and write XML files
-const processSectionXmlFiles = (jsonFilePath, outputDir) => {
-  fs.readFile(jsonFilePath, "utf8", (err, data) => {
-    if (err) {
-      console.error("Error reading JSON file:", err);
+const processSectionXmlFiles = async (jsonFilePath, outputDir) => {
+  try {
+    console.log("Processing section XML files...");
+
+    // Step 1: Read and parse JSON data
+    const jsonData = await fs.readFile(jsonFilePath, "utf8");
+    const sectionJsonData = await createContent(jsonData); 
+
+    // Step 2: Locate the 'sections' directory
+    const directories = await fs.readdir(outputDir);
+    const sectionsDir = directories.find((dir) => dir === "sections");
+    if (!sectionsDir) {
+      console.error("No 'sections' directory found in:", outputDir);
       return;
     }
 
-    const sectionJsonData = createContent(data);
+    const sectionsPath = path.join(outputDir, sectionsDir);
 
-    // Read all directories in the base directory
-    fs.readdir(outputDir, (err, directories) => {
-      if (err) {
-        console.error("Error reading base directory:", err);
-        return;
+    // Step 3: Read all directories in the 'sections' folder
+    const sectionDirs = await fs.readdir(sectionsPath);
+    const sectionDirsToProcess = sectionDirs.filter((dir) =>
+      dir.startsWith("section_")
+    );
+
+    // Step 4: Process each section directory
+    for (const sectionDir of sectionDirsToProcess) {
+      const sectionPath = path.join(sectionsPath, sectionDir);
+      const sectionXmlFilePath = path.join(sectionPath, "section.xml");
+      const folderId = sectionDir.split("_")[1]; // Extract the folder ID from "section_X"
+
+      // Find the corresponding JSON content based on folderId
+      const sectionJsonContent = sectionJsonData.find(
+        (content) => content.section_id_attribute == folderId
+      );
+
+      if (!sectionJsonContent) {
+        console.warn(`No JSON content found for section: ${folderId}`);
+        continue;
       }
 
-      // Check if 'sections' directory exists in the outputDir
-      const sectionsDir = directories.find((dir) => dir === "sections");
+      // Check if the XML file exists
+      try {
+        const xmlData = await fs.readFile(sectionXmlFilePath, "utf8");
 
-      // Proceed with processing the 'sections' directory
-      const sectionsPath = path.join(outputDir, sectionsDir);
-
-      // Read all section directories inside the 'sections' folder
-      fs.readdir(sectionsPath, (err, sectionDirs) => {
-        if (err) {
-          console.error("Error reading sections folder:", err);
-          return;
-        }
-
-        // Filter for directories with "section_" in their names
-        const sectionDirsToProcess = sectionDirs.filter((dir) =>
-          dir.startsWith("section_")
+        // Update the section XML file
+        const updatedXml = await updateSectionXml(xmlData, sectionJsonContent);
+        await fs.writeFile(sectionXmlFilePath, updatedXml, "utf8");
+        console.log(
+          "Updated section XML file successfully:",
+          sectionXmlFilePath
         );
+      } catch (err) {
+        console.error(
+          "Error processing XML file for section:",
+          sectionPath,
+          err
+        );
+      }
+    }
 
-        // Process each section directory
-        sectionDirsToProcess.forEach((sectionDir) => {
-          const sectionPath = path.join(sectionsPath, sectionDir);
-          const sectionXmlFilePath = path.join(sectionPath, "section.xml");
-          const folderId = sectionDir.split("_")[1]; // Extract the folder ID from "section_X"
-
-          // Find the corresponding JSON content based on folderId
-          const sectionJsonContent = sectionJsonData.find(
-            (content) => content.section_id_attribute == folderId
-          );
-
-          // Check if the XML file exists
-          if (fs.existsSync(sectionXmlFilePath)) {
-            const xmlData = fs.readFileSync(sectionXmlFilePath, "utf8");
-
-            // Update the section XML files
-            updateSectionXml(xmlData, sectionJsonContent)
-              .then((updatedXml) => {
-                console.log("Writing Updated XML to:", sectionXmlFilePath); 
-                fs.writeFileSync(sectionXmlFilePath, updatedXml, "utf8");
-                console.log(
-                  "Updated section XML file successfully:",
-                  sectionXmlFilePath
-                );
-              })
-              .catch((err) => {
-                console.error("Error updating section XML file:", err);
-              });
-          } else {
-            console.warn("section XML file not found in:", sectionPath);
-          }
-        });
-        console.log("All section XML files processed.");
-      });
-    });
-  });
+    console.log("All section XML files processed.");
+  } catch (err) {
+    console.error("Error in processSectionXmlFiles:", err);
+  }
 };
 
 module.exports = processSectionXmlFiles;
