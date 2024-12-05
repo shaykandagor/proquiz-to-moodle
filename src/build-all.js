@@ -12,6 +12,7 @@ const buildTopicsXml = require("./old-code/xml-topics-builder");
 const { createFilePath } = require("./utils/utils");
 const buildTopicsHtml = require("./old-code/html-topics-builder");
 const buildLessonsHtml = require("./old-code/html-lessons-builder");
+const { generateTodoMarkdownFile } = require("./utils/todo");
 
 if (!fs.existsSync("output/gift")) {
   fs.mkdirSync("output/gift", { recursive: true });
@@ -41,3 +42,5 @@ buildQuiz2XML(createFilePath(config, "quizPath"), "output/xml/questions.xml");
 
 buildLessonsHtml(createFilePath(config, "lessonsPath"));
 buildTopicsHtml(createFilePath(config, "topicsPath"));
+
+generateTodoMarkdownFile();

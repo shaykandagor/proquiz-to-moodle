@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const { generateWarningLog } = require("./warning-log");
 
 // remove <!-- wp:<tag> --> and <!-- /wp:<tag> --> from the content
 const removeWPTags = (content) => {
@@ -75,84 +76,8 @@ const convertEmbedToIframe = (content) => {
 // remove \n\n
 const removeMultipleNewLines = (content) => content.replace(/\n\n/g, "");
 
-// write warning-log.txt to output folder
-const writeWarningLog = (title, content) => {
-  const cleanedTitle = title.replace(/[^a-z0-9]/gi, "_").toLowerCase();
-  const outputFolder = "output/warning-logs";
-  const outputFilePath = `${outputFolder}/warning-log-${cleanedTitle}.txt`;
-
-  if (!fs.existsSync(outputFolder)) {
-    fs.mkdirSync(outputFolder, { recursive: true });
-  }
-
-  fs.writeFileSync(outputFilePath, content);
-};
-
-const warnSiteUrl = (content, title) => {
-  const regexWholeLine = /{site_url}/g;
-  const matchesWholeLine = content.match(regexWholeLine);
-
-  if (!matchesWholeLine) {
-    return;
-  }
-
-  const warnings = [];
-
-  matchesWholeLine.forEach((match) => {
-    console.warn(
-      "Found {site_url} which needs to be edited, check warning-logs"
-    );
-    warnings.push(`Link {site_url}: ${match}`);
-  });
-
-  warnings.push(`Title: ${title}`);
-  warnings.push(`Content: ${content}`);
-
-  return warnings;
-};
-
 const removeWordPressClasses = (content) => {
   return content.replace(/class="wp-[^"]+"/g, "");
-};
-
-const findMotiva = (content, title) => {
-  const regex = /https:\/\/motiva-verkkokurssit.fi/g;
-  const matches = content.match(regex);
-
-  if (!matches) {
-    return;
-  }
-
-  const warnings = [];
-
-  matches.forEach((match) => {
-    console.log(
-      "Found link which needs to be edited, check warning-logs:",
-      match
-    );
-    warnings.push(`Motiva link: ${match}`);
-  });
-
-  warnings.push(`Title: ${title}`);
-  warnings.push(`Content: ${content}`);
-
-  return warnings;
-};
-
-const generateWarningLog = (title, content) => {
-  const siteUrlWarnings = warnSiteUrl(content, title);
-  const motiveWarnings = findMotiva(content);
-
-  if (siteUrlWarnings || motiveWarnings) {
-    writeWarningLog(
-      title,
-      [
-        `Warnings for ${title}`,
-        ...(siteUrlWarnings || []),
-        ...(motiveWarnings || []),
-      ].join("\n\n")
-    );
-  }
 };
 
 const generateHtml = ({ title, content }, path, theme) => {

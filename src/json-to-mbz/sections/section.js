@@ -35,15 +35,9 @@ const updateSectionXml = (xmlData, jsonContent, folderId) => {
 
           // Update the XML content with static values
           result.section.$.id = folderId;
-          result.section.number = ["0"];
-          result.section.name = ["$@NULL@$"];
           result.section.summary = jsonContent.summary;
-          result.section.summaryformat = ["1"];
           result.section.sequence = [""];
-          result.section.visible = ["1"];
-          result.section.availabilityjson = ["$@NULL@$"];
           result.section.timemodified = [timestamp];
-
           const updatedXml = builder.buildObject(result);
           resolve(updatedXml);
       });

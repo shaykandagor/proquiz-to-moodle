@@ -13,6 +13,33 @@ const generateRandomNumber = () => parseInt(Math.random() * 1000000000);
 // generating random number for now
 const ownerid = generateRandomNumber();
 
+const createPointFractions = (points) => {
+  return points.toFixed(5);
+};
+
+const createAnswer = (answersEle) => (answer, i, allAnswers) => {
+  const answerId = generateRandomNumber();
+  const answerEle = answersEle.ele("answer", { id: answer.id || answerId });
+  answerEle.ele("answertext", answer.answer.trim());
+  answerEle.ele("answerformat", 0);
+
+  const totalAnswers = allAnswers.length;
+  const correctAnswers = allAnswers.filter((a) => a.correct).length;
+
+  const pointsFromCorrect = createPointFractions(correctAnswers);
+  const pointsFromIncorrect = createPointFractions(
+    100 / (totalAnswers - correctAnswers) / 100
+  );
+
+  // 1 for correct, negative fraction for incorrect
+  answerEle.ele(
+    "fraction",
+    answer.correct ? pointsFromCorrect : `-${pointsFromIncorrect}`
+  );
+  answerEle.ele("feedback", "");
+  answerEle.ele("feedbackformat", 0);
+};
+
 const createQuestionBankEntryForMultiChoice =
   (questionBankEntries, category) => (question) => {
     const id = generateRandomNumber();
@@ -61,33 +88,22 @@ const createQuestionBankEntryForMultiChoice =
     const pluginQtype = questionEle.ele("plugin_qtype_multichoice_question");
     const answersEle = pluginQtype.ele("answers");
 
-    const numberOfAnswers = question.answers.length;
-
-    question.answers.forEach((answer) => {
-      const answerId = generateRandomNumber();
-      const answerEle = answersEle.ele("answer", { id: answer.id || answerId });
-      answerEle.ele("answertext", answer.answer.trim());
-      answerEle.ele("answerformat", 0);
-      // 1 for correct, negative fraction for incorrect
-      answerEle.ele(
-        "fraction",
-        answer.correct ? 1 : `-${1 / (numberOfAnswers - 1)}`
-      );
-      answerEle.ele("feedback", "");
-      answerEle.ele("feedbackformat", 0);
-    });
+    question.answers.forEach(createAnswer(answersEle));
 
     const multichoiceId = generateRandomNumber();
 
     const multichoiceEle = pluginQtype.ele("multichoice", {
-      id: multichoiceId
+      id: multichoiceId,
     });
     multichoiceEle.ele("layout", 0);
     multichoiceEle.ele("single", 1);
     multichoiceEle.ele("shuffleanswers", 1);
     multichoiceEle.ele("correctfeedback", "Vastauksesi on oikein.");
     multichoiceEle.ele("correctfeedbackformat", 1);
-    multichoiceEle.ele("partiallycorrectfeedback", "Vastauksesi on osittain oikein.");
+    multichoiceEle.ele(
+      "partiallycorrectfeedback",
+      "Vastauksesi on osittain oikein."
+    );
     multichoiceEle.ele("partiallycorrectfeedbackformat", 1);
     multichoiceEle.ele("incorrectfeedback", "Vastauksesi on väärin.");
     multichoiceEle.ele("incorrectfeedbackformat", 1);
