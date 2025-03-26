@@ -1,6 +1,10 @@
 const fs = require("fs");
 const path = require("path");
+const { json } = require("stream/consumers");
 const xml2js = require("xml2js");
+
+const generateRandomNumber = () => parseInt(Math.random() * 10000000);
+const att_id = () => parseInt(Math.random() * 10000);
 
 const createContent = (filePath) => {
     const data = fs.readFileSync(filePath, 'utf8');
@@ -9,8 +13,6 @@ const createContent = (filePath) => {
         const {
             wp_post_id,
             wp_post_title,
-            wp_post_content,
-            wp_post_date_gmt,
         } = post;
 
         const module_id = generateRandomNumber();
@@ -24,11 +26,6 @@ const createContent = (filePath) => {
             quizid: quiz_id,
             name: wp_post_title,
             intro: "",
-            content: wp_post_content,
-            timemodified: wp_post_date_gmt,
-            contentformat: 1,
-            legacyfiles: 0,
-            legacyfileslast: "$@NULL@$",
         };
     });
 };
@@ -47,32 +44,86 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
                 return reject(err);
             }
 
-            // Update the XML content with JSON content
-            result.activity.$.id = jsonContent.activity_id;
-            result.quiz.$.moduleid = jsonContent.moduleid;
-            result.quiz.$.contextid = jsonContent.contextid;
-            result.quiz.$.id = jsonContent.quizid;
-            result.quiz.name = jsonContent.name;
-            result.quiz.intro = jsonContent.intro;
-            result.quiz.content = jsonContent.content;
+            // Ensure the structure exists
+            if (!result || !result.activity || !result.activity.quiz) {
+                return reject(new Error("Unexpected XML structure"));
+            }
 
-            const xml = builder.buildObject(result);
-            resolve(xml);
+            // Assuming result.activity.quiz is an array
+            jsonContent.forEach((quiz, index) => {
+                if (!result.activity.quiz[index]) {
+                    result.activity.quiz[index] = { $: {} };
+                }
+                result.activity.quiz[index].id = quiz.activity_id;
+                result.activity.quiz[index].$.moduleid = quiz.moduleid;
+                result.activity.quiz[index].$.contextid = quiz.contextid;
+                result.activity.quiz[index].$.quizid = quiz.quizid;
+                result.activity.quiz[index].name = quiz.name;
+                result.activity.quiz[index].intro = quiz.intro;
+            });
+
+            const updatedXml = builder.buildObject(result);
+            resolve(updatedXml);
         });
     });
-}
+};
 
 // Function to read, write and update XML file
-const processQuizXml = (xmlFile, jsonFile, outputDir) => {
-    const xmlData = fs.readFileSync(xmlFile, 'utf8');
-    const jsonContent = createContent(jsonFile);
+const processQuizXml = (lessonsJsonFilePath, finalDir) => {
+    const inputXmlFilePath = path.join("output", "mbz", "activities", "quiz", "quiz.xml");
+    const outputXmlFilePath = path.join("final-mbz", "activities", "quiz_11174", "quiz.xml"); // Updated file
 
-    return updateXmlWithJsonContent(xmlData, jsonContent)
-        .then((xml) => {
-            const fileName = path.basename(xmlFile);
-            const outputFile = path.join(outputDir, fileName);
-            fs.writeFileSync(outputFile, xml);
+
+    // Check if the input XML file exists
+    if (!fs.existsSync(inputXmlFilePath)) {
+        console.error("Error: Input XML file does not exist at:", inputXmlFilePath);
+        return;
+    }
+
+    fs.mkdir(finalDir, { recursive: true }, (err) => {
+        if (err) {
+          console.error("Error creating directory:", err.message);
+          return;
+        }
+
+        fs.readFile(inputXmlFilePath, "utf8", (err, xmlData) => {
+            if (err) {
+              console.error(
+                "Error reading XML file. Ensure the XML file exists:",
+                err.message
+              );
+              return;
+            }
+      
+            fs.readFile(lessonsJsonFilePath, "utf8", (err, jsonData) => {
+              if (err) {
+                console.error(
+                  "Error reading JSON file. Ensure the JSON file exists:",
+                  err.message
+                );
+                return;
+              }
+
+            const jsonContent = createContent(lessonsJsonFilePath);
+            updateXmlWithJsonContent(xmlData, jsonContent)
+                .then((updatedXml) => {
+                    fs.writeFile(outputXmlFilePath, updatedXml, "utf8", (err) => {
+                        if (err) {
+                            console.error("Error writing updated XML file:", err.message);
+                            return;
+                        }
+                        console.log(
+                            "Updated XML file has been written to",
+                            outputXmlFilePath
+                        );
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error updating XML with JSON content:", error);
+                });
+            });
         });
+    });
 };
 
 module.exports = { processQuizXml };

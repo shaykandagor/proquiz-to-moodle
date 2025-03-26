@@ -4,6 +4,7 @@ const xml2js = require("xml2js");
 
 const generateRandomNumber = () => parseInt(Math.random() * 10000000);
 const att_id = () => parseInt(Math.random() * 20000);
+const timestamp = Math.floor(Date.now() / 1000);
 
 // Function to create content from JSON data
 const createContent = (data) => {
@@ -23,7 +24,7 @@ const createContent = (data) => {
       moduleid: wp_post_id,
       name: wp_post_title,
       content: wp_post_content,
-      timemodified: wp_post_date_gmt,
+      timemodified: timestamp,
       contentformat: 1,
       legacyfiles: 0,
       legacyfileslast: "$@NULL@$",

@@ -1,8 +1,8 @@
 const path = require("path");
-const createSectionsFolders = require("./create-section-folders");
 const generateCombinedJsonData = require("./jsonContent");
 const processSectionXmlFiles = require("./section");
 const updateSectionXmlWithActivities = require("./section-sequence");
+const { createSectionsFolders } = require("./create-section-folders");
 
 async function buildSections(finalDir) {
   // step 1: create section folder and xml files
