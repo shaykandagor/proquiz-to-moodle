@@ -13,4 +13,4 @@ function generateGroupsXml(outputDir) {
     return groupsXml;
 }
 
-module.exports = { generateGroupsXml }
+module.exports = generateGroupsXml

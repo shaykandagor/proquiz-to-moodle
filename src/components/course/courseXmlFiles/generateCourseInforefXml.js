@@ -4,7 +4,7 @@ const xmlbuilder = require('xmlbuilder');
 
 // Generates inforef.xml inside 'course'
 // course\inforef.xml
-function generateInforefXml(courseDir) {
+function generateCourseInforefXml(courseDir) {
     const inforefXml = xmlbuilder.create('inforef', { encoding: 'UTF-8' })
         .ele('roleref')
             .ele('role')
@@ -18,4 +18,4 @@ function generateInforefXml(courseDir) {
     return inforefXml;
 }
 
-module.exports = { generateInforefXml };
+module.exports = { generateCourseInforefXml };

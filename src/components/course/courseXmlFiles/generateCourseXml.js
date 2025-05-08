@@ -4,20 +4,20 @@ const xmlbuilder = require('xmlbuilder');
 
 // Generates course.xml inside 'course'
 // course\course.xml
-function generateCourseXml(courseDir) {
+function generateCourseXml(outputDir) {
     const courseXml = xmlbuilder.create('course', { encoding: 'UTF-8' })
-        .att('id', '4457')
-        .att('contextid', '1050905')
-        .ele('shortname', 'empty course 10').up()
-        .ele('fullname', 'Empty course 10').up()
+        .att('id', '')
+        .att('contextid', '')
+        .ele('shortname', '').up()
+        .ele('fullname', '').up()
         .ele('idnumber', '').up()
         .ele('summary', '').up()
         .ele('summaryformat', '1').up()
         .ele('format', 'topics').up()
         .ele('showgrades', '1').up()
         .ele('newsitems', '0').up()
-        .ele('startdate', '1717621200').up()
-        .ele('enddate', '1749157200').up()
+        .ele('startdate', '').up()
+        .ele('enddate', '').up()
         .ele('marker', '0').up()
         .ele('maxbytes', '52428800').up()
         .ele('legacyfiles', '0').up()
@@ -28,8 +28,8 @@ function generateCourseXml(courseDir) {
         .ele('defaultgroupingid', '0').up()
         .ele('lang', '').up()
         .ele('theme', '').up()
-        .ele('timecreated', '1717536492').up()
-        .ele('timemodified', '1731579782').up()
+        .ele('timecreated', '').up()
+        .ele('timemodified', '').up()
         .ele('requested', '0').up()
         .ele('showactivitydates', '1').up()
         .ele('showcompletionconditions', '1').up()
@@ -57,7 +57,7 @@ function generateCourseXml(courseDir) {
         .up()
         .end({ pretty: true });
 
-    fs.writeFileSync(path.join(courseDir, 'course.xml'), courseXml);
+    fs.writeFileSync(path.join(outputDir, 'course.xml'), courseXml);
 
     return courseXml;
 }

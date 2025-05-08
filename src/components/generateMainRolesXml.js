@@ -4,9 +4,10 @@ const xmlbuilder = require('xmlbuilder');
 
 // Generates roles.xml file inside 'output' directory
 // output\roles.xml
-function generateRolesXml(outputDir) {
+function generateMainRolesXml(outputDir) {
     const rolesXml = xmlbuilder.create('roles_definition', { encoding: 'UTF-8' })
-    .ele('role', { id: '5' })
+    .ele('role')
+        .att('id', '5')
         .ele('name', '').up()
         .ele('shortname', 'student').up()
         .ele('nameincourse', '').up()
@@ -19,4 +20,4 @@ function generateRolesXml(outputDir) {
     return rolesXml;
 }
 
-module.exports = generateRolesXml;
+module.exports = generateMainRolesXml;

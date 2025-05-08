@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    
     "build-all": "nodemon src/build-all.js --ignore output",
     "build-mbz-backup": "nodemon src/mbz-backup-builder.js --ignore output",
-    "build-final-mbz-backup": "nodemon src/final-mbz-builder.js --ignore output",
+    "build-groups": "nodemon src/json-to-mbz/groups.js --ignore output",
+    "build-final-mbz-backup": "nodemon src/final-mbz-builder.js --ignore output --ignore exported_data/json/combined_sections.json",
     "node:build-mbz-backup": "node src/mbz-backup-builder.js",
     "node:build-final-mbz-backup": "node src/final-mbz-builder.js",
     "copy-output-to-final": "sh ./copy-output-to-final.sh",
@@ -17,10 +19,15 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "he": "^1.2.0",
     "lodash": "^4.17.21",
+    "mime": "^4.0.4",
     "nodemon": "^3.1.7",
     "php-serialize": "^5.0.1",
+    "uuid": "^11.0.3",
     "xml2js": "^0.6.2",
-    "xmlbuilder": "^15.1.1"
+    "xmlbuilder": "^15.1.1",
+    "xmldom": "^0.6.0",
+    "xpath": "^0.0.34"
   }
 }

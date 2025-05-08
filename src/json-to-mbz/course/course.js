@@ -2,179 +2,134 @@ const fs = require("fs");
 const path = require("path");
 const xml2js = require("xml2js");
 
+const generateContextid = () => parseInt(Math.random() * 10000000);
+const oneYearInSeconds = 365 * 24 * 60 * 60;
+const timestamp = Math.floor(Date.now() / 1000);
+const oneYearFromNow = timestamp + oneYearInSeconds;
+
 // Function to create course content from JSON data
 const createCourseContent = (data) =>
     JSON.parse(data).wp_data.map(
         ({
             wp_post_id,
-            wp_post_title,
-            wp_post_name,
-            wp_post_content,
-            wp_post_date,
-            wp_post_modified,
         }) => ({
             id: wp_post_id,
-            shortname: wp_post_name || "",
-            fullname: wp_post_title || "",
-            idnumber: "",
-            summary: wp_post_content || "",
-            summaryformat: 1,
-            format: "topics",
-            showgrades: 1,
-            newsitems: 5,
-            startdate: wp_post_date || "",
-            enddate: "",
-            marker: 0,
-            maxbytes: 0,
-            legacyfiles: 0,
-            showreports: 0,
-            visible: 1,
-            groupmode: 0,
-            groupmodeforce: 0,
-            defaultgroupingid: 0,
-            lang: "",
-            theme: "",
-            timecreated: wp_post_date || "",
-            timemodified: wp_post_modified || "",
-            requested: 0,
-            enablecompletion: 0,
-            completionnotify: 0,
-            numsections: 1,
-            hiddensections: 0,
-            coursedisplay: 0,
+            contextid: generateContextid(),
+            startdate: timestamp,
+            enddate: oneYearFromNow,
+            timecreated: timestamp,
+            timemodified: timestamp,
         })
     );
 
-// Function to update XML with course content
-const updateXmlWithJsonContent = (xmlData, jsonContent) => {
-    const parser = new xml2js.Parser();
-    const builder = new xml2js.Builder();
 
-    return new Promise((resolve, reject) => {
-        parser.parseString(xmlData, (err, xmlResult) => {
-            if (err) {
-                return reject(`Error parsing XML: ${err.message}`);
-            }
 
-            // Ensure courses structure exists in XML
-            if (!xmlResult.courses) {
-                xmlResult.courses = { course: [] };
-            } else {
-                // Filter out any empty <course> elements
-                xmlResult.courses.course = xmlResult.courses.course.filter((course) => {
-                    // Check if all fields of the course object are empty or null
-                    return Object.keys(course).some(
-                        (key) =>
-                            course[key] &&
-                            Array.isArray(course[key]) &&
-                            course[key].some((value) => value.trim())
-                    );
-                });
-            }
+// Function to update XML with JSON content
+const updateCourseXmlWithJsonContent = (xmlData, jsonContent) => {
+  const parser = new xml2js.Parser();
+  const builder = new xml2js.Builder({
+    xmldec: { standalone: null, encoding: "UTF-8" },
+  });
 
-            // Ensure jsonContent is an array
-            if (!Array.isArray(jsonContent)) {
-                return reject("JSON content is not an array.");
-            }
+  return new Promise((resolve, reject) => {
+    parser.parseString(xmlData, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      // Update course.xml
+      result.course.$.id = jsonContent.id;
+      result.course.$.contextid = jsonContent.contextid;
+      result.course.shortname = "Pro quiz";
+      result.course.fullname = "Pro quiz course";
+      result.course.startdate = jsonContent.startdate;
+      result.course.enddate = jsonContent.enddate;
+      result.course.timecreated = jsonContent.timecreated;
+      result.course.timemodified = jsonContent.timemodified;
 
-            // Add JSON content to XML
-            jsonContent.forEach((course) => {
-                const newCourse = {
-                    $: { id: course.id.toString() },
-                    shortname: [course.shortname],
-                    fullname: [course.fullname],
-                    idnumber: [course.idnumber],
-                    summary: [course.summary],
-                    summaryformat: [course.summaryformat.toString()],
-                    format: [course.format],
-                    showgrades: [course.showgrades.toString()],
-                    newsitems: [course.newsitems.toString()],
-                    startdate: [course.startdate],
-                    enddate: [course.enddate || ""],
-                    marker: [course.marker.toString()],
-                    maxbytes: [course.maxbytes.toString()],
-                    legacyfiles: [course.legacyfiles.toString()],
-                    showreports: [course.showreports.toString()],
-                    visible: [course.visible.toString()],
-                    groupmode: [course.groupmode.toString()],
-                    groupmodeforce: [course.groupmodeforce.toString()],
-                    defaultgroupingid: [course.defaultgroupingid.toString()],
-                    lang: [course.lang || ""],
-                    theme: [course.theme || ""],
-                    timecreated: [course.timecreated],
-                    timemodified: [course.timemodified],
-                    requested: [course.requested.toString()],
-                    enablecompletion: [course.enablecompletion.toString()],
-                    completionnotify: [course.completionnotify.toString()],
-                    numsections: [course.numsections.toString()],
-                    hiddensections: [course.hiddensections.toString()],
-                    coursedisplay: [course.coursedisplay.toString()],
-                };
-                xmlResult.courses.course.push(newCourse);
-            });
-
-            const updatedXml = builder.buildObject(xmlResult);
-            resolve(updatedXml);
-        });
+      const updatedXml = builder.buildObject(result);
+      resolve(updatedXml);
     });
+  });
 };
 
+const enrol_id1 = () => parseInt(Math.random() * 100000);
+const enrol_id2 = () => parseInt(Math.random() * 100000);
 
-// Function to build courses XML from JSON file
-const buildCoursesXml = (courseJsonFilePath, finalDir) => {
-    const inputXmlFilePath = path.join("output", "mbz", "course", "course.xml"); // Original file
-    const outputXmlFilePath = path.join("output", "final-mbz", "course", "course.xml"); // Updated file
+// function to update enrolments.xml 
+const updateEnrolmentsXml = (xmlData, jsonContent) => {
+  const parser = new xml2js.Parser();
+  const builder = new xml2js.Builder({
+    xmldec: { standalone: null, encoding: "UTF-8" },
+  });
 
-    // Check if the input XML file exists
-    if (!fs.existsSync(inputXmlFilePath)) {
-        console.error("Error: Input XML file does not exist at:", inputXmlFilePath);
-        return;
+  return new Promise((resolve, reject) => {
+    parser.parseString(xmlData, (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      // Update enrolments.xml
+      if (
+        result.enrolments &&
+        result.enrolments.enrols &&
+        result.enrolments.enrols[0] &&
+        result.enrolments.enrols[0].enrol
+      ) {
+        result.enrolments.enrols[0].enrol.forEach((enrol, index) => {
+          enrol.$.id = index === 0 ? enrol_id1() : enrol_id2();
+          enrol.timecreated = jsonContent.timecreated;
+          enrol.timemodified = jsonContent.timemodified;
+        });
+      }
+
+      const updatedXml = builder.buildObject(result);
+      resolve(updatedXml);
+    });
+  });
+}
+
+// Function to read, update, and write XML files
+const processCourseXmlFile = async (jsonFilePath, xmlDirPath) => {
+try {
+  const jsonData = await fs.promises.readFile(jsonFilePath, "utf8"); // read json file
+  const jsonContentArray = createCourseContent(jsonData);
+
+  const courseXmlFilePath = path.join(xmlDirPath, "course.xml");
+  const enrolmentsXmlFilePath = path.join(xmlDirPath, "enrolments.xml");
+
+  // Read both XML files asynchronously
+  const [courseXmlData, enrolmentsXmlData] = await Promise.all([
+    fs.promises.readFile(courseXmlFilePath, "utf8"),
+    fs.promises.readFile(enrolmentsXmlFilePath, "utf8"),
+  ]);
+
+  // Initialize variables to hold the updated XML data
+  let updatedCourseXml = courseXmlData;
+  let updatedEnrolmentsXml = enrolmentsXmlData;
+
+  // Process each jsonContent
+  for (const jsonContent of jsonContentArray) {
+    try {
+      updatedCourseXml = await updateCourseXmlWithJsonContent(updatedCourseXml, jsonContent ); // Update course XML data
+    } catch (err) {
+      console.error("Error updating course XML content:", err);
     }
 
-    // Ensure the output directory exists
-    fs.mkdir(finalDir, { recursive: true }, (err) => {
-        if (err) {
-            console.error("Error creating directory:", err.message);
-            return;
-        }
+    try {
+      updatedEnrolmentsXml = await updateEnrolmentsXml(updatedEnrolmentsXml, jsonContent); // Update enrolments XML data
+    } catch (err) {
+      console.error("Error updating enrolments XML content:", err);
+    }
+  }
 
-        fs.readFile(inputXmlFilePath, "utf8", (err, xmlData) => {
-            if (err) {
-                console.error("Error reading XML file. Ensure the XML file exists:", err.message);
-                return;
-            }
+  // After processing all jsonContent, write the updated XML files
+  await Promise.all([
+    fs.promises.writeFile(courseXmlFilePath, updatedCourseXml, "utf8"),
+    fs.promises.writeFile(enrolmentsXmlFilePath, updatedEnrolmentsXml, "utf8"),
+  ]);
 
-            fs.readFile(courseJsonFilePath, "utf8", (err, jsonData) => {
-                if (err) {
-                    console.error("Error reading JSON file. Ensure the JSON file exists:", err.message);
-                    return;
-                }
-
-                let jsonContent;
-
-                try {
-                    jsonContent = createCourseContent(jsonData);
-                } catch (parseErr) {
-                    console.error("Error processing JSON data:", parseErr.message);
-                    return;
-                }
-
-                updateXmlWithJsonContent(xmlData, jsonContent)
-                    .then((updatedXml) => {
-                        fs.writeFile(outputXmlFilePath, updatedXml, "utf8", (err) => {
-                            if (err) {
-                                console.error("Error writing updated XML file:", err.message);
-                                return;
-                            }
-                            console.log("Successfully updated XML file at:", outputXmlFilePath);
-                        });
-                    })
-                    .catch((updateErr) => {
-                        console.error("Error updating XML content:", updateErr.message);
-                    });
-            });
-        });
-    });
+  console.log("XML files updated successfully.");
+} catch (err) {
+  console.error("Error processing course XML file:", err);
+}
 };
-
-module.exports = { buildCoursesXml };
+exports.processCourseXmlFile = processCourseXmlFile;
