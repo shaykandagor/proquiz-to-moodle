@@ -1,4 +1,3 @@
-const { generateCompletiondefaultsXml } = require("../../components/course/courseXmlFiles/generateCompletiondefaultsXml");
 const generateCompletionXml = require("../../components/generateCompletionXml");
 const generateFilesXml = require("../../components/generateFilesXml");
 const generateGradehistoryXml = require("../../components/generateGradehistoryXml");

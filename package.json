@@ -8,6 +8,7 @@
     "build-mbz-backup": "nodemon src/mbz-backup-builder.js --ignore output",
     "build-groups": "nodemon src/json-to-mbz/groups.js --ignore output",
     "build-final-mbz-backup": "nodemon src/final-mbz-builder.js --ignore output --ignore exported_data/json/combined_sections.json",
+    "build-activities": "nodemon src/testing-code-activities.js --ignore output",
     "node:build-mbz-backup": "node src/mbz-backup-builder.js",
     "node:build-final-mbz-backup": "node src/final-mbz-builder.js",
     "copy-output-to-final": "sh ./copy-output-to-final.sh",
