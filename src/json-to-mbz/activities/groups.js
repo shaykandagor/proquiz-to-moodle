@@ -43,12 +43,8 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
         return reject(`Error parsing XML: ${err.message}`);
       }
 
-      // Clear existing groups in XML
       xmlResult.groups = { group: [] };
 
-      // Add JSON content to XML
-      // Iterates over each group in the jsonContent array and constructs a new XML group object.
-      // Each property of the group object from the JSON is mapped to the corresponding XML element.
       jsonContent.forEach((group) => {
         const newGroup = {
           $: { id: group.id.toString() },
@@ -75,12 +71,10 @@ const updateXmlWithJsonContent = (xmlData, jsonContent) => {
 // The function reads the original XML file, reads the JSON file, creates content from the JSON data
 // Takes two arguments: groupsJsonFilePath (the path to the JSON file)
 // FinalDir (the directory where the final XML file will be saved)
-// Defines
 const buildGroupsXml = (groupsJsonFilePath, finalDir) => {
   const inputXmlFilePath = path.join("output", "mbz", "groups.xml"); // Original file
   const outputXmlFilePath = path.join("final-mbz", "groups.xml"); // Updated file
 
-  // Check if the input XML file exists
   if (!fs.existsSync(inputXmlFilePath)) {
     console.error("Error: Input XML file does not exist at:", inputXmlFilePath);
     return;
