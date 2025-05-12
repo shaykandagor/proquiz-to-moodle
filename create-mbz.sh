@@ -16,8 +16,8 @@ if [ ! -d "$OUTPUT_DIR" ]; then
 fi
 
 # Define the output zip and mbz file names
-OUTPUT_ZIP="$OUTPUT_DIR/output.zip"
-OUTPUT_MBZ="$OUTPUT_DIR/output.mbz"
+OUTPUT_ZIP="$OUTPUT_DIR/pro-quiz.zip"
+OUTPUT_MBZ="$OUTPUT_DIR/pro-quiz.mbz"
 
 # Change to the directory to be zipped
 cd "$DIRECTORY_TO_ZIP"
